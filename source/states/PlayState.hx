@@ -56,7 +56,7 @@ import sys.io.File;
 #end
 
 #if VIDEOS_ALLOWED 
-import backend.VideoHandler;
+import backend.VideoManager;
 #end
 
 import objects.Note.EventNote;
@@ -901,7 +901,7 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		var video:VideoHandler = new VideoHandler();
+		var video:VideoManager = new VideoManager();
 			video.startVideo(filepath);
 			video.setFinishCallBack(function(){
 				startAndEnd();
