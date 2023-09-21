@@ -266,7 +266,7 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteHandler> = []; #end 
+	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteManager> = []; #end 
 	//due to the game clearing memory on gameover and song restart, the game wont store what was loaded midsong so you'll freez and probably die over and over, and because it stresses the CPU. -karim
 	//public static var allowedToClear:Bool = (ClientPrefs.data != null) ? !ClientPrefs.data.lowQuality : true; // default to true moved to Main.hx cause its setting back to true because of FlxG.resetState()
 
