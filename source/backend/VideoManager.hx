@@ -57,7 +57,22 @@ class VideoManager extends VideoHandler {
         this.openingCallback = func;
         #end
     }
+    override public function pause(){
+        super.pause();
+        if(FlxG.autoPause){
+        if(FlxG.signals.focusLost.has(pause))
+            FlxG.signals.focusLost.remove(pause);
+        if(FlxG.signals.focusGained.has(resume))
+            FlxG.signals.focusGained.remove(resume);
+        }
+    }
 
-    //if you want do smth such as pausing the video just do this -> yourVideo.pause();, , same thing for resume but call resume(); instead
+    override public function resume(){
+        super.resume();
+        if(FlxG.autoPause){
+        FlxG.signals.focusLost.add(pause);
+        FlxG.signals.focusGained.add(resume);
+        }
+    }
     #end
 }

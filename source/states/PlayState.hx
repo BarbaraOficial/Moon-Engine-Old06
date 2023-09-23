@@ -271,7 +271,7 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteManager> = []; #end 
+	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteManager> = []; #end
 	//due to the game clearing memory on gameover and song restart, the game wont store what was loaded midsong so you'll freez and probably die over and over, and because it stresses the CPU. -karim
 	//public static var allowedToClear:Bool = (ClientPrefs.data != null) ? !ClientPrefs.data.lowQuality : true; // default to true moved to Main.hx cause its setting back to true because of FlxG.resetState()
 
@@ -888,9 +888,9 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String)#if VIDEOS_ALLOWED :VideoHandler #end
+	#if VIDEOS_ALLOWED
+	public function startVideo(name:String):VideoManager
 	{
-		#if VIDEOS_ALLOWED
 		inCutscene = true;
 
 		var filepath:String = Paths.video(name);
@@ -913,6 +913,8 @@ class PlayState extends MusicBeatState
 			});
 		return video;
 		#else
+                //because it returns a VideoManager which dosen't exists on unsupported platforms so it results in a error during compile.
+		public function startVideo(ignoreThisThing:String){
 		FlxG.log.warn('Platform not supported!');
 		startAndEnd();
 		return null;
@@ -1698,18 +1700,10 @@ class PlayState extends MusicBeatState
 
 			#if VIDEOS_ALLOWED
 			if(videoSprites.length > 0){
-			for(daVideoSprite in 0...videoSprites.length){
-				videoSprites[daVideoSprite].bitmap.resume();
-				if (FlxG.autoPause)
-					{
-							FlxG.signals.focusGained.add(videoSprites[daVideoSprite].bitmap.resume);
-			
-							FlxG.signals.focusLost.add(videoSprites[daVideoSprite].bitmap.pause);
-					}
-				}
+			for(daVideoSprite in 0...videoSprites.length)
+				videoSprites[daVideoSprite].resume();
 			}
 			#end
-
 
 			paused = false;
 			callOnScripts('onResume');
@@ -2002,18 +1996,8 @@ class PlayState extends MusicBeatState
 
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0){
-			for(daVideoSprite in 0...videoSprites.length){
-				videoSprites[daVideoSprite].bitmap.pause();
-			//prevent the video from resuming on focus change in pause menu
-			if (FlxG.autoPause)
-				{
-					if (FlxG.signals.focusGained.has(videoSprites[daVideoSprite].bitmap.resume))
-						FlxG.signals.focusGained.remove(videoSprites[daVideoSprite].bitmap.resume);
-		
-					if (FlxG.signals.focusLost.has(videoSprites[daVideoSprite].bitmap.pause))
-						FlxG.signals.focusLost.remove(videoSprites[daVideoSprite].bitmap.pause);
-				}
-			}
+			for(daVideoSprite in 0...videoSprites.length)
+				videoSprites[daVideoSprite].pause();
 		}
 		#end
 		
@@ -2092,8 +2076,12 @@ class PlayState extends MusicBeatState
 				//i assume it's better removing the thing on gameover
 				if(videoSprites.length > 0){
 				for(daVideoSprite in 0...videoSprites.length){
-					videoSprites[daVideoSprite].bitmap.onEndReached();
-					videoSprites[daVideoSprite].kill();
+					#if (hxCodec >= "3.0.0")
+				videoSprites[daVideoSprite].destroy();
+				#else
+				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
+				#end
+				videoSprites[daVideoSprite].kill();
 				}
 				for(i in videoSprites)
 					videoSprites.remove(i);
@@ -3178,8 +3166,12 @@ class PlayState extends MusicBeatState
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0){
 			for(daVideoSprite in 0...videoSprites.length){
+				#if (hxCodec >= "3.0.0")
+				videoSprites[daVideoSprite].destroy();
+				#else
 				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
-				videoSprites[daVideoSprite].kill(); //some sort of optmization
+				#end
+				videoSprites[daVideoSprite].kill();
 			}
 			for(i in videoSprites)
 				videoSprites.remove(i); //clearing
