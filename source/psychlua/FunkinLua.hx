@@ -38,8 +38,7 @@ import substates.GameOverSubstate;
 
 import psychlua.LuaUtils;
 import psychlua.LuaUtils.LuaTweenOptions;
-#if BrewScript
-import psychlua.HScript;
+#if BrewScript import psychlua.HScript; #end 
 import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
 
