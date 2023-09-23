@@ -95,7 +95,7 @@ class FPS extends TextField
 			var memoryMegas:Float = 0;
                         var OS:String = '${lime.system.System.platformLabel}';
 
-                        if (OS == 'null' || OS == null) OS = 'Unknown";
+                        if (OS == 'null' || OS == null) OS = "Unknown";
 			
 			#if openfl
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
