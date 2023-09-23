@@ -93,13 +93,16 @@ class FPS extends TextField
 		{
 			text = "FPS: " + currentFPS;
 			var memoryMegas:Float = 0;
+                        var OS:String = '${lime.system.System.platformLabel}';
+
+                        if (OS == 'null' || OS == null) OS = 'Unknown";
 			
 			#if openfl
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
 			text += "\nMemory: " + memoryMegas + " MB";
 			#end
 			#if lime
-			text += "\nOS: " + '${lime.system.System.platformLabel}';
+			text += "\nOS: " + OS;
 			#end
 
 			textColor = 0xFFFFFFFF;
