@@ -3443,72 +3443,111 @@ class PlayState extends MusicBeatState
 		#end
 		return returnVal;
 	}
-	
-	public function callOnHScript(funcToCall:String, args:Array<Dynamic> = null, ?ignoreStops:Bool = false, exclusions:Array<String> = null, excludeValues:Array<Dynamic> = null):Dynamic {
-		var returnVal:Dynamic = psychlua.FunkinLua.Function_Continue;
 
 		#if HSCRIPT_ALLOWED
-		if(exclusions == null) exclusions = new Array();
-		if(excludeValues == null) excludeValues = new Array();
-		excludeValues.push(psychlua.FunkinLua.Function_Continue);
-
-		var len:Int = hscriptArray.length;
-		if (len < 1)
-			return returnVal;
-		for(i in 0...len)
+	public function startHScriptsNamed(scriptFile:String)
+	{
+		var scriptToLoad:String = Paths.modFolders(scriptFile);
+		if(!FileSystem.exists(scriptToLoad))
+			scriptToLoad = Paths.getPreloadPath(scriptFile);
+		
+		if(FileSystem.exists(scriptToLoad))
 		{
-			var script:HScript = hscriptArray[i];
-			if(script == null || !script.active || !script.variables.exists(funcToCall) || exclusions.contains(script.origin))
-				continue;
+			if (BrewScript.global.exists(scriptToLoad)) return false;
+	
+			initHScript(scriptToLoad);
+			return true;
+		}
+		return false;
+	}
 
-			var myValue:Dynamic = null;
-			try
+	public function initHScript(file:String)
+	{
+		try
+		{
+			var newScript:HScript = new HScript(null, file);
+			if(newScript.parsingException != null)
 			{
-				returnVal = script.executeFunction(funcToCall, args);
-				if (script.exception != null) {
-					script.active = false;
-					FunkinLua.luaTrace('ERROR ($funcToCall) - ${script.exception}', true, false, FlxColor.RED);
-				}
-				else
+				addTextToDebug('ERROR ON LOADING ($file): ${newScript.parsingException.message}', FlxColor.RED);
+				newScript.kill();
+				return;
+			}
+
+			hscriptArray.push(newScript);
+			if(newScript.exists('onCreate'))
+			{
+				var callValue = newScript.call('onCreate');
+				if(!callValue.succeeded)
 				{
-					if((returnVal == FunkinLua.Function_StopHScript || returnVal == FunkinLua.Function_StopAll) && !excludeValues.contains(returnVal) && !ignoreStops)
-						break;
+					for (e in callValue.exceptions)
+						if (e != null)
+							addTextToDebug('ERROR ($file: onCreate) - ${e.message.substr(0, e.message.indexOf('\n'))}', FlxColor.RED);
+
+					newScript.kill();
+					hscriptArray.remove(newScript);
+					trace('failed to initialize brew interp!!! ($file)');
 				}
+				else trace('initialized brew interp successfully: $file');
+			}
+			
+		}
+		catch(e)
+		{
+			addTextToDebug('ERROR ($file) - ' + e.message.substr(0, e.message.indexOf('\n')), FlxColor.RED);
+			var newScript:HScript = cast (BrewScript.global.get(file), HScript);
+			if(newScript != null)
+			{
+				newScript.kill();
+				hscriptArray.remove(newScript);
 			}
 		}
-		#end
-
-		return returnVal;
 	}
+	#end
 
-	public function setOnScripts(variable:String, arg:Dynamic, exclusions:Array<String> = null) {
+	public function callOnScripts(funcToCall:String, args:Array<Dynamic> = null, ignoreStops = false, exclusions:Array<String> = null, excludeValues:Array<Dynamic> = null):Dynamic {
+		var returnVal:Dynamic = psychlua.FunkinLua.Function_Continue;
+		if(args == null) args = [];
 		if(exclusions == null) exclusions = [];
-		setOnLuas(variable, arg, exclusions);
-		setOnHScript(variable, arg, exclusions);
+		if(excludeValues == null) excludeValues = [psychlua.FunkinLua.Function_Continue];
+
+		var result:Dynamic = callOnLuas(funcToCall, args, ignoreStops, exclusions, excludeValues);
+		if(result == null || excludeValues.contains(result)) result = callOnHScript(funcToCall, args, ignoreStops, exclusions, excludeValues);
+		return result;
 	}
 
-	public function setOnLuas(variable:String, arg:Dynamic, exclusions:Array<String> = null) {
+	public function callOnLuas(funcToCall:String, args:Array<Dynamic> = null, ignoreStops = false, exclusions:Array<String> = null, excludeValues:Array<Dynamic> = null):Dynamic {
+		var returnVal:Dynamic = FunkinLua.Function_Continue;
 		#if LUA_ALLOWED
+		if(args == null) args = [];
 		if(exclusions == null) exclusions = [];
-		for (script in luaArray) {
+		if(excludeValues == null) excludeValues = [FunkinLua.Function_Continue];
+
+		var len:Int = luaArray.length;
+		var i:Int = 0;
+		while(i < len)
+		{
+			var script:FunkinLua = luaArray[i];
 			if(exclusions.contains(script.scriptName))
+			{
+				i++;
 				continue;
+			}
 
-			script.set(variable, arg);
+			var myValue:Dynamic = script.call(funcToCall, args);
+			if((myValue == FunkinLua.Function_StopLua || myValue == FunkinLua.Function_StopAll) && !excludeValues.contains(myValue) && !ignoreStops)
+			{
+				returnVal = myValue;
+				break;
+			}
+			
+			if(myValue != null && !excludeValues.contains(myValue))
+				returnVal = myValue;
+
+			if(!script.closed) i++;
+			else len--;
 		}
 		#end
-	}
-
-	public function setOnHScript(variable:String, arg:Dynamic, exclusions:Array<String> = null) {
-		#if HSCRIPT_ALLOWED
-		if(exclusions == null) exclusions = [];
-		for (script in hscriptArray) {
-			if(exclusions.contains(script.origin))
-				continue;
-
-			script.setVar(variable, arg);
-		}
-		#end
+		return returnVal;
 	}
 
 	function strumPlayAnim(isDad:Bool, id:Int, time:Float) {

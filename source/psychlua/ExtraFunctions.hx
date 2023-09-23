@@ -21,6 +21,7 @@ import openfl.utils.Assets;
 
 class ExtraFunctions
 {
+	var lua:State = funk.lua;
 	public static function implement(funk:FunkinLua)
 	{
 		// Keyboard & Gamepads

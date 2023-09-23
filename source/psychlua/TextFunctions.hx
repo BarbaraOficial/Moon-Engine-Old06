@@ -2,6 +2,7 @@ package psychlua;
 
 class TextFunctions
 {
+	var lua:State = funk.lua;
 	public static function implement(funk:FunkinLua)
 	{
 		var game:PlayState = PlayState.instance;

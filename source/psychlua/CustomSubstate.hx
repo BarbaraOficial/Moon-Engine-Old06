@@ -6,6 +6,7 @@ class CustomSubstate extends MusicBeatSubstate
 {
 	public static var name:String = 'unnamed';
 	public static var instance:CustomSubstate;
+	var lua:State = funk.lua;
 
 	public static function implement(funk:FunkinLua)
 	{

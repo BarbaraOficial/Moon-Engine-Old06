@@ -7,6 +7,7 @@ package psychlua;
 
 class DeprecatedFunctions
 {
+	var lua:State = funk.lua;
 	public static function implement(funk:FunkinLua)
 	{
 		// DEPRECATED, DONT MESS WITH THESE SHITS, ITS JUST THERE FOR BACKWARD COMPATIBILITY

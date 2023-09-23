@@ -12,7 +12,8 @@ class ShaderFunctions
 {
 	#if (!flash && MODS_ALLOWED && sys)
         private static var storedFilters:Map<String, ShaderFilter> = [];
-        #end
+        #
+		var lua:State = funk.lua;
 	public static function implement(funk:FunkinLua)
 	{
 		// shader shit
