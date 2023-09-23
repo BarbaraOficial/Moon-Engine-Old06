@@ -57,8 +57,7 @@ class FunkinLua {
 	public var scriptName:String = '';
 	public var closed:Bool = false;
 
-	#if BrewScript
-	public var hscript:HScript = null;
+	#if BrewScript public var hscript:HScript = null; #end
 	
 	public var callbacks:Map<String, Dynamic> = new Map<String, Dynamic>();
 	public static var customFunctions:Map<String, Dynamic> = new Map<String, Dynamic>();
