@@ -9,7 +9,6 @@ import psychlua.CustomSubstate;
 import brew.BrewScript;
 class HScript extends BrewScript
 {
-	var lua:State = funk.lua;
 	public var parentLua:FunkinLua;
 	
 	public static function initHaxeModule(parent:FunkinLua)

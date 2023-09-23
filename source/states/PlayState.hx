@@ -804,70 +804,69 @@ class PlayState extends MusicBeatState
 	}
 
 	function startCharacterScripts(name:String)
-	{
-		// Lua
-		#if LUA_ALLOWED
-		var doPush:Bool = false;
-		var luaFile:String = 'characters/' + name + '.lua';
-		#if MODS_ALLOWED
-		var replacePath:String = Paths.modFolders(luaFile);
-		if(FileSystem.exists(replacePath))
 		{
-			luaFile = replacePath;
-			doPush = true;
-		}
-		else
-		{
-			luaFile = Paths.getPreloadPath(luaFile);
-			if(FileSystem.exists(luaFile))
-				doPush = true;
-		}
-		#else
-		luaFile = Paths.getPreloadPath(luaFile);
-		if(Assets.exists(luaFile)) doPush = true;
-		#end
-
-		if(doPush)
-		{
-			for (script in luaArray)
+			// Lua
+			#if LUA_ALLOWED
+			var doPush:Bool = false;
+			var luaFile:String = 'characters/' + name + '.lua';
+			#if MODS_ALLOWED
+			var replacePath:String = Paths.modFolders(luaFile);
+			if(FileSystem.exists(replacePath))
 			{
-				if(script.scriptName == luaFile)
-				{
-					doPush = false;
-					break;
-				}
-			}
-			if(doPush) new FunkinLua(luaFile);
-		}
-		#end
-
-		// HScript
-		#if HSCRIPT_ALLOWED
-		var doPush:Bool = false;
-		var scriptFile:String = 'characters/' + name + '.hx';
-		var replacePath:String = Paths.modFolders(scriptFile);
-		if(FileSystem.exists(replacePath))
-		{
-			scriptFile = replacePath;
-			doPush = true;
-		}
-		else
-		{
-			scriptFile = Paths.getPreloadPath(scriptFile);
-			if(FileSystem.exists(scriptFile))
+				luaFile = replacePath;
 				doPush = true;
-		}
-		
-		if(doPush)
-		{
-			if(BrewScript.global.exists(scriptFile))
-				doPush = false;
-				break;
 			}
-
-			if(doPush) initHScript(scriptFile);
+			else
+			{
+				luaFile = Paths.getPreloadPath(luaFile);
+				if(FileSystem.exists(luaFile))
+					doPush = true;
+			}
+			#else
+			luaFile = Paths.getPreloadPath(luaFile);
+			if(Assets.exists(luaFile)) doPush = true;
+			#end
+	
+			if(doPush)
+			{
+				for (script in luaArray)
+				{
+					if(script.scriptName == luaFile)
+					{
+						doPush = false;
+						break;
+					}
+				}
+				if(doPush) new FunkinLua(luaFile);
+			}
+			#end
+	
+			// HScript
+			#if HSCRIPT_ALLOWED
+			var doPush:Bool = false;
+			var scriptFile:String = 'characters/' + name + '.hx';
+			var replacePath:String = Paths.modFolders(scriptFile);
+			if(FileSystem.exists(replacePath))
+			{
+				scriptFile = replacePath;
+				doPush = true;
+			}
+			else
+			{
+				scriptFile = Paths.getPreloadPath(scriptFile);
+				if(FileSystem.exists(scriptFile))
+					doPush = true;
+			}
+			
+			if(doPush)
+			{
+				if(BrewScript.global.exists(scriptFile))
+					doPush = false;
+	
+				if(doPush) initHScript(scriptFile);
+			}
+			#end
 		}
-		#end
 
 	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
 		#if LUA_ALLOWED
@@ -2344,25 +2343,6 @@ class PlayState extends MusicBeatState
 							}
 						});
 				}
-
-			case 'Set Property':
-				try
-				{
-					var split:Array<String> = value1.split('.');
-					if(split.length > 1) {
-						LuaUtils.setVarInArray(LuaUtils.getPropertyLoop(split), split[split.length-1], value2);
-					} else {
-						LuaUtils.setVarInArray(this, value1, value2);
-					}
-				}
-				catch(e:Dynamic)
-				{
-					HScript.hscriptTrace('ERROR ("Set Property" Event) - $e', FlxColor.RED);
-				}
-			
-			case 'Play Sound':
-				if(flValue2 == null) flValue2 = 1;
-				FlxG.sound.play(Paths.sound(value1), flValue2);
 		}
 		
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
