@@ -103,6 +103,7 @@ class PlayState extends MusicBeatState
 	
 	#if HSCRIPT_ALLOWED
 	public var hscriptArray:Array<HScript> = [];
+        public var instancesExclude:Array<String> = [];
 	#end
 
 	#if LUA_ALLOWED
@@ -3487,6 +3488,8 @@ class PlayState extends MusicBeatState
 		for (script in hscriptArray) {
 			if(exclusions.contains(script.origin))
 				continue;
+                        if(!instancesExclude.contains(variable))
+				instancesExclude.push(variable);
 
 			script.set(variable, arg);
 		}
