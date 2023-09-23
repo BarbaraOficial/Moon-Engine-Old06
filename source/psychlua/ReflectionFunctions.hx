@@ -12,9 +12,9 @@ import substates.GameOverSubstate;
 
 class ReflectionFunctions
 {
-	var lua:State = funk.lua;
 	public static function implement(funk:FunkinLua)
-	{
+		{
+		var lua:State = funk.lua;
 		Lua_helper.add_callback(lua, "getProperty", function(variable:String, ?allowMaps:Bool = false) {
 			var split:Array<String> = variable.split('.');
 			if(split.length > 1)

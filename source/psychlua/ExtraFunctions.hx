@@ -21,9 +21,9 @@ import openfl.utils.Assets;
 
 class ExtraFunctions
 {
-	var lua:State = funk.lua;
 	public static function implement(funk:FunkinLua)
-	{
+		{
+		var lua:State = funk.lua;
 		// Keyboard & Gamepads
 		Lua_helper.add_callback(lua, "keyboardJustPressed", function(name:String)
 		{

@@ -2,9 +2,9 @@ package psychlua;
 
 class TextFunctions
 {
-	var lua:State = funk.lua;
 	public static function implement(funk:FunkinLua)
-	{
+		{
+		var lua:State = funk.lua;
 		var game:PlayState = PlayState.instance;
 		Lua_helper.add_callback(lua, "makeLuaText", function(tag:String, text:String, width:Int, x:Float, y:Float) {
 			tag = tag.replace('.', '');

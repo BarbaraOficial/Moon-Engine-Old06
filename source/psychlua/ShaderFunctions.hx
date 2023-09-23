@@ -12,11 +12,11 @@ class ShaderFunctions
 {
 	#if (!flash && MODS_ALLOWED && sys)
         private static var storedFilters:Map<String, ShaderFilter> = [];
-        #
-		var lua:State = funk.lua;
-	public static function implement(funk:FunkinLua)
-	{
-		// shader shit
+        #end
+		public static function implement(funk:FunkinLua)
+			{
+				var lua:State = funk.lua;
+				// shader shit
 		funk.addLocalCallback("initLuaShader", function(name:String) {
 			if(!ClientPrefs.data.shaders) return false;
 
