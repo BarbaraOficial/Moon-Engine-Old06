@@ -304,7 +304,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 					}
 				}
 				finishThing();
-				destroy();
+				kill();
 			}
 		}
 		super.update(elapsed);
