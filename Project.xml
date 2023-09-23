@@ -108,12 +108,11 @@
 
 	<!--Psych stuff needed-->
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
-	<haxelib name="hscript-improved" if="HSCRIPT_ALLOWED"/>
+	<haxelib name="BrewScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
 	<haxelib name="discord_rpc" if="desktop" unless="hl"/>
 	<haxelib name="hxjsonast" if="desktop"/>
 	<haxelib name="tjson" />
-	<haxedef name="openflPos" />
 	<haxedef name="hscriptPos" />
 	<haxelib name="extension-androidtools" if="android" />
         <haxelib name="extension-orientation" if="mobile" />

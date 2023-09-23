@@ -71,6 +71,10 @@ import psychlua.LuaUtils;
 import psychlua.HScript;
 #end
 
+#if BrewScript
+import brew.BrewScript;
+#end
+
 class PlayState extends MusicBeatState
 {
 	public static var STRUM_X = 48.5;
@@ -856,7 +860,7 @@ class PlayState extends MusicBeatState
 		
 		if(doPush)
 		{
-			for (hx in hscriptArray) if (hx.origin == scriptFile) {
+			if(BrewScript.global.exists(scriptFile))
 				doPush = false;
 				break;
 			}
@@ -3180,11 +3184,12 @@ class PlayState extends MusicBeatState
 		#end
 
 		#if HSCRIPT_ALLOWED
-		for (script in hscriptArray) if(script != null)
-		{
-			script.executeFunction('onDestroy');
-			script.destroy();
-		}
+		for (script in hscriptArray)
+			if(script != null)
+			{
+				script.call('onDestroy');
+				script.kill();
+			}
 
 		while (hscriptArray.length > 0)
 			hscriptArray.pop();
@@ -3336,8 +3341,7 @@ class PlayState extends MusicBeatState
 		
 		if(FileSystem.exists(scriptToLoad))
 		{
-			for (hx in hscriptArray) if (hx.origin == scriptToLoad)
-				return false;
+			if (BrewScript.global.exists(scriptToLoad)) return false;
 	
 			initHScript(scriptToLoad);
 			return true;
@@ -3357,30 +3361,40 @@ class PlayState extends MusicBeatState
 		{
 			var times:Float = Date.now().getTime();
 			var newScript:HScript = new HScript(null, file);
-			hscriptArray.push(newScript);
-
-			if (newScript.exception != null) {
-				HScript.hscriptTrace('ERROR ON LOADING - ${newScript.exception.message}', FlxColor.RED);
-				makeError(newScript);
+			if(newScript.parsingException != null)
+			{
+				addTextToDebug('ERROR ON LOADING ($file): ${newScript.parsingException.message}', FlxColor.RED);
+				newScript.kill();
 				return;
 			}
 
-			if (newScript.variables.exists('onCreate')) {
-				var retVal:Dynamic = newScript.executeFunction('onCreate');
-				if (newScript.exception != null) {
-					HScript.hscriptTrace('ERROR (onCreate) - ${newScript.exception.message}', FlxColor.RED);
-					makeError(newScript);
-					return;
-				}
-			}
+			hscriptArray.push(newScript);
+			if(newScript.exists('onCreate'))
+			{
+				var callValue = newScript.call('onCreate');
+				if(!callValue.succeeded)
+				{
+					for (e in callValue.exceptions)
+						if (e != null)
+							addTextToDebug('ERROR ($file: onCreate) - ${e.message.substr(0, e.message.indexOf('\n'))}', FlxColor.RED);
 
-			trace('initialized hscript interp successfully: $file (${Std.int(Date.now().getTime() - times)}ms)');
+					newScript.kill();
+					hscriptArray.remove(newScript);
+					trace('failed to initialize brew interp!!! ($file)');
+				}
+				else trace('initialized brew interp successfully: $file');
+			}
+			
 		}
 		catch(e)
 		{
-			HScript.hscriptTrace('ERROR - $e', FlxColor.RED);
-			if (hscriptArray.length > 0)
-				makeError(hscriptArray[hscriptArray.length - 1]);
+			addTextToDebug('ERROR ($file) - ' + e.message.substr(0, e.message.indexOf('\n')), FlxColor.RED);
+			var newScript:HScript = cast (BrewScript.global.get(file), HScript);
+			if(newScript != null)
+			{
+				newScript.kill();
+				hscriptArray.remove(newScript);
+			}
 		}
 	}
 	#end

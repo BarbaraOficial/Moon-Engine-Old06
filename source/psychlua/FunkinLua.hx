@@ -38,6 +38,7 @@ import substates.GameOverSubstate;
 
 import psychlua.LuaUtils;
 import psychlua.LuaUtils.LuaTweenOptions;
+#if BrewScript
 import psychlua.HScript;
 import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
@@ -56,6 +57,7 @@ class FunkinLua {
 	public var scriptName:String = '';
 	public var closed:Bool = false;
 
+	#if BrewScript
 	public var hscript:HScript = null;
 	
 	public var callbacks:Map<String, Dynamic> = new Map<String, Dynamic>();
@@ -1437,8 +1439,8 @@ class FunkinLua {
 			return closed;
 		});
 
-		#if desktop DiscordClient.addLuaCallbacks(this); #end
-		HScript.implement(this);
+		#if desktop DiscordClient.addLuaCallbacks(lua); #end
+		#if BrewScript HScript.implement(this); #end
 		ReflectionFunctions.implement(this);
 		TextFunctions.implement(this);
 		ExtraFunctions.implement(this);
@@ -1542,8 +1544,7 @@ class FunkinLua {
 		lua = null;
 		if(hscript != null)
 		{
-			hscript.active = false;
-			hscript.destroy();
+			hscript.kill();
 			hscript = null;
 		}
 		#end
