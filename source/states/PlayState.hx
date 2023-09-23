@@ -3497,7 +3497,7 @@ class PlayState extends MusicBeatState
 				continue;
 
 			script.set(variable, arg);
-		}b
+		}
 		#end
 	}
 
