@@ -887,7 +887,7 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String):VideoHandler
+	public function startVideo(name:String)#if VIDEOS_ALLOWED :VideoHandler #end
 	{
 		#if VIDEOS_ALLOWED
 		inCutscene = true;
