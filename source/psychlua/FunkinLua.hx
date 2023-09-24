@@ -58,7 +58,7 @@ class FunkinLua {
 	public var scriptName:String = '';
 	public var closed:Bool = false;
 
-	#if BrewScript
+	#if SScript
 	public var hscript:HScript = null;
 	#end
 	
