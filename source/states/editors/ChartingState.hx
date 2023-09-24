@@ -2232,13 +2232,13 @@ class ChartingState extends MusicBeatState
 		audioBuffers[0] = null;
 		#if MODS_ALLOWED
 		if(FileSystem.exists(Paths.modFolders('songs/' + currentSongName + '/Inst.ogg'))) {
-			audioBuffers[0] = AudioBuffer.fromFile(Sys.getCwd() + Paths.modFolders('songs/' + currentSongName + '/Inst.ogg'));
+			audioBuffers[0] = AudioBuffer.fromFile('./' + Paths.modFolders('songs/' + currentSongName + '/Inst.ogg'));
 			//trace('Custom vocals found');
 		}
 		else { #end
 			var leVocals:String = Paths.getPath(currentSongName + '/Inst.' + Paths.SOUND_EXT, SOUND, 'songs');
 			if (Assets.exists(leVocals)) { //Vanilla inst
-				audioBuffers[0] = AudioBuffer.fromFile(Sys.getCwd() + leVocals.substr(6));
+				audioBuffers[0] = AudioBuffer.fromFile('./' + leVocals.substr(6));
 				//trace('Inst found');
 			}
 		#if MODS_ALLOWED
@@ -2251,12 +2251,12 @@ class ChartingState extends MusicBeatState
 		audioBuffers[1] = null;
 		#if MODS_ALLOWED
 		if(FileSystem.exists(Paths.modFolders('songs/' + currentSongName + '/Voices.ogg'))) {
-			audioBuffers[1] = AudioBuffer.fromFile(Sys.getCwd() + Paths.modFolders('songs/' + currentSongName + '/Voices.ogg'));
+			audioBuffers[1] = AudioBuffer.fromFile('./' + Paths.modFolders('songs/' + currentSongName + '/Voices.ogg'));
 			//trace('Custom vocals found');
 		} else { #end
 			var leVocals:String = Paths.getPath(currentSongName + '/Voices.' + Paths.SOUND_EXT, SOUND, 'songs');
 			if (Assets.exists(leVocals)) { //Vanilla voices
-				audioBuffers[1] = AudioBuffer.fromFile(Sys.getCwd() + leVocals.substr(6));
+				audioBuffers[1] = AudioBuffer.fromFile('./' + leVocals.substr(6));
 				//trace('Voices found, LETS FUCKING GOOOO');
 			}
 		#if MODS_ALLOWED

@@ -243,7 +243,7 @@ class Paths
 			return currentTrackedAssets.get(file);
 		}
 		else if (FileSystem.exists(file))
-			bitmap = BitmapData.fromFile(Sys.getCwd() + file);
+			bitmap = BitmapData.fromFile('./' + file);
 		else
 		#end
 		{
@@ -413,7 +413,7 @@ class Paths
 		var file:String = modsSounds(path, key);
 		if(FileSystem.exists(file)) {
 			if(!currentTrackedSounds.exists(file)) {
-				currentTrackedSounds.set(file, Sound.fromFile(Sys.getCwd() + file));
+				currentTrackedSounds.set(file, Sound.fromFile('./' + file));
 			}
 			localTrackedAssets.push(key);
 			return currentTrackedSounds.get(file);
