@@ -868,23 +868,13 @@ class PlayState extends MusicBeatState
 			
 			if(doPush)
 			{
-				if(BrewScript.global.exists(scriptFile))
+				if(SScript.global.exists(scriptFile))
 					doPush = false;
 	
 				if(doPush) initHScript(scriptFile);
 			}
 			#end
 		}
-		
-		if(doPush)
-		{
-			if(SScript.global.exists(scriptFile))
-				doPush = false;
-
-			if(doPush) initHScript(scriptFile);
-		}
-		#end
-	}
 
 	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
 		#if LUA_ALLOWED
