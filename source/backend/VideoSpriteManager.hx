@@ -11,7 +11,6 @@ class VideoSpriteManager extends VideoSprite {
     public function new(x:Float, y:Float #if (hxCodec < "2.6.0"),width:Float = 1280, height:Float = 720, autoScale:Bool = true #end){
         super(x, y #if (hxCodec < "2.6.0"),width, height, autoScale #end);
         states.PlayState.instance.videoSprites.push(this); //hopefully will put the VideoSprite var in the array
-	this.setPlayBackRate(states.PlayState.instance.playbackRate);
     }
     #if VIDEOS_ALLOWED
 
@@ -26,6 +25,7 @@ class VideoSpriteManager extends VideoSprite {
         #else
         this.playVideo(path, loop, false);
         #end
+	this.setPlayBackRate(states.PlayState.instance.playbackRate);
     }
 
      /**
