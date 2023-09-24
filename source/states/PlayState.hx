@@ -701,7 +701,14 @@ class PlayState extends MusicBeatState
 
 		#if (mobileC && !android)
 		addVirtualPad(NONE, P);
-        addPadCamera(false);
+       		addPadCamera(false);
+		#end
+
+		#if VIDEOS_ALLOWED
+		if(videoSprites.length > 0) {
+		for(i in 0...videoSprites.length)
+			videoSprites[i].setPlayBackRate(playbackRate);
+			}
 		#end
 
 		super.create();
