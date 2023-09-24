@@ -129,7 +129,7 @@ class Main extends Sprite
 		}
 
 		#if linux
-		var icon = Image.fromFile("icon.png");
+		var icon = Image.fromFile('./' + "icon.png");
 		Lib.current.stage.window.setIcon(icon);
 		#end
 
