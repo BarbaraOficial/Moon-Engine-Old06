@@ -7,6 +7,7 @@ import backend.SUtil;
 import flixel.graphics.FlxGraphic;
 import flixel.FlxGame;
 import flixel.FlxState;
+import haxe.io.Path;
 import openfl.Assets;
 import openfl.system.System;
 import openfl.Lib;
@@ -57,7 +58,7 @@ class Main extends Sprite
 
 		// https://github.com/MAJigsaw77/UTF/blob/972e4c27ec62e2279cddb53083a2fee98e76ce53/source/Main.hx#L45-L49 (but modified)
 	        #if android
-		Sys.setCwd(Context.getExternalFilesDir(null) + '/');
+		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
 		#elseif ios
 		Sys.setCwd(LimeSystem.applicationStorageDirectory);
 		#end
@@ -129,7 +130,7 @@ class Main extends Sprite
 		}
 
 		#if linux
-		var icon = Image.fromFile('./' + "icon.png");
+		var icon = Image.fromFile("./icon.png");
 		Lib.current.stage.window.setIcon(icon);
 		#end
 
