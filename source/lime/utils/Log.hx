@@ -50,8 +50,6 @@ class Log
 						FileSystem.createDirectory('logs');
 
 					File.saveContent('logs/'
-						+ Lib.application.meta.get('file')
-						+ '-'
 						+ Date.now().toString().replace(' ', '-').replace(':', "'")
 						+ '.txt',
 						message

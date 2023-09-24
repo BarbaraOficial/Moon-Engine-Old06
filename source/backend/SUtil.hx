@@ -192,7 +192,7 @@ class SUtil
 		#end
 
 		LimeLogger.println(msg);
-		Lib.application.window.alert(msg, 'Critical Error!');
+		Lib.application.window.alert(msg, 'Fatal Error!');
 
 		#if (desktop && !hl)
 		DiscordClient.shutdown();
