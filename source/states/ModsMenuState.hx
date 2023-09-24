@@ -299,7 +299,7 @@ class ModsMenuState extends MusicBeatState
 			var iconToUse:String = Paths.mods(values[0] + '/pack.png');
 			if(FileSystem.exists(iconToUse))
 			{
-				loadedIcon = BitmapData.fromFile('./' + iconToUse);
+				loadedIcon = BitmapData.fromFile(Sys.getCwd() + iconToUse);
 			}
 
 			newMod.icon = new AttachedSprite();
