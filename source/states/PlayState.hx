@@ -704,13 +704,6 @@ class PlayState extends MusicBeatState
        		addPadCamera(false);
 		#end
 
-		#if VIDEOS_ALLOWED
-		if(videoSprites.length > 0) {
-		for(i in 0...videoSprites.length)
-			videoSprites[i].setPlayBackRate(playbackRate);
-			}
-		#end
-
 		super.create();
 		if(Main.allowedToClear) Paths.clearUnusedMemory();
 		
