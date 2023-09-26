@@ -135,8 +135,8 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: true
-          automatic_release_tag: "0.7.1h-alpha"
-          title: "0.7.1h Android Alpha"
+          prerelease: false
+          automatic_release_tag: "0.7.1h-release5"
+          title: "0.7.1h Android Release 5"
           files: |
             /home/runner/PsychEngine-release.apk
