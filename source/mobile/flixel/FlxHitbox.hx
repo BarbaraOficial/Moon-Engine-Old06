@@ -40,7 +40,7 @@ class FlxHitbox extends FlxSpriteGroup
 		var buttonDownColor:Array<FlxColor>;
 		var buttonUpColor:Array<FlxColor>;
 		var buttonRightColor:Array<FlxColor>;
-		if (ClientPrefs.data.dynamicColors && PlayState.SONG.disableNoteRGB != null && !PlayState.SONG.disableNoteRGB == true){
+		if (ClientPrefs.data.dynamicColors){
 			buttonLeftColor = ClientPrefs.data.arrowRGB[0];
 			buttonDownColor = ClientPrefs.data.arrowRGB[1];
 			buttonUpColor = ClientPrefs.data.arrowRGB[2];
