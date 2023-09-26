@@ -9,13 +9,12 @@ import flixel.util.FlxDestroyUtil;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 import openfl.utils.Assets;
+import flixel.util.FlxDestroyUtil;
 
 /**
- * A gamepad.
- * It's easy to customize the layout.
+ * This code is a extend for extra virtualpad buttons 
  *
- * @original author Ka Wing Chin
- * @modification's author: Saw (M.A. Jigsaw) & Karim Akra (UTFan)
+ * author: Karim Akra (UTFan)
  */
 class FlxVirtualPadExtra extends FlxSpriteGroup
 {
@@ -49,8 +48,8 @@ class FlxVirtualPadExtra extends FlxSpriteGroup
 	{
 		super.destroy();
 
-		buttonExtra = null;
-        buttonExtra1 = null;
+		buttonExtra = FlxDestroyUtil.destroy(buttonExtra);
+        buttonExtra1 = FlxDestroyUtil.destroy(buttonExtra1);
 	}
 
 	private function createButton(X:Float, Y:Float, Width:Int, Height:Int, Graphic:String, ?Color:Int = 0xFFFFFF):FlxButton

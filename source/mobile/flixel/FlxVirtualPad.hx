@@ -9,6 +9,7 @@ import flixel.util.FlxDestroyUtil;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 import openfl.utils.Assets;
+import flixel.util.FlxDestroyUtil;
 
 /**
  * A gamepad.
@@ -48,7 +49,6 @@ class FlxVirtualPad extends FlxSpriteGroup
 	{
 		super();
 		#if mobileC
-
 		var buttonLeftColor:Array<FlxColor>;
 		var buttonDownColor:Array<FlxColor>;
 		var buttonUpColor:Array<FlxColor>;
@@ -58,7 +58,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 			buttonDownColor = ClientPrefs.data.arrowRGB[1];
 			buttonUpColor = ClientPrefs.data.arrowRGB[2];
 			buttonRightColor = ClientPrefs.data.arrowRGB[3];
-		} else{*/
+		} else {*/
 			buttonLeftColor = ClientPrefs.defaultData.arrowRGB[0];
 			buttonDownColor = ClientPrefs.defaultData.arrowRGB[1];
 			buttonUpColor = ClientPrefs.defaultData.arrowRGB[2];
@@ -205,24 +205,24 @@ class FlxVirtualPad extends FlxSpriteGroup
 	{
 		super.destroy();
 
-		buttonLeft = null;
-		buttonUp = null;
-		buttonDown = null;
-		buttonRight = null;
-		buttonLeft2 = null;
-		buttonUp2 = null;
-		buttonDown2 = null;
-		buttonRight2 = null;
-		buttonA = null;
-		buttonB = null;
-		buttonC = null;
-		buttonD = null;
-		buttonE = null;
-		buttonV = null;
-		buttonX = null;
-		buttonY = null;
-		buttonZ = null;
-		buttonP = null;
+		buttonLeft = FlxDestroyUtil.destroy(buttonLeft);
+		buttonUp = FlxDestroyUtil.destroy(buttonUp);
+		buttonDown = FlxDestroyUtil.destroy(buttonDown);
+		buttonRight = FlxDestroyUtil.destroy(buttonRight);
+		buttonLeft2 = FlxDestroyUtil.destroy(buttonLeft2);
+		buttonUp2 = FlxDestroyUtil.destroy(buttonUp2);
+		buttonDown2 = FlxDestroyUtil.destroy(buttonDown2);
+		buttonRight2 = FlxDestroyUtil.destroy(buttonRight2);
+		buttonA = FlxDestroyUtil.destroy(buttonA);
+		buttonB = FlxDestroyUtil.destroy(buttonB);
+		buttonC = FlxDestroyUtil.destroy(buttonC);
+		buttonD = FlxDestroyUtil.destroy(buttonD);
+		buttonE = FlxDestroyUtil.destroy(buttonE);
+		buttonV = FlxDestroyUtil.destroy(buttonV);
+		buttonX = FlxDestroyUtil.destroy(buttonX);
+		buttonY = FlxDestroyUtil.destroy(buttonY);
+		buttonZ = FlxDestroyUtil.destroy(buttonZ);
+		buttonP = FlxDestroyUtil.destroy(buttonP);
 	}
 
 	private function createButton(X:Float, Y:Float, Width:Int, Height:Int, Graphic:String, ?Color:Int = 0xFFFFFF):FlxButton

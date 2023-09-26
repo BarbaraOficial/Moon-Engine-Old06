@@ -287,6 +287,18 @@ class FreeplayState extends MusicBeatState
 					changeSelection((checkNewHold - checkLastHold) * (controls.UI_UP ? -shiftMult : shiftMult));
 			}
 
+                        /* TODO: Find better and working code
+                        #if mobileC
+                        for (swipe in FlxG.swipes) {
+                        var mf = swipe.startPosition.x - swipe.endPosition.x;
+                        var fm = Math.sqrt(mf * mf);
+                        if(fm != 0)
+                        {
+                                FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
+                                changeSelection(-shiftMult * fm, false);
+                        }
+                        }
+                        #end*/
 			if(FlxG.mouse.wheel != 0)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);

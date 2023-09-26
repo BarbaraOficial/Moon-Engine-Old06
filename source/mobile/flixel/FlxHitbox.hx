@@ -9,6 +9,7 @@ import flixel.util.FlxDestroyUtil;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.group.FlxSpriteGroup;
+import flixel.util.FlxDestroyUtil;
 
 /**
  * A zone with 4 hint's (A hitbox).
@@ -33,14 +34,13 @@ class FlxHitbox extends FlxSpriteGroup
 	{
 		super();
 		#if mobileC
-
 		final offsetFir:Int = (ClientPrefs.data.hitbox2 ? Std.int(FlxG.height / 4) * 3 : 0);
 		final offsetSec:Int = (ClientPrefs.data.hitbox2 ? 0 : Std.int(FlxG.height / 4));
 		var buttonLeftColor:Array<FlxColor>;
 		var buttonDownColor:Array<FlxColor>;
 		var buttonUpColor:Array<FlxColor>;
 		var buttonRightColor:Array<FlxColor>;
-		if (ClientPrefs.data.dynamicColors){
+		if (ClientPrefs.data.dynamicColors && (PlayState.SONG.disableNoteRGB != null && !PlayState.SONG.disableNoteRGB == true)){
 			buttonLeftColor = ClientPrefs.data.arrowRGB[0];
 			buttonDownColor = ClientPrefs.data.arrowRGB[1];
 			buttonUpColor = ClientPrefs.data.arrowRGB[2];
@@ -86,12 +86,12 @@ class FlxHitbox extends FlxSpriteGroup
 	{
 		super.destroy();
 
-		buttonLeft = null;
-		buttonDown = null;
-		buttonUp = null;
-		buttonRight = null;
-		buttonExtra = null;
-		buttonExtra1 = null;
+		buttonLeft = FlxDestroyUtil.destroy(buttonLeft);
+		buttonDown = FlxDestroyUtil.destroy(buttonDown);
+		buttonUp = FlxDestroyUtil.destroy(buttonUp);
+		buttonRight = FlxDestroyUtil.destroy(buttonRight);
+		buttonExtra = FlxDestroyUtil.destroy(buttonExtra);
+		buttonExtra1 = FlxDestroyUtil.destroy(buttonExtra1);
 	}
 
 	private function createHintGraphic(Width:Int, Height:Int, Color:Int = 0xFFFFFF):BitmapData
