@@ -243,7 +243,7 @@ class Paths
 			return currentTrackedAssets.get(file);
 		}
 		else if (FileSystem.exists(file))
-			bitmap = BitmapData.fromFile('./' + file);
+			bitmap = BitmapData.fromFile(file);
 		else
 		#end
 		{
@@ -413,7 +413,7 @@ class Paths
 		var file:String = modsSounds(path, key);
 		if(FileSystem.exists(file)) {
 			if(!currentTrackedSounds.exists(file)) {
-				currentTrackedSounds.set(file, Sound.fromFile('./' + file));
+				currentTrackedSounds.set(file, Sound.fromFile(file));
 			}
 			localTrackedAssets.push(key);
 			return currentTrackedSounds.get(file);
@@ -423,9 +423,9 @@ class Paths
 		var gottenPath:String = getPath('$path/$key.$SOUND_EXT', SOUND, library);
 		gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
 		// trace(gottenPath);
-		#if MODS_ALLOWED
 		if(!currentTrackedSounds.exists(gottenPath))
-			currentTrackedSounds.set(gottenPath, Sound.fromFile(Sys.getCwd() + gottenPath));
+		#if MODS_ALLOWED
+			currentTrackedSounds.set(gottenPath, Sound.fromFile(gottenPath));
 		#else
 		{
 			var folder:String = '';
@@ -434,14 +434,13 @@ class Paths
 			currentTrackedSounds.set(gottenPath, Assets.getSound(folder + getPath('$path/$key.$SOUND_EXT', SOUND, library)));
 		}
 		#end
-
 		localTrackedAssets.push(gottenPath);
 		return currentTrackedSounds.get(gottenPath);
 	}
 
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '') {
-		return 'mods/' + key;
+		return  #if mobile Sys.getCwd() + #end 'mods/' + key;
 	}
 
 	inline static public function modsFont(key:String) {
@@ -499,7 +498,7 @@ class Paths
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
 		}
-		return 'mods/' + key;
+		return  #if mobile Sys.getCwd() + #end 'mods/' + key;
 	}
 	#end
 }
