@@ -13,25 +13,25 @@ class VideoSpriteManager extends VideoSprite {
         states.PlayState.instance.videoSprites.push(this); //hopefully will put the VideoSprite var in the array
     }
     #if VIDEOS_ALLOWED
-
+    
     /**
-	 * Native video support for Flixel & OpenFL
-	 * @param Path Example: `your/video/here.mp4`
-	 * @param Loop Loop the video.
-	 */
-    public function startVideo(path:String, loop:Bool = false) {
-        #if (hxCodec >= "3.0.0")
-        this.play(path, loop);
-        #else
-        this.playVideo(path, loop, false);
-        #end
-	this.setPlayBackRate(states.PlayState.instance.playbackRate);
+        * Native video support for Flixel & OpenFL
+        * @param Path Example: `your/video/here.mp4`
+        * @param Loop Loop the video.
+        */
+        public function startVideo(path:String, loop:Bool = false) {
+            #if (hxCodec >= "3.0.0")
+            this.play(path, loop);
+            #else
+            this.playVideo(path, loop, false);
+            #end
+            this.setPlayBackRate(states.PlayState.instance.playbackRate);
     }
 
-     /**
+    	/**
 	 * Adds a function that is called when the Video ends.
 	 * @param func Example: `function() { //code to run }`
-	 */
+	*/
     public function setFinishCallBack(func:Dynamic){
         #if (hxCodec >= "3.0.0")
         this.bitmap.onEndReached.add(function() {
@@ -45,7 +45,7 @@ class VideoSpriteManager extends VideoSprite {
         #end
     }
 
-     /**
+    	 /**
 	 * Adds a function which is called when the Codec is opend(video starts).
 	 * @param func Example: `function() { //code to run }`
 	 */
@@ -109,8 +109,8 @@ class VideoSpriteManager extends VideoSprite {
         #end
     }
 
-	//REAL
-   	public function setPlayBackRate(multi:Float){
+    //REAL
+    public function setPlayBackRate(multi:Float){
         this.bitmap.rate = multi;
     }
     #end

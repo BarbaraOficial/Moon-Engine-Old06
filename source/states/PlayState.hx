@@ -272,14 +272,11 @@ class PlayState extends MusicBeatState
 	public var endCallback:Void->Void = null;
 
 	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteManager> = []; #end
-	//due to the game clearing memory on gameover and song restart, the game wont store what was loaded midsong so you'll freez and probably die over and over, and because it stresses the CPU. -karim
-	//public static var allowedToClear:Bool = (ClientPrefs.data != null) ? !ClientPrefs.data.lowQuality : true; // default to true moved to Main.hx cause its setting back to true because of FlxG.resetState()
 
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
-		if(isStoryMode) Main.allowedToClear = true;
-		if(Main.allowedToClear) Paths.clearStoredMemory();
+		Paths.clearStoredMemory();
 
 		startCallback = startCountdown;
 		endCallback = endSong;
@@ -705,7 +702,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		super.create();
-		if(Main.allowedToClear) Paths.clearUnusedMemory();
+		Paths.clearUnusedMemory();
 		
 		CustomFadeTransition.nextCamera = camOther;
 		if(eventNotes.length < 1) checkEventNote();
@@ -1701,6 +1698,7 @@ class PlayState extends MusicBeatState
 			#if VIDEOS_ALLOWED
 			if(videoSprites.length > 0){
 			for(daVideoSprite in 0...videoSprites.length)
+				if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null) // prevents null function pointer when pausing after the video is finished
 				videoSprites[daVideoSprite].resume();
 			}
 			#end
@@ -1954,6 +1952,13 @@ class PlayState extends MusicBeatState
 			checkEventNote();
 		}
 
+		#if VDEIOS_ALLOWED
+		for(daVideoSprite in 0...videoSprites.length){
+			if(!videoSprites[daVideoSprite].bitmap.isDisplaying)
+				videoSprites.remove(daVideoSprite);
+		}
+		#end
+
 		#if debug
 		if(!endingSong && !startingSong) {
 			if (FlxG.keys.justPressed.ONE) {
@@ -1996,8 +2001,10 @@ class PlayState extends MusicBeatState
 
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0){
-			for(daVideoSprite in 0...videoSprites.length)
+			for(daVideoSprite in 0...videoSprites.length){
+				if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null) // prevents null function pointer when pausing after the video is finished
 				videoSprites[daVideoSprite].pause();
+			}
 		}
 		#end
 		
@@ -2076,11 +2083,10 @@ class PlayState extends MusicBeatState
 				//i assume it's better removing the thing on gameover
 				if(videoSprites.length > 0){
 				for(daVideoSprite in 0...videoSprites.length){
-					#if (hxCodec >= "3.0.0")
-				videoSprites[daVideoSprite].destroy();
-				#else
+				#if (hxCodec < "3.0.0")
 				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
 				#end
+				videoSprites[daVideoSprite].destroy();
 				videoSprites[daVideoSprite].kill();
 				}
 				for(i in videoSprites)
@@ -2502,7 +2508,6 @@ class PlayState extends MusicBeatState
 
 					trace('LOADING NEXT SONG');
 					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
-					Main.allowedToClear = true;
 					FlxTransitionableState.skipNextTransIn = true;
 					FlxTransitionableState.skipNextTransOut = true;
 					prevCamFollow = camFollow;
@@ -3166,16 +3171,15 @@ class PlayState extends MusicBeatState
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0){
 			for(daVideoSprite in 0...videoSprites.length){
-				#if (hxCodec >= "3.0.0")
-				videoSprites[daVideoSprite].destroy();
-				#else
-				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
-				#end
-				videoSprites[daVideoSprite].kill();
+			#if (hxCodec < "3.0.0")
+			videoSprites[daVideoSprite].bitmap.onEndReached();
+			#end
+			videoSprites[daVideoSprite].destroy();
+			videoSprites[daVideoSprite].kill();
 			}
 			for(i in videoSprites)
-				videoSprites.remove(i); //clearing
-		}
+				videoSprites.remove(i);
+			}
 		#end
 
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);

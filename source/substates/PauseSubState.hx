@@ -242,7 +242,7 @@ class PauseSubState extends MusicBeatSubstate
 					return;
 				}
 
-				Main.allowedToClear = false; //i think this is called when you presse back
+				 //i think this is called when you presse back
 				menuItems = menuItemsOG;
 				regenMenu();
 			}
@@ -255,7 +255,6 @@ class PauseSubState extends MusicBeatSubstate
 					#end
 					close();
 				case 'Change Difficulty':
-					Main.allowedToClear = true; // some mods have whole diffrent assets, song... on diffrent difficulties, so yea
 					menuItems = difficultyChoices;
 					deleteSkipTimeText();
 					regenMenu();
@@ -264,7 +263,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.changedDifficulty = true;
 					practiceText.visible = PlayState.instance.practiceMode;
 				case "Restart Song":
-					Main.allowedToClear = false;
+					
 					#if mobileC
 					
 					#end
@@ -284,7 +283,7 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Skip Time':
 					if(curTime < Conductor.songPosition)
 					{
-						Main.allowedToClear = false;
+						
 						PlayState.startOnTime = curTime;
 						restartSong(true);
 					}
@@ -302,7 +301,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.notes.clear();
 					PlayState.instance.unspawnNotes = [];
 					PlayState.instance.finishSong(true);
-					Main.allowedToClear = true;
+					
 				case 'Toggle Botplay':
 					PlayState.instance.cpuControlled = !PlayState.instance.cpuControlled;
 					PlayState.changedDifficulty = true;
@@ -310,7 +309,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
 				case 'Options':
-					Main.allowedToClear = false;
+					
 					#if mobileC
 					
 					#end
@@ -326,7 +325,7 @@ class PauseSubState extends MusicBeatSubstate
 					OptionsState.onPlayState = true;
 				case "Exit to menu":
 					#if mobileC
-					Main.allowedToClear = true;
+					
 					
 					#end
 					#if (desktop && !hl) DiscordClient.resetClientID(); #end
@@ -381,7 +380,7 @@ class PauseSubState extends MusicBeatSubstate
 
 	public static function restartSong(noTrans:Bool = false)
 	{
-		Main.allowedToClear = false;
+		
 		PlayState.instance.paused = true; // For lua
 		FlxG.sound.music.volume = 0;
 		PlayState.instance.vocals.volume = 0;

@@ -94,13 +94,13 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if (controls.ACCEPT)
 		{
-			Main.allowedToClear = false;
+			
 			endBullshit();
 		}
 
 		if (controls.BACK)
 		{
-			Main.allowedToClear = true;
+			
 			
 			#if (desktop && !hl) DiscordClient.resetClientID(); #end
 			FlxG.sound.music.stop();
