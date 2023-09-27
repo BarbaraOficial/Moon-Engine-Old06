@@ -1952,11 +1952,13 @@ class PlayState extends MusicBeatState
 			checkEventNote();
 		}
 
-		#if VDEIOS_ALLOWED
+		#if VIDEOS_ALLOWED
+		if(videoSprites.length > 0){
 		for(daVideoSprite in 0...videoSprites.length){
 			if(!videoSprites[daVideoSprite].bitmap.isDisplaying)
 				videoSprites.remove(daVideoSprite);
 		}
+	}
 		#end
 
 		#if debug
@@ -3171,12 +3173,14 @@ class PlayState extends MusicBeatState
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0){
 			for(daVideoSprite in 0...videoSprites.length){
+			if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null){
 			#if (hxCodec < "3.0.0")
 			videoSprites[daVideoSprite].bitmap.onEndReached();
 			#end
 			videoSprites[daVideoSprite].destroy();
 			videoSprites[daVideoSprite].kill();
 			}
+		}
 			for(i in videoSprites)
 				videoSprites.remove(i);
 			}
