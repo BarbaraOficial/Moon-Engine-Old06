@@ -8,6 +8,9 @@ jobs:
     steps:
       - name: Info
         run: echo haxe --version && haxelib list
+        
+      - name: Changing Directory
+        run: cd C:\Users\LENOVO\Desktop\GitHub\FNF-PsychEngine-Mobile
 
       - name: Compile
         run: lime build android -release -D NO_PRECOMPILED_HEADERS
