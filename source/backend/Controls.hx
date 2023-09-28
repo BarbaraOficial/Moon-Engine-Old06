@@ -143,7 +143,7 @@ class Controls
 	private function get_RESET()
 		return justPressed('reset');
 
-	// Gamepad, Keyboard & mobile stuff
+	// Gamepad, Keyboard & Mobile stuff
 	public var keyboardBinds:Map<String, Array<FlxKey>>;
 	public var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;
 	#if mobileC
@@ -153,37 +153,46 @@ class Controls
 	public function justPressed(key:String)
 	{
 		var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
+                #if android var mafaka:Bool = false; #end
 		if (result)
 			controllerMode = false;
 
-		return result
-			|| _myGamepadJustPressed(gamepadBinds[key]) == true #if mobileC
-		|| mobileCJustPressed(mobileBinds[key]) == true
-		|| virtualPadJustPressed(mobileBinds[key]) == true #end;
+                #if android
+                if (key == "back")
+                  mafaka = FlxG.android.justPressed.BACK;
+                #end
+
+		return result #if android || mafaka #end || _myGamepadJustPressed(gamepadBinds[key]) == true #if mobileC || mobileCJustPressed(mobileBinds[key]) == true || virtualPadJustPressed(mobileBinds[key]) == true #end;
 	}
 
 	public function pressed(key:String)
 	{
 		var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
+                #if android var mafaka:Bool = false; #end
 		if (result)
 			controllerMode = false;
 
-		return result
-			|| _myGamepadPressed(gamepadBinds[key]) == true #if mobileC
-		|| mobileCPressed(mobileBinds[key]) == true
-		|| virtualPadPressed(mobileBinds[key]) == true #end;
+                #if android
+                if (key == "back")
+                  mafaka = FlxG.android.pressed.BACK;
+                #end
+
+		return result #if android || mafaka #end || _myGamepadPressed(gamepadBinds[key]) == true #if mobileC || mobileCPressed(mobileBinds[key]) == true || virtualPadPressed(mobileBinds[key]) == true #end;
 	}
 
 	public function justReleased(key:String)
 	{
 		var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
+                #if android var mafaka:Bool = false; #end
 		if (result)
 			controllerMode = false;
 
-		return result
-			|| _myGamepadJustReleased(gamepadBinds[key]) == true #if mobileC
-		|| mobileCJustReleased(mobileBinds[key]) == true
-		|| virtualPadJustReleased(mobileBinds[key]) == true #end;
+                #if android
+                if (key == "back")
+                  mafaka = FlxG.android.justReleased.BACK;
+                #end
+
+		return result #if android || mafaka #end || _myGamepadJustReleased(gamepadBinds[key]) == true #if mobileC || mobileCJustReleased(mobileBinds[key]) == true || virtualPadJustReleased(mobileBinds[key]) == true #end;
 	}
 
 	public var controllerMode:Bool = false;

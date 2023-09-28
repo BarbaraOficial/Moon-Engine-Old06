@@ -1808,7 +1808,7 @@ class ChartingState extends MusicBeatState
 
 		if (!blockInput)
 		{
-			if (FlxG.keys.justPressed.ESCAPE #if mobileC || virtualPad.buttonC.justPressed #end)
+			if (FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end #if mobileC || virtualPad.buttonC.justPressed #end)
 			{
 				FlxG.sound.music.pause();
 				if(vocals != null) vocals.pause();

@@ -1104,7 +1104,7 @@ class CharacterEditorState extends MusicBeatState
 		ClientPrefs.toggleVolumeKeys(true);
 
 		if(!charDropDown.dropPanel.visible) {
-			if (FlxG.keys.justPressed.ESCAPE #if mobileC || virtualPad.buttonB.justPressed #end) {
+			if (FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end #if mobileC || virtualPad.buttonB.justPressed #end) {
 				if(goToPlayState) {
 					MusicBeatState.switchState(new PlayState());
 				} else {

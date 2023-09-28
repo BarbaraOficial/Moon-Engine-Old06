@@ -168,6 +168,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
+                var back = controls.BACK;
 		var accepted = controls.ACCEPT;
 
 		if (upP)
@@ -250,9 +251,6 @@ class PauseSubState extends MusicBeatSubstate
 			switch (daSelected)
 			{
 				case "Resume":
-					#if mobileC
-					
-					#end
 					close();
 				case 'Change Difficulty':
 					menuItems = difficultyChoices;
@@ -263,10 +261,6 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.changedDifficulty = true;
 					practiceText.visible = PlayState.instance.practiceMode;
 				case "Restart Song":
-					
-					#if mobileC
-					
-					#end
 					restartSong();
 				#if mobileC
 				case 'Chart Editor':
@@ -275,9 +269,6 @@ class PauseSubState extends MusicBeatSubstate
 					
 				#end
 				case "Leave Charting Mode":
-					#if mobileC
-					
-					#end
 					restartSong();
 					PlayState.chartingMode = false;
 				case 'Skip Time':
@@ -309,10 +300,6 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
 				case 'Options':
-					
-					#if mobileC
-					
-					#end
 					PlayState.instance.paused = true; // For lua
 					PlayState.instance.vocals.volume = 0;
 					MusicBeatState.switchState(new OptionsState());
@@ -324,10 +311,6 @@ class PauseSubState extends MusicBeatSubstate
 					}
 					OptionsState.onPlayState = true;
 				case "Exit to menu":
-					#if mobileC
-					
-					
-					#end
 					#if (desktop && !hl) DiscordClient.resetClientID(); #end
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
@@ -345,6 +328,7 @@ class PauseSubState extends MusicBeatSubstate
 					FlxG.camera.followLerp = 0;
 			}
 		}
+                if (back) close();
 		#if mobileC
 		if (MusicBeatSubstate.virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
 			if (PlayState.chartingMode)
