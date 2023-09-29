@@ -25,7 +25,6 @@ jobs:
         uses: actions/cache/restore@main
         with:
           path: |
-            ~/.hxcpp
             ~/haxelib
             ~/.gradle
             export/release/android/haxe
@@ -69,7 +68,6 @@ jobs:
       - name: Compile
         run: haxelib run lime build android -release
         env:
-          HXCPP_COMPILE_CACHE: ~/.hxcpp
           cert_pass: nullfunni
           cert_alias_pass: nullfunni
 
@@ -106,7 +104,6 @@ jobs:
         uses: actions/cache/save@main
         with:
           path: |
-            ~/.hxcpp
             ~/haxelib
             ~/.gradle
             export/release/android/haxe
