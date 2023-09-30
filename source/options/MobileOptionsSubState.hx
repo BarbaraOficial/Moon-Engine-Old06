@@ -34,7 +34,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 			'controlsAlpha',
 			'percent');
 		option.scrollSpeed = 1;
-		option.minValue = 0.2;
+		option.minValue = 0.001;
 		option.maxValue = 1;
 		option.changeValue = 0.1;
 		option.decimals = 1;
