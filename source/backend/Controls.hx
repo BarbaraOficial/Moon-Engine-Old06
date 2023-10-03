@@ -153,14 +153,14 @@ class Controls
 	public function justPressed(key:String)
 	{
 		var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
-                #if android var mafaka:Bool = false; #end
+                //#if android var mafaka:Bool = false; #end
 		if (result)
 			controllerMode = false;
 
-                #if android
+                /*#if android
                 if (key == "back")
                   mafaka = FlxG.android.justPressed.BACK;
-                #end
+                #end*/
 
 		return result #if android || mafaka #end || _myGamepadJustPressed(gamepadBinds[key]) == true #if mobileC || mobileCJustPressed(mobileBinds[key]) == true || virtualPadJustPressed(mobileBinds[key]) == true #end;
 	}
@@ -168,14 +168,14 @@ class Controls
 	public function pressed(key:String)
 	{
 		var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
-                #if android var mafaka:Bool = false; #end
+                //#if android var mafaka:Bool = false; #end
 		if (result)
 			controllerMode = false;
 
-                #if android
+                /*#if android
                 if (key == "back")
                   mafaka = FlxG.android.pressed.BACK;
-                #end
+                #end*/
 
 		return result #if android || mafaka #end || _myGamepadPressed(gamepadBinds[key]) == true #if mobileC || mobileCPressed(mobileBinds[key]) == true || virtualPadPressed(mobileBinds[key]) == true #end;
 	}
@@ -183,14 +183,14 @@ class Controls
 	public function justReleased(key:String)
 	{
 		var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
-                #if android var mafaka:Bool = false; #end
+                //#if android var mafaka:Bool = false; #end
 		if (result)
 			controllerMode = false;
 
-                #if android
+                /*#if android
                 if (key == "back")
                   mafaka = FlxG.android.justReleased.BACK;
-                #end
+                #end*/
 
 		return result #if android || mafaka #end || _myGamepadJustReleased(gamepadBinds[key]) == true #if mobileC || mobileCJustReleased(mobileBinds[key]) == true || virtualPadJustReleased(mobileBinds[key]) == true #end;
 	}
