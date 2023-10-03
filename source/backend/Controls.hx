@@ -162,7 +162,7 @@ class Controls
                   mafaka = FlxG.android.justPressed.BACK;
                 #end*/
 
-		return result #if android || mafaka #end || _myGamepadJustPressed(gamepadBinds[key]) == true #if mobileC || mobileCJustPressed(mobileBinds[key]) == true || virtualPadJustPressed(mobileBinds[key]) == true #end;
+		return result /*#if android || mafaka #end*/ || _myGamepadJustPressed(gamepadBinds[key]) == true #if mobileC || mobileCJustPressed(mobileBinds[key]) == true || virtualPadJustPressed(mobileBinds[key]) == true #end;
 	}
 
 	public function pressed(key:String)
@@ -177,7 +177,7 @@ class Controls
                   mafaka = FlxG.android.pressed.BACK;
                 #end*/
 
-		return result #if android || mafaka #end || _myGamepadPressed(gamepadBinds[key]) == true #if mobileC || mobileCPressed(mobileBinds[key]) == true || virtualPadPressed(mobileBinds[key]) == true #end;
+		return result /*#if android || mafaka #end*/ || _myGamepadPressed(gamepadBinds[key]) == true #if mobileC || mobileCPressed(mobileBinds[key]) == true || virtualPadPressed(mobileBinds[key]) == true #end;
 	}
 
 	public function justReleased(key:String)
@@ -192,7 +192,7 @@ class Controls
                   mafaka = FlxG.android.justReleased.BACK;
                 #end*/
 
-		return result #if android || mafaka #end || _myGamepadJustReleased(gamepadBinds[key]) == true #if mobileC || mobileCJustReleased(mobileBinds[key]) == true || virtualPadJustReleased(mobileBinds[key]) == true #end;
+		return result /*#if android || mafaka #end*/ || _myGamepadJustReleased(gamepadBinds[key]) == true #if mobileC || mobileCJustReleased(mobileBinds[key]) == true || virtualPadJustReleased(mobileBinds[key]) == true #end;
 	}
 
 	public var controllerMode:Bool = false;
