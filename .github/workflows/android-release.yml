@@ -44,7 +44,7 @@ jobs:
           haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git
           haxelib install lime 8.1.0 --quiet
           haxelib git linc_luajit https://github.com/mcagabe19-stuff/linc_luajit.git
-          haxelib install openfl 9.2.1 --quiet
+          haxelib install openfl 9.2.2 --quiet
           haxelib install tjson 1.4.0 --quiet
           haxelib git extension-orientation https://github.com/HaxeExtension/extension-orientation.git
 
