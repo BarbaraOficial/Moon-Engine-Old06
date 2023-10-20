@@ -47,7 +47,7 @@ jobs:
           haxelib install flixel 5.2.2 --quiet
           haxelib git hxCodec https://github.com/mcagabe19-stuff/hxCodec.git
           haxelib install SScript 6.1.80 --quiet
-          haxelib install hxcpp 4.2.0 --quiet
+          haxelib install hxcpp 4.2.1 --quiet
           haxelib install lime 7.9.0 --quiet
           haxelib git linc_luajit https://github.com/mcagabe19-stuff/linc_luajit.git
           haxelib install openfl 9.2.2 --quiet
