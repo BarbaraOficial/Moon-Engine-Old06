@@ -66,7 +66,7 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Compile
-        run: lime build android -D NO_PRECOMPILED_HEADEDS -final
+        run: lime build android -D NO_PRECOMPILED_HEADERS -final
         env:
           cert_pass: nullfunni
           cert_alias_pass: nullfunni
