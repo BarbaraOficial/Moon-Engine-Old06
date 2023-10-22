@@ -115,7 +115,7 @@ class Main extends Sprite
 
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
                 #if (openfl >= "9.2.0")
-		addChild(new FlxGame(1280, 720, TitleState, #if (flixel < "5.0.0") -1, #end 60, 60, true, false));
+		addChild(new FlxGame(1280, 720, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 		#else
 		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 		#end
