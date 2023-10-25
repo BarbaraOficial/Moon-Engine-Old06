@@ -278,8 +278,8 @@ class Paths
 			else
 			#end
 			{
-				if (OpenFlAssets.exists(file, IMAGE))
-					bitmap = OpenFlAssets.getBitmapData(file);
+				if (Assets.exists(file, IMAGE))
+					bitmap = Assets.getBitmapData(file);
 			}
 
 			if(bitmap == null) return null;
@@ -304,16 +304,6 @@ class Paths
 
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
 	{
-		if (absolute) {
-			#if sys
-			if (FileSystem.exists(key))
-				return File.getContent(key);
-			#end
-			if(Assets.exists(key, TEXT))
-				return Assets.getText(key);
-
-			return null;
-		}
 		#if sys
 		#if MODS_ALLOWED
 		if (!ignoreMods && FileSystem.exists(modFolders(key)))
