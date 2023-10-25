@@ -271,7 +271,7 @@ class ModsMenuState extends MusicBeatState
 		FlxG.mouse.visible = true;
 
 		#if mobileC
-		addVirtualPad(UP_DOWN, B);
+		addVirtualPad(LEFT_FULL, A_B);
 		#end
 
 		changeSelectedMod();

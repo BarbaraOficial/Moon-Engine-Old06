@@ -368,7 +368,7 @@ class Paths
 		var useMod = false;
 		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
 		var myXml:Dynamic = getPath('images/$key.xml', TEXT, library, true);
-		if(OpenFlAssets.exists(myXml) #if MODS_ALLOWED || (FileSystem.exists(myXml) && (useMod = true)) #end )
+		if(Assets.exists(myXml) #if MODS_ALLOWED || (FileSystem.exists(myXml) && (useMod = true)) #end )
 		{
 			#if MODS_ALLOWED
 			return FlxAtlasFrames.fromSparrow(imageLoaded, (useMod ? File.getContent(myXml) : myXml));
