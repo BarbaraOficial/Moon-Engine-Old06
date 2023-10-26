@@ -75,6 +75,10 @@ import psychlua.HScript;
 import tea.SScript;
 #end
 
+#if mobileC
+import mobile.flixel.FlxVirtualPad;
+#end
+
 class PlayState extends MusicBeatState
 {
 	public static var STRUM_X = 48.5;
@@ -213,6 +217,7 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
+	public var luaVpadCam:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
 	public var songScore:Int = 0;
@@ -273,6 +278,10 @@ class PlayState extends MusicBeatState
 
 	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteManager> = []; #end
 
+	#if mobileC
+	public var luaVirtualPad:FlxVirtualPad;
+	#end
+
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
@@ -309,12 +318,15 @@ class PlayState extends MusicBeatState
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
+		luaVpadCam = new FlxCamera();
+		luaVpadCam.bgColor.alpha = 0;
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+		FlxG.cameras.add(luaVpadCam, false);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
@@ -3688,6 +3700,46 @@ class PlayState extends MusicBeatState
 		FlxG.log.warn('This platform doesn\'t support Runtime Shaders!');
 		#end
 		return false;
+	}
+	#end
+	#if mobileC
+	public function addLuaVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
+		{
+			luaVirtualPad.setUpMaps();
+			luaVirtualPad = new FlxVirtualPad(DPad, Action);
+			luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
+			add(luaVirtualPad);
+		}
+	
+	public function removeLuaVirtualPad()
+		{
+			if (luaVirtualPad != null)
+				remove(luaVirtualPad);
+		}
+	public function addLuaPadCamera()
+		{
+			if (luaVirtualPad != null)
+				luaVirtualPad.cameras = [luaVpadCam];
+		}
+	public function luaVpadJustPressed(button:String):Bool{
+		if (luaVirtualPad == null)
+			return false;
+
+		return luaVirtualPad.checkButtonPressByString(button, "justPressed");
+	}
+
+	public function luaVpadPressed(button:String):Bool{
+		if (luaVirtualPad == null)
+			return false;
+
+		return luaVirtualPad.checkButtonPressByString(button, "pressed");
+	}
+
+	public function luaVpadJustReleased(button:String):Bool{
+		if (luaVirtualPad == null)
+			return false;
+	
+		return luaVirtualPad.checkButtonPressByString(button, "JustReleased");
 	}
 	#end
 }

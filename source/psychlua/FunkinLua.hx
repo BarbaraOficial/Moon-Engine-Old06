@@ -7,8 +7,6 @@ import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
 import openfl.Lib;
-import openfl.utils.Assets;
-import openfl.display.BitmapData;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.addons.transition.FlxTransitionableState;
@@ -215,7 +213,42 @@ class FunkinLua {
 			}
 			return 'null';
 		}
-                set('mobileControlsMode', getMobileControlsAsString());
+        set('mobileControlsMode', getMobileControlsAsString());
+		//LUA VPAD
+		set("addVirtualPad", function(directionButton:String, actionButton:String){
+			if(game.luaVirtualPad == null)
+				game.addLuaVirtualPad(game.virtualPad.dpadMode.get(directionButton), game.virtualPad.actionMode.get(actionButton));
+			else
+				luaTrace('virtual pad already exists!!');
+		});
+
+		set("addVirtualPadCamera", function(){
+			if(game.luaVirtualPad != null)
+				game.addLuaPadCamera();
+			else
+				luaTrace("virtual pad doesn't exists!!");
+		});
+		set("virtualPadJustPressed", function(button:String){
+			if(game.luaVirtualPad != null)
+				game.luaVpadJustPressed(button)
+			else
+				luaTrace("virtual pad doesn't exists!!");
+		});
+		set("virtualPadPressed", function(button:String){
+			if(game.luaVirtualPad != null)
+				game.luaVpadPressed(button)
+			else
+				luaTrace("virtual pad doesn't exists!!");
+		});
+		set("virtualPadJustReleased", function(button:String){
+			if(game.luaVirtualPad != null)
+				game.luaVpadJustReleased(button)
+			else
+				luaTrace("virtual pad doesn't exists!!");
+		});
+		set("removeVirtualPad", function(){
+			game.removeLuaVirtualPad();
+		});
 		#end
 
 		for (name => func in customFunctions)

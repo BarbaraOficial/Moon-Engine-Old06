@@ -30,7 +30,7 @@ class MobileControls extends FlxSpriteGroup
 				initControler(1);
 			case 2: // CUSTOM
 				initControler(2);
-			case 3: // BOTH_FULL
+			case 3: // BOTH
 				initControler(3);
 			case 4: // HITBOX
 				initControler(4);
@@ -65,7 +65,7 @@ class MobileControls extends FlxSpriteGroup
 				add(virtualPadExtra);
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
 			case 3:
-				virtualPad = new FlxVirtualPad(BOTH_FULL, NONE);
+				virtualPad = new FlxVirtualPad(BOTH, NONE);
 				add(virtualPad);
 				virtualPadExtra = MobileControls.getExtraCustomMode(new FlxVirtualPadExtra(padMap.get(ClientPrefs.data.extraButtons)));
 				add(virtualPadExtra);

@@ -10,6 +10,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 import openfl.utils.Assets;
 import flixel.util.FlxDestroyUtil;
+import haxe.ds.Map;
 
 /**
  * A gamepad.
@@ -39,6 +40,10 @@ class FlxVirtualPad extends FlxSpriteGroup
 	public var buttonZ:FlxButton = new FlxButton(0, 0);
 	public var buttonP:FlxButton = new FlxButton(0, 0);
 
+	public var buttonsString:Map<String, FlxButton>;
+	public var dpadMode:Map<String, FlxDPadMode>;
+	public var actionMode:Map<String, FlxActionMode>;
+
 	/**
 	 * Create a gamepad.
 	 *
@@ -48,6 +53,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 	public function new(DPad:FlxDPadMode, Action:FlxActionMode)
 	{
 		super();
+
 		#if mobileC
 		var buttonLeftColor:Array<FlxColor>;
 		var buttonDownColor:Array<FlxColor>;
@@ -89,7 +95,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 				add(buttonLeft = createButton(FlxG.width - 384, FlxG.height - 309, 132, 127, 'left', buttonLeftColor[0]));
 				add(buttonRight = createButton(FlxG.width - 132, FlxG.height - 309, 132, 127, 'right', buttonRightColor[0]));
 				add(buttonDown = createButton(FlxG.width - 258, FlxG.height - 201, 132, 127, 'down', buttonDownColor[0]));
-			case BOTH_FULL:
+			case BOTH:
 				add(buttonUp = createButton(105, FlxG.height - 345, 132, 127, 'up', buttonUpColor[0]));
 				add(buttonLeft = createButton(0, FlxG.height - 243, 132, 127, 'left', buttonLeftColor[0]));
 				add(buttonRight = createButton(207, FlxG.height - 243, 132, 127, 'right', buttonRightColor[0]));
@@ -198,6 +204,52 @@ class FlxVirtualPad extends FlxSpriteGroup
 		#end
 	}
 
+	public function setUpMaps(){
+		trace("virtualpad maps created");
+		// DPad Buttons
+		buttonsString = new Map<String, FlxButton>();
+		buttonsString.set("buttonUp", buttonUp);
+		buttonsString.set("buttonUp2", buttonUp2);
+		buttonsString.set("buttonDown", buttonDown);
+		buttonsString.set("buttonDown2", buttonDown2);
+		buttonsString.set("buttonLeft", buttonLeft);
+		buttonsString.set("buttonLeft2", buttonLeft2);
+		buttonsString.set("buttonRight", buttonRight);
+		buttonsString.set("buttonRight2", buttonRight2);
+
+		// Actions buttons
+		buttonsString.set("buttonA", buttonA);
+		buttonsString.set("buttonB", buttonB);
+		buttonsString.set("buttonC", buttonC);
+		buttonsString.set("buttonD", buttonD);
+		buttonsString.set("buttonE", buttonE);
+		buttonsString.set("buttonV", buttonV);
+		buttonsString.set("buttonX", buttonX);
+		buttonsString.set("buttonY", buttonY);
+		buttonsString.set("buttonZ", buttonZ);
+		buttonsString.set("buttonP", buttonP);
+
+		// FlxDPadModes
+		dpadMode = new Map<String, FlxDPadMode>();
+		dpadMode.set("UP_DOWN", UP_DOWN);
+		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
+		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
+		dpadMode.set("LEFT_FULL", LEFT_FULL);
+		dpadMode.set("RIGHT_FULL", RIGHT_FULL);
+		dpadMode.set("BOTH", BOTH);
+		dpadMode.set("NONE", NONE);
+
+		actionMode = new Map<String, FlxActionMode>();
+		actionMode.set('A', A);
+		actionMode.set('A_B', A_B);
+		actionMode.set('A_B_C', A_B_C);
+		actionMode.set('A_B_E', A_B_E);
+		actionMode.set('A_B_E', A_B_E);
+		actionMode.set('A_B_C_X_Y', A_B_C_X_Y);
+		actionMode.set('A_B_C_X_Y_Z', A_B_C_X_Y_Z);
+		actionMode.set('A_B_C_D_V_X_Y_Z', A_B_C_D_V_X_Y_Z);
+	}
+
 	/**
 	 * Clean up memory.
 	 */
@@ -241,12 +293,12 @@ class FlxVirtualPad extends FlxSpriteGroup
 		#if FLX_DEBUG
 		button.ignoreDrawDebug = true;
 		#end
-		//button.alpha = MobileControls.getOpacity();
 		return button;
 	}
-		/*
-		* Checks if the virtualpad button is pressed, if yes returns true.
-		*/
+
+	/**
+	* Checks if the virtualpad button is pressed, if yes returns true.
+	*/
 	public function mobileControlsPressed(buttonID:FlxMobileControlsID):Bool
 		{
 			switch (buttonID)
@@ -292,57 +344,57 @@ class FlxVirtualPad extends FlxSpriteGroup
 			}
 		}
 
-		/*
-		* Checks if the virtualpad button justPressed, if yes returns true.
-		*/
-		public function mobileControlsJustPressed(buttonID:FlxMobileControlsID):Bool
+	/**
+	* Checks if the virtualpad button justPressed, if yes returns true.
+	*/
+	public function mobileControlsJustPressed(buttonID:FlxMobileControlsID):Bool
+		{
+			switch (buttonID)
 			{
-				switch (buttonID)
-				{
-				case FlxMobileControlsID.LEFT:
-					return buttonLeft.justPressed;
-				case FlxMobileControlsID.UP:
-					return buttonUp.justPressed;
-				case FlxMobileControlsID.RIGHT:
-					return buttonRight.justPressed;
-				case FlxMobileControlsID.DOWN:
-					return buttonDown.justPressed;
-				case FlxMobileControlsID.LEFT2:
-					return buttonLeft2.justPressed;
-				case FlxMobileControlsID.UP2:
-					return buttonUp2.justPressed;
-				case FlxMobileControlsID.RIGHT2:
-					return buttonRight2.justPressed;
-				case FlxMobileControlsID.DOWN2:
-					return buttonDown2.justPressed;
-				case FlxMobileControlsID.A:
-					return buttonA.justPressed;
-				case FlxMobileControlsID.B:
-					return buttonB.justPressed;
-				case FlxMobileControlsID.C:
-					return buttonC.justPressed;
-				case FlxMobileControlsID.D:
-					return buttonD.justPressed;
-				case FlxMobileControlsID.E:
-					return buttonE.justPressed;
-				case FlxMobileControlsID.V:
-					return buttonV.justPressed;
-				case FlxMobileControlsID.X:
-					return buttonX.justPressed;
-				case FlxMobileControlsID.Y:
-					return buttonY.justPressed;
-				case FlxMobileControlsID.Z:
-					return buttonZ.justPressed;
-				case FlxMobileControlsID.NONE:
-					return false;
-				default:
-					return false;
-				}
+			case FlxMobileControlsID.LEFT:
+				return buttonLeft.justPressed;
+			case FlxMobileControlsID.UP:
+				return buttonUp.justPressed;
+			case FlxMobileControlsID.RIGHT:
+				return buttonRight.justPressed;
+			case FlxMobileControlsID.DOWN:
+				return buttonDown.justPressed;
+			case FlxMobileControlsID.LEFT2:
+				return buttonLeft2.justPressed;
+			case FlxMobileControlsID.UP2:
+				return buttonUp2.justPressed;
+			case FlxMobileControlsID.RIGHT2:
+				return buttonRight2.justPressed;
+			case FlxMobileControlsID.DOWN2:
+				return buttonDown2.justPressed;
+			case FlxMobileControlsID.A:
+				return buttonA.justPressed;
+			case FlxMobileControlsID.B:
+				return buttonB.justPressed;
+			case FlxMobileControlsID.C:
+				return buttonC.justPressed;
+			case FlxMobileControlsID.D:
+				return buttonD.justPressed;
+			case FlxMobileControlsID.E:
+				return buttonE.justPressed;
+			case FlxMobileControlsID.V:
+				return buttonV.justPressed;
+			case FlxMobileControlsID.X:
+				return buttonX.justPressed;
+			case FlxMobileControlsID.Y:
+				return buttonY.justPressed;
+			case FlxMobileControlsID.Z:
+				return buttonZ.justPressed;
+			case FlxMobileControlsID.NONE:
+				return false;
+			default:
+				return false;
 			}
+		}
 
-		/*
-		* Checks if the virtualpad button is justReleased, if yes returns true.
-		*/
+	/**
+	* Checks if the virtualpad button is justReleased, if yes returns true.
+	*/
 	public function mobileControlsJustReleased(buttonID:FlxMobileControlsID):Bool
 		{
 			switch (buttonID)
@@ -385,9 +437,30 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return false;
 				default:
 					return false;
-					}
 				}
-				
+			}
+
+		/**
+		* Checks if a button from `this` VirtuaPad is pressed.
+		* @param button			The button you want to check if it's pressed as a string.
+		* @param type 			The type that should be checked, can be `"justPressed"`, `"pressed"` or `"justReleased"`.
+		*/
+		public function checkButtonPressByString(button:String, type:String):Bool
+			{
+				if(buttonsString.get(button) == null)
+					return false;
+
+				var check:Bool = false;
+				switch(type){
+					case "justPressed":
+						check = buttonsString.get(button).justPressed;
+					case "pressed":
+						check = buttonsString.get(button).pressed;
+					case "justReleased":
+						check = buttonsString.get(button).justReleased;
+				}
+				return check;
+			}
 		
 }
 
@@ -398,7 +471,7 @@ enum FlxDPadMode
 	UP_LEFT_RIGHT;
 	LEFT_FULL;
 	RIGHT_FULL;
-	BOTH_FULL;
+	BOTH;
 	DIALOGUE_PORTRAIT_EDITOR;
 	MENU_CHARACTER;
 	NOTE_SPLASH_DEBUG;

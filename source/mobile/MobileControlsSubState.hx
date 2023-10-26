@@ -363,7 +363,7 @@ function changeSelection(change:Int = 0):Void
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
 				virtualPad.destroy();
-				virtualPad = new FlxVirtualPad(BOTH_FULL, NONE);
+				virtualPad = new FlxVirtualPad(BOTH, NONE);
 				virtualPad.alpha = ClientPrefs.data.controlsAlpha;
 				add(virtualPad);
 				virtualPad.buttonLeft.color =  buttonLeftColor[0];
