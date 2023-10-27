@@ -217,7 +217,7 @@ class FunkinLua {
 		//LUA VPAD
 		set("addVirtualPad", function(directionButton:String, actionButton:String){
 			if(game.luaVirtualPad == null)
-				game.addLuaVirtualPad(game.virtualPad.dpadMode.get(directionButton), game.virtualPad.actionMode.get(actionButton));
+				game.addLuaVirtualPad(MusicBeatState.dpadMode.get(directionButton), MusicBeatState.actionMode.get(actionButton));
 			else
 				luaTrace('virtual pad already exists!!');
 		});

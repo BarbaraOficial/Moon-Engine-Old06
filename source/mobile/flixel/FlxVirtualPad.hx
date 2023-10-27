@@ -41,8 +41,6 @@ class FlxVirtualPad extends FlxSpriteGroup
 	public var buttonP:FlxButton = new FlxButton(0, 0);
 
 	public var buttonsString:Map<String, FlxButton>;
-	public var dpadMode:Map<String, FlxDPadMode>;
-	public var actionMode:Map<String, FlxActionMode>;
 
 	/**
 	 * Create a gamepad.
@@ -54,6 +52,28 @@ class FlxVirtualPad extends FlxSpriteGroup
 	{
 		super();
 
+		// DPad Buttons
+		buttonsString = new Map<String, FlxButton>();
+		buttonsString.set("buttonUp", buttonUp);
+		buttonsString.set("buttonUp2", buttonUp2);
+		buttonsString.set("buttonDown", buttonDown);
+		buttonsString.set("buttonDown2", buttonDown2);
+		buttonsString.set("buttonLeft", buttonLeft);
+		buttonsString.set("buttonLeft2", buttonLeft2);
+		buttonsString.set("buttonRight", buttonRight);
+		buttonsString.set("buttonRight2", buttonRight2);
+
+		// Actions buttons
+		buttonsString.set("buttonA", buttonA);
+		buttonsString.set("buttonB", buttonB);
+		buttonsString.set("buttonC", buttonC);
+		buttonsString.set("buttonD", buttonD);
+		buttonsString.set("buttonE", buttonE);
+		buttonsString.set("buttonV", buttonV);
+		buttonsString.set("buttonX", buttonX);
+		buttonsString.set("buttonY", buttonY);
+		buttonsString.set("buttonZ", buttonZ);
+		buttonsString.set("buttonP", buttonP);
 		#if mobileC
 		var buttonLeftColor:Array<FlxColor>;
 		var buttonDownColor:Array<FlxColor>;
@@ -204,53 +224,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 		#end
 	}
 
-	public function setUpMaps(){
-		trace("virtualpad maps created");
-		// DPad Buttons
-		buttonsString = new Map<String, FlxButton>();
-		buttonsString.set("buttonUp", buttonUp);
-		buttonsString.set("buttonUp2", buttonUp2);
-		buttonsString.set("buttonDown", buttonDown);
-		buttonsString.set("buttonDown2", buttonDown2);
-		buttonsString.set("buttonLeft", buttonLeft);
-		buttonsString.set("buttonLeft2", buttonLeft2);
-		buttonsString.set("buttonRight", buttonRight);
-		buttonsString.set("buttonRight2", buttonRight2);
-
-		// Actions buttons
-		buttonsString.set("buttonA", buttonA);
-		buttonsString.set("buttonB", buttonB);
-		buttonsString.set("buttonC", buttonC);
-		buttonsString.set("buttonD", buttonD);
-		buttonsString.set("buttonE", buttonE);
-		buttonsString.set("buttonV", buttonV);
-		buttonsString.set("buttonX", buttonX);
-		buttonsString.set("buttonY", buttonY);
-		buttonsString.set("buttonZ", buttonZ);
-		buttonsString.set("buttonP", buttonP);
-
-		// FlxDPadModes
-		dpadMode = new Map<String, FlxDPadMode>();
-		dpadMode.set("UP_DOWN", UP_DOWN);
-		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
-		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
-		dpadMode.set("LEFT_FULL", LEFT_FULL);
-		dpadMode.set("RIGHT_FULL", RIGHT_FULL);
-		dpadMode.set("BOTH", BOTH);
-		dpadMode.set("NONE", NONE);
-
-		actionMode = new Map<String, FlxActionMode>();
-		actionMode.set('A', A);
-		actionMode.set('A_B', A_B);
-		actionMode.set('A_B_C', A_B_C);
-		actionMode.set('A_B_E', A_B_E);
-		actionMode.set('A_B_E', A_B_E);
-		actionMode.set('A_B_C_X_Y', A_B_C_X_Y);
-		actionMode.set('A_B_C_X_Y_Z', A_B_C_X_Y_Z);
-		actionMode.set('A_B_C_D_V_X_Y_Z', A_B_C_D_V_X_Y_Z);
-	}
-
-	/**
+	/*
 	 * Clean up memory.
 	 */
 	override public function destroy():Void
@@ -311,13 +285,13 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonRight.pressed;
 				case FlxMobileControlsID.DOWN:
 					return buttonDown.pressed;
-				case FlxMobileControlsID.LEFT2:
+				case FlxMobileControlsID.dpadLEFT2:
 					return buttonLeft2.pressed;
-				case FlxMobileControlsID.UP2:
+				case FlxMobileControlsID.dpadUP2:
 					return buttonUp2.pressed;
-				case FlxMobileControlsID.RIGHT2:
+				case FlxMobileControlsID.dpadRIGHT2:
 					return buttonRight2.pressed;
-				case FlxMobileControlsID.DOWN2:
+				case FlxMobileControlsID.dpadDOWN2:
 					return buttonDown2.pressed;
 				case FlxMobileControlsID.A:
 					return buttonA.pressed;
@@ -337,6 +311,14 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonY.pressed;
 				case FlxMobileControlsID.Z:
 					return buttonZ.pressed;
+				case FlxMobileControlsID.noteLEFT:
+					return buttonLeft.pressed;
+				case FlxMobileControlsID.noteUP:
+					return buttonUp.pressed;
+				case FlxMobileControlsID.noteRIGHT:
+					return buttonRight.pressed;
+				case FlxMobileControlsID.noteDOWN:
+					return buttonDown.pressed;
 				case FlxMobileControlsID.NONE:
 					return false;
 				default:
@@ -359,13 +341,13 @@ class FlxVirtualPad extends FlxSpriteGroup
 				return buttonRight.justPressed;
 			case FlxMobileControlsID.DOWN:
 				return buttonDown.justPressed;
-			case FlxMobileControlsID.LEFT2:
+			case FlxMobileControlsID.dpadLEFT2:
 				return buttonLeft2.justPressed;
-			case FlxMobileControlsID.UP2:
+			case FlxMobileControlsID.dpadUP2:
 				return buttonUp2.justPressed;
-			case FlxMobileControlsID.RIGHT2:
+			case FlxMobileControlsID.dpadRIGHT2:
 				return buttonRight2.justPressed;
-			case FlxMobileControlsID.DOWN2:
+			case FlxMobileControlsID.dpadDOWN2:
 				return buttonDown2.justPressed;
 			case FlxMobileControlsID.A:
 				return buttonA.justPressed;
@@ -385,6 +367,14 @@ class FlxVirtualPad extends FlxSpriteGroup
 				return buttonY.justPressed;
 			case FlxMobileControlsID.Z:
 				return buttonZ.justPressed;
+			case FlxMobileControlsID.noteLEFT:
+				return buttonLeft.justPressed;
+			case FlxMobileControlsID.noteUP:
+				return buttonUp.justPressed;
+			case FlxMobileControlsID.noteRIGHT:
+				return buttonRight.justPressed;
+			case FlxMobileControlsID.noteDOWN:
+				return buttonDown.justPressed;
 			case FlxMobileControlsID.NONE:
 				return false;
 			default:
@@ -407,13 +397,13 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonRight.justReleased;
 				case FlxMobileControlsID.DOWN:
 					return buttonDown.justReleased;
-				case FlxMobileControlsID.LEFT2:
+				case FlxMobileControlsID.dpadLEFT2:
 					return buttonLeft2.justReleased;
-				case FlxMobileControlsID.UP2:
+				case FlxMobileControlsID.dpadUP2:
 					return buttonUp2.justReleased;
-				case FlxMobileControlsID.RIGHT2:
+				case FlxMobileControlsID.dpadRIGHT2:
 					return buttonRight2.justReleased;
-				case FlxMobileControlsID.DOWN2:
+				case FlxMobileControlsID.dpadDOWN2:
 					return buttonDown2.justReleased;
 				case FlxMobileControlsID.A:
 					return buttonA.justReleased;
@@ -433,6 +423,14 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonY.justReleased;
 				case FlxMobileControlsID.Z:
 					return buttonZ.justReleased;
+				case FlxMobileControlsID.noteLEFT:
+					return buttonLeft.justReleased;
+				case FlxMobileControlsID.noteUP:
+					return buttonUp.justReleased;
+				case FlxMobileControlsID.noteRIGHT:
+					return buttonRight.justReleased;
+				case FlxMobileControlsID.noteDOWN:
+					return buttonDown.justReleased;
 				case FlxMobileControlsID.NONE:
 					return false;
 				default:

@@ -23,14 +23,18 @@ abstract FlxMobileControlsID(Int) from Int to Int
     var X = 11;
     var Y = 12;
     var Z = 13;
-    var LEFT2 = 16;
-    var UP2 = 14;
-    var RIGHT2 = 17;
-    var DOWN2 = 15;
+    var dpadLEFT2 = 16;
+    var dpadUP2 = 14;
+    var dpadRIGHT2 = 17;
+    var dpadDOWN2 = 15;
     var hitboxUP = 16;
     var hitboxDOWN = 17;
     var hitboxLEFT = 18;
     var hitboxRIGHT = 19;
+    var noteUP = 20;
+    var noteDOWN = 21;
+    var noteLEFT = 22;
+    var noteRIGHT = 23;
 
     var NONE = -1;
 

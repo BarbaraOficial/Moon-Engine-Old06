@@ -169,72 +169,95 @@ class FlxHitbox extends FlxSpriteGroup
 		return hint;
 	}
 
-	/*
+	/**
 	* Checks if the hitbox is pressed, if yes returns true.
 	*/
 	public function mobileControlsPressed(buttonID:FlxMobileControlsID):Bool
+	{
+		switch (buttonID)
 		{
-			switch (buttonID)
-			{
-				case FlxMobileControlsID.hitboxLEFT:
-					return buttonLeft.pressed;
-				case FlxMobileControlsID.hitboxUP:
-					return buttonUp.pressed;
-				case FlxMobileControlsID.hitboxRIGHT:
-					return buttonRight.pressed;
-				case FlxMobileControlsID.hitboxDOWN:
-					return buttonDown.pressed;
-				case FlxMobileControlsID.NONE:
-					return false;
-				default:
-					return false;
-			}
+			case FlxMobileControlsID.hitboxLEFT:
+				return buttonLeft.pressed;
+			case FlxMobileControlsID.hitboxUP:
+				return buttonUp.pressed;
+			case FlxMobileControlsID.hitboxRIGHT:
+				return buttonRight.pressed;
+			case FlxMobileControlsID.hitboxDOWN:
+				return buttonDown.pressed;
+			case FlxMobileControlsID.noteLEFT:
+				return buttonLeft.pressed;
+			case FlxMobileControlsID.noteUP:
+				return buttonUp.pressed;
+			case FlxMobileControlsID.noteRIGHT:
+				return buttonRight.pressed;
+			case FlxMobileControlsID.noteDOWN:
+				return buttonDown.pressed;
+			case FlxMobileControlsID.NONE:
+				return false;
+			default:
+				return false;
 		}
+	}
 
-		/*
+		/**
 		* Checks if the hitbox is justPressed, if yes returns true.
 		*/
-		public function mobileControlsJustPressed(buttonID:FlxMobileControlsID):Bool
-			{
-				switch (buttonID)
-				{
-				case FlxMobileControlsID.hitboxLEFT:
-					return buttonLeft.justPressed;
-					trace("left was justpressed on the hitbox!");
-				case FlxMobileControlsID.hitboxUP:
-					return buttonUp.justPressed;
-				case FlxMobileControlsID.hitboxRIGHT:
-					return buttonRight.justPressed;
-				case FlxMobileControlsID.hitboxDOWN:
-					return buttonDown.justPressed;
-				case FlxMobileControlsID.NONE:
-					return false;
-				default:
-					return false;
-				}
-			}
+	public function mobileControlsJustPressed(buttonID:FlxMobileControlsID):Bool
+	{
+		switch (buttonID)
+		{
+		case FlxMobileControlsID.hitboxLEFT:
+			return buttonLeft.justPressed;
+		case FlxMobileControlsID.hitboxUP:
+			return buttonUp.justPressed;
+		case FlxMobileControlsID.hitboxRIGHT:
+			return buttonRight.justPressed;
+		case FlxMobileControlsID.hitboxDOWN:
+			return buttonDown.justPressed;
+		case FlxMobileControlsID.noteLEFT:
+			return buttonLeft.justPressed;
+		case FlxMobileControlsID.noteUP:
+			return buttonUp.justPressed;
+		case FlxMobileControlsID.noteRIGHT:
+			return buttonRight.justPressed;
+		case FlxMobileControlsID.noteDOWN:
+			return buttonDown.justPressed;
+		case FlxMobileControlsID.NONE:
+			return false;
+		default:
+			return false;
+		}
+	}
 
-	/*
+	/**
 	* Checks if the hitbox is justReleased, if yes returns true.
 	*/
 	public function mobileControlsJustReleased(buttonID:FlxMobileControlsID):Bool
+	{
+		switch (buttonID)
 		{
-			switch (buttonID)
-			{
-				case FlxMobileControlsID.hitboxLEFT:
-					return buttonLeft.justReleased;
-				case FlxMobileControlsID.hitboxUP:
-					return buttonUp.justReleased;
-				case FlxMobileControlsID.hitboxRIGHT:
-					return buttonRight.justReleased;
-				case FlxMobileControlsID.hitboxDOWN:
-					return buttonDown.justReleased;
-				case FlxMobileControlsID.NONE:
-					return false;
-				default:
-					return false;
-					}
-				}
+			case FlxMobileControlsID.hitboxLEFT:
+				return buttonLeft.justReleased;
+			case FlxMobileControlsID.hitboxUP:
+				return buttonUp.justReleased;
+			case FlxMobileControlsID.hitboxRIGHT:
+				return buttonRight.justReleased;
+			case FlxMobileControlsID.hitboxDOWN:
+		 		return buttonDown.justReleased;
+			case FlxMobileControlsID.noteLEFT:
+				return buttonLeft.justReleased;
+			case FlxMobileControlsID.noteUP:
+				return buttonUp.justReleased;
+			case FlxMobileControlsID.noteRIGHT:
+				return buttonRight.justReleased;
+			case FlxMobileControlsID.noteDOWN:
+				return buttonDown.justReleased;
+			case FlxMobileControlsID.NONE:
+				return false;
+			default:
+				return false;
+		}
+	}
 }
 enum Modes
 {

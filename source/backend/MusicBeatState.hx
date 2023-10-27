@@ -29,6 +29,8 @@ class MusicBeatState extends FlxUIState
 	}
 
 	#if mobileC
+	public static var dpadMode:Map<String, FlxDPadMode>;
+	public static var actionMode:Map<String, FlxActionMode>;
 	public var virtualPad:FlxVirtualPad;
 	public var mobileControls:MobileControls;
 	public var camControls:FlxCamera;
@@ -36,7 +38,6 @@ class MusicBeatState extends FlxUIState
 
 	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
 	{
-		virtualPad.setUpMaps();
 		virtualPad = new FlxVirtualPad(DPad, Action);
 		virtualPad.alpha = ClientPrefs.data.controlsAlpha;
 		add(virtualPad);
@@ -60,63 +61,6 @@ class MusicBeatState extends FlxUIState
 		mobileControls.visible = false;
 		mobileControls.alpha = ClientPrefs.data.controlsAlpha;
 		add(mobileControls);
-		// configure the current mobile control binds, without this there gonna be conflict and input issues.
-		switch (MobileControls.getMode())
-				{
-					case 0 | 1 | 2: // RIGHT_FULL, LEFT_FULL and CUSTOM
-					ClientPrefs.mobileBinds = controls.mobileBinds = [
-						'note_up'		=> [UP],
-						'note_left'		=> [LEFT],
-						'note_down'		=> [DOWN],
-						'note_right'	=> [RIGHT],
-				
-						'ui_up'			=> [UP], //idk if i remove these the controls in menus gonna get fucked
-						'ui_left'		=> [LEFT],
-						'ui_down'		=> [DOWN],
-						'ui_right'		=> [RIGHT],
-				
-						'accept'		=> [A],
-						'back'			=> [B],
-						'pause'			=> [NONE],
-						'reset'			=> [NONE]
-					];
-					case 3: // BOTH
-					ClientPrefs.mobileBinds = controls.mobileBinds = [
-						'note_up'		=> [UP, UP2],
-						'note_left'		=> [LEFT, LEFT2],
-						'note_down'		=> [DOWN, DOWN2],
-						'note_right'	=> [RIGHT, RIGHT2],
-				
-						'ui_up'			=> [UP],
-						'ui_left'		=> [LEFT],
-						'ui_down'		=> [DOWN],
-						'ui_right'		=> [RIGHT],
-				
-						'accept'		=> [A],
-						'back'			=> [B],
-						'pause'			=> [NONE],
-						'reset'			=> [NONE]
-					];
-					case 4: // HITBOX
-					ClientPrefs.mobileBinds = controls.mobileBinds = [
-						'note_up'		=> [hitboxUP],
-						'note_left'		=> [hitboxLEFT],
-						'note_down'		=> [hitboxDOWN],
-						'note_right'	=> [hitboxRIGHT],
-				
-						'ui_up'			=> [UP],
-						'ui_left'		=> [LEFT],
-						'ui_down'		=> [DOWN],
-						'ui_right'		=> [RIGHT],
-				
-						'accept'		=> [A],
-						'back'			=> [B],
-						'pause'			=> [NONE],
-						'reset'			=> [NONE]
-					];
-					case 5: // KEYBOARD
-					//sex, idk maybe nothin'?
-				}
 	}
 
 	public function removeMobileControls()
@@ -159,6 +103,27 @@ class MusicBeatState extends FlxUIState
 	public static var camBeat:FlxCamera;
 
 	override function create() {
+		#if mobileC
+		// FlxDPadModes
+		dpadMode = new Map<String, FlxDPadMode>();
+		dpadMode.set("UP_DOWN", UP_DOWN);
+		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
+		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
+		dpadMode.set("LEFT_FULL", LEFT_FULL);
+		dpadMode.set("RIGHT_FULL", RIGHT_FULL);
+		dpadMode.set("BOTH", BOTH);
+		dpadMode.set("NONE", NONE);
+
+		actionMode = new Map<String, FlxActionMode>();
+		actionMode.set('A', A);
+		actionMode.set('A_B', A_B);
+		actionMode.set('A_B_C', A_B_C);
+		actionMode.set('A_B_E', A_B_E);
+		actionMode.set('A_B_E', A_B_E);
+		actionMode.set('A_B_C_X_Y', A_B_C_X_Y);
+		actionMode.set('A_B_C_X_Y_Z', A_B_C_X_Y_Z);
+		actionMode.set('A_B_C_D_V_X_Y_Z', A_B_C_D_V_X_Y_Z);
+		#end
 		instance = this;
 		camBeat = FlxG.camera;
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;

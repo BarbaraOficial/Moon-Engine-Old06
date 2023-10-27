@@ -3705,7 +3705,6 @@ class PlayState extends MusicBeatState
 	#if mobileC
 	public function addLuaVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
 		{
-			luaVirtualPad.setUpMaps();
 			luaVirtualPad = new FlxVirtualPad(DPad, Action);
 			luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
 			add(luaVirtualPad);

@@ -135,15 +135,15 @@ class ClientPrefs {
 	];
 	#if mobileC
 	public static var mobileBinds:Map<String, Array<FlxMobileControlsID>> = [
-		'note_up'		=> [UP],
-		'note_left'		=> [LEFT],
-		'note_down'		=> [DOWN],
-		'note_right'	=> [RIGHT],
+		'note_up'		=> [noteUP, dpadUP2],
+		'note_left'		=> [noteLEFT, dpadLEFT2],
+		'note_down'		=> [noteDOWN, dpadDOWN2],
+		'note_right'	=> [noteRIGHT, dpadRIGHT2],
 
-		'ui_up'			=> [UP],
-		'ui_left'		=> [LEFT],
-		'ui_down'		=> [DOWN],
-		'ui_right'		=> [RIGHT],
+		'ui_up'			=> [UP, noteUP],
+		'ui_left'		=> [LEFT, noteLEFT],
+		'ui_down'		=> [DOWN, noteDOWN],
+		'ui_right'		=> [RIGHT, noteRIGHT],
 
 		'accept'		=> [A],
 		'back'			=> [B],
