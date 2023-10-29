@@ -148,11 +148,11 @@ class DiscordClient
 
 	#if LUA_ALLOWED
 	public static function addLuaCallbacks(funk:FunkinLua) {
-		Lua_helper.add_callback(lua, "changeDiscordPresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
+		funk.set("changeDiscordPresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
 			changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp);
 		});
 
-		Lua_helper.add_callback(lua, "changeDiscordClientID", function(?newID:String = null) {
+		funk.set("changeDiscordClientID", function(?newID:String = null) {
 			if(newID == null) newID = _defaultID;
 			clientID = newID;
 		});

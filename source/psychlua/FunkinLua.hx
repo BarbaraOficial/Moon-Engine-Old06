@@ -1500,7 +1500,7 @@ class FunkinLua {
 			return closed;
 		});
 
-		#if desktop DiscordClient.addLuaCallbacks(lua); #end
+		#if desktop DiscordClient.addLuaCallbacks(this); #end
 		#if SScript HScript.implement(this); #end
 		ReflectionFunctions.implement(this);
 		TextFunctions.implement(this);
