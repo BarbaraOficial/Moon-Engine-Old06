@@ -58,6 +58,9 @@
 	<!-- __________________________ Game Assets & Etc. __________________________ -->
 
 	<!-- Assets -->
+
+        <assets path="mobile" rename="assets/mobile" if="mobileC" />
+
 	<assets path="assets/fonts" />
 	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
 	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
