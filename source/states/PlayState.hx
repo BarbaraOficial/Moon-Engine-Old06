@@ -813,58 +813,25 @@ class PlayState extends MusicBeatState
 
 	function startCharacterScripts(name:String)
 		{
-			luaFile = replacePath;
-			doPush = true;
-		}
-		else
-		{
-			luaFile = Paths.getSharedPath(luaFile);
-			if(FileSystem.exists(luaFile))
-				doPush = true;
-		}
-		#else
-		luaFile = Paths.getSharedPath(luaFile);
-		if(Assets.exists(luaFile)) doPush = true;
-		#end
-
-		if(doPush)
-		{
-			for (script in luaArray)
+			// Lua
+			#if LUA_ALLOWED
+			var doPush:Bool = false;
+			var luaFile:String = 'characters/' + name + '.lua';
+			#if MODS_ALLOWED
+			var replacePath:String = Paths.modFolders(luaFile);
+			if(FileSystem.exists(replacePath))
 			{
-				if(script.scriptName == luaFile)
-				{
-					doPush = false;
-					break;
-				}
-			}
-			if(doPush) new FunkinLua(luaFile);
-		}
-		#end
-
-		// HScript
-		#if HSCRIPT_ALLOWED
-		var doPush:Bool = false;
-		var scriptFile:String = 'characters/' + name + '.hx';
-		var replacePath:String = Paths.modFolders(scriptFile);
-		if(FileSystem.exists(replacePath))
-		{
-			scriptFile = replacePath;
-			doPush = true;
-		}
-		else
-		{
-			scriptFile = Paths.getSharedPath(scriptFile);
-			if(FileSystem.exists(scriptFile))
+				luaFile = replacePath;
 				doPush = true;
 			}
 			else
 			{
-				luaFile = Paths.getPreloadPath(luaFile);
+				luaFile = Paths.getSharedPath(luaFile);
 				if(FileSystem.exists(luaFile))
 					doPush = true;
 			}
 			#else
-			luaFile = Paths.getPreloadPath(luaFile);
+			luaFile = Paths.getSharedPath(luaFile);
 			if(Assets.exists(luaFile)) doPush = true;
 			#end
 	
@@ -894,7 +861,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				scriptFile = Paths.getPreloadPath(scriptFile);
+				scriptFile = Paths.getSharedPath(scriptFile);
 				if(FileSystem.exists(scriptFile))
 					doPush = true;
 			}
@@ -2024,15 +1991,6 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		persistentDraw = true;
 		paused = true;
-
-		// 1 / 1000 chance for Gitaroo Man easter egg
-		/*if (FlxG.random.bool(0.1))
-		{
-			// gitaroo man easter egg
-			cancelMusicFadeTween();
-			MusicBeatState.switchState(new GitarooPause());
-		}
-		else {*/
 
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0){
@@ -3182,7 +3140,7 @@ class PlayState extends MusicBeatState
 		if (!note.isSustainNote)
 			invalidateNote(note);
 	}
-
+}
 	public function invalidateNote(note:Note):Void {
 		notes.remove(note, true);
 		note.destroy();

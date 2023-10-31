@@ -24,7 +24,9 @@ class ExtraFunctions
 			switch(name.toUpperCase()){
 				case 'SPACE':
 					#if mobileC
-					if (MobileControls.instance.virtualPadExtra != null)
+					if (MobileControls.instance.virtualPadExtra == null)
+						return false;
+					else
 						return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed || Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
 					#else 
 						return Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
@@ -39,6 +41,8 @@ class ExtraFunctions
 				case 'SPACE':
 					#if mobileC
 					if (MobileControls.instance.virtualPadExtra != null)
+						return false;
+					else
 						return MobileControls.instance.virtualPadExtra.buttonExtra.pressed || Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
 					#else 
 						return Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
@@ -53,6 +57,8 @@ class ExtraFunctions
 				case 'SPACE':
 					#if mobileC
 					if (MobileControls.instance.virtualPadExtra != null)
+						return false;
+					else
 						return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased || Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
 					#else 
 						return Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
