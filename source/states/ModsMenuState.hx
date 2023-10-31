@@ -284,9 +284,9 @@ class ModsMenuState extends MusicBeatState
 
 		#if mobileC
 		addVirtualPad(LEFT_FULL, A_B);
-		virtualPad.buttonA.y -= 175; // so that you can press the touch buttons.
-		virtualPad.buttonB.y -= 175;
-		virtualPad.alpha = 0.5;
+		// virtualPad.buttonA.y -= 125; // so that you can press the touch buttons.
+		// virtualPad.buttonB.y -= 125;
+		virtualPad.alpha = 0.45;
 		#end
 
 		changeSelectedMod();
@@ -960,7 +960,7 @@ class MenuButton extends FlxSpriteGroup
 		if(_needACheck)
 		{
 			_needACheck = false;
-			#if !mobileC if(!Controls.instance.controllerMode) #end
+			if(!Controls.instance.controllerMode)
 				onFocus = FlxG.mouse.overlaps(this);
 		}
 	}

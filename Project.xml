@@ -40,8 +40,8 @@
 	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
-		<!--Mobile-specific-->
-		<window if="mobile" orientation="landscape" fullscreen="true" resizable="true" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
+	<!--Mobile-specific-->
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="true" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
 
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
@@ -154,9 +154,8 @@
 			<certificate path="key.keystore" password="nullfunni" alias="null" alias-password="nullfunni" unless="debug" />
 
 			<config>
-                                <!--Gradle-->
+                <!--Gradle-->
 				<android gradle-version="7.4.2" gradle-plugin="7.3.1" />
-
 				<!--Target SDK-->
 				<android target-sdk-version="29" if="${lime &lt; 8.1.0}" />
 			</config>
@@ -179,7 +178,6 @@
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 
 	<assets path='art/iconOG.png' rename='icon.png' if="linux" />
-	
 	<icon path="art/icon16.png" size='16'/>
 	<icon path="art/icon32.png" size='32'/>
 	<icon path="art/icon64.png" size='64'/>
