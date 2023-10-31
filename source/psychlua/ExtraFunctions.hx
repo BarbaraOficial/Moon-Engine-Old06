@@ -21,15 +21,45 @@ class ExtraFunctions
 		// Keyboard & Gamepads
 		funk.set("keyboardJustPressed", function(name:String)
 		{
-			return Reflect.getProperty(FlxG.keys.justPressed, name.toUpperCase());
+			switch(name.toUpperCase()){
+				case 'SPACE':
+					#if mobileC
+					if (MobileControls.instance.virtualPadExtra != null)
+						return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed || Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
+					#else 
+						return Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
+					#end
+				default:
+					return Reflect.getProperty(FlxG.keys.justPressed, name.toUpperCase());
+			}
 		});
 		funk.set("keyboardPressed", function(name:String)
 		{
-			return Reflect.getProperty(FlxG.keys.pressed, name.toUpperCase());
+			switch(name.toUpperCase()){
+				case 'SPACE':
+					#if mobileC
+					if (MobileControls.instance.virtualPadExtra != null)
+						return MobileControls.instance.virtualPadExtra.buttonExtra.pressed || Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
+					#else 
+						return Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
+					#end
+				default:
+					return Reflect.getProperty(FlxG.keys.pressed, name.toUpperCase());
+			}
 		});
 		funk.set("keyboardReleased", function(name:String)
 		{
-			return Reflect.getProperty(FlxG.keys.justReleased, name.toUpperCase());
+			switch(name.toUpperCase()){
+				case 'SPACE':
+					#if mobileC
+					if (MobileControls.instance.virtualPadExtra != null)
+						return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased || Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
+					#else 
+						return Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
+					#end
+				default:
+					return Reflect.getProperty(FlxG.keys.justReleased, name.toUpperCase());
+			}
 		});
 
 		funk.set("anyGamepadJustPressed", function(name:String)

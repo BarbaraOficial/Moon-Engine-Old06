@@ -37,11 +37,7 @@ import objects.HealthIcon;
 import objects.AttachedSprite;
 import objects.Character;
 import substates.Prompt;
-
-
-#if sys
-import flash.media.Sound;
-#end
+import openfl.media.Sound;
 
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
