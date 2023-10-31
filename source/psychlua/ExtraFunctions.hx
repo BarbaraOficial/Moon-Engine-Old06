@@ -1,5 +1,7 @@
 package psychlua;
 
+import flixel.util.FlxSave;
+import openfl.utils.Assets;
 #if mobileC
 import mobile.MobileControls;
 #end
@@ -7,13 +9,6 @@ import mobile.MobileControls;
 import extension.eightsines.EsOrientation;
 #end
 import lime.ui.Haptic;
-#if sys
-import sys.FileSystem;
-import sys.io.File;
-#end
-
-import flixel.util.FlxSave;
-import openfl.utils.Assets;
 
 //
 // Things to trivialize some dumb stuff like splitting strings on older Lua

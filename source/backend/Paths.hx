@@ -16,10 +16,6 @@ import openfl.system.System;
 import openfl.geom.Rectangle;
 import openfl.media.Sound;
 
-#if sys
-import sys.io.File;
-import sys.FileSystem;
-#end
 import tjson.TJSON as Json;
 
 
@@ -39,7 +35,7 @@ class Paths
 
 	public static var dumpExclusions:Array<String> =
 	[
-		'assets/music/freakyMenu.$SOUND_EXT',
+		'assets/shared/music/freakyMenu.$SOUND_EXT',
 		'assets/shared/music/breakfast.$SOUND_EXT',
 		'assets/shared/music/tea-time.$SOUND_EXT',
 	];
@@ -109,7 +105,11 @@ class Paths
 		#if MODS_ALLOWED
 		if(modsAllowed)
 		{
-			var modded:String = modFolders(file);
+			var customFile:String = file;
+			if (library != null)
+				customFile = '$library/$file';
+
+			var modded:String = modFolders(customFile);
 			if(FileSystem.exists(modded)) return modded;
 		}
 		#end
@@ -125,18 +125,13 @@ class Paths
 				if (Assets.exists(levelPath, type))
 					return levelPath;
 			}
-
-			levelPath = getLibraryPathForce(file, "shared");
-			if (Assets.exists(levelPath, type))
-				return levelPath;
 		}
-
-		return getPreloadPath(file);
+		return getSharedPath(file);
 	}
 
-	static public function getLibraryPath(file:String, library = "preload")
+	static public function getLibraryPath(file:String, library = "shared")
 	{
-		return if (library == "preload" || library == "default") getPreloadPath(file); else getLibraryPathForce(file, library);
+		return if (library == "shared") getSharedPath(file); else getLibraryPathForce(file, library);
 	}
 
 	inline static function getLibraryPathForce(file:String, library:String, ?level:String)
@@ -146,9 +141,9 @@ class Paths
 		return returnPath;
 	}
 
-	inline public static function getPreloadPath(file:String = '')
+	inline public static function getSharedPath(file:String = '')
 	{
-		return 'assets/$file';
+		return 'assets/shared/$file';
 	}
 
 	inline static public function txt(key:String, ?library:String)
@@ -209,24 +204,16 @@ class Paths
 
 	inline static public function voices(song:String):Any
 	{
-		#if html5
-		return 'songs:assets/songs/${formatToSongPath(song)}/Voices.$SOUND_EXT';
-		#else
 		var songKey:String = '${formatToSongPath(song)}/Voices';
-		var voices = returnSound('songs', songKey);
+		var voices = returnSound(null, songKey, 'songs');
 		return voices;
-		#end
 	}
 
 	inline static public function inst(song:String):Any
 	{
-		#if html5
-		return 'songs:assets/songs/${formatToSongPath(song)}/Inst.$SOUND_EXT';
-		#else
 		var songKey:String = '${formatToSongPath(song)}/Inst';
-		var inst = returnSound('songs', songKey);
+		var inst = returnSound(null, songKey, 'songs');
 		return inst;
-		#end
 	}
 
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
@@ -310,8 +297,8 @@ class Paths
 			return File.getContent(modFolders(key));
 		#end
 
-		if (FileSystem.exists(getPreloadPath(key)))
-			return File.getContent(getPreloadPath(key));
+		if (FileSystem.exists(getSharedPath(key)))
+			return File.getContent(getSharedPath(key));
 
 		if (currentLevel != null)
 		{
@@ -321,10 +308,6 @@ class Paths
 				if (FileSystem.exists(levelPath))
 					return File.getContent(levelPath);
 			}
-
-			levelPath = getLibraryPathForce(key, 'shared');
-			if (FileSystem.exists(levelPath))
-				return File.getContent(levelPath);
 		}
 		#end
 		var path:String = getPath(key, TEXT);
@@ -418,9 +401,13 @@ class Paths
 	}
 
 	public static var currentTrackedSounds:Map<String, Sound> = [];
-	public static function returnSound(path:String, key:String, ?library:String) {
+	public static function returnSound(path:Null<String>, key:String, ?library:String) {
 		#if MODS_ALLOWED
-		var file:String = modsSounds(path, key);
+		var modLibPath:String = '';
+		if (library != null) modLibPath = '$library/';
+		if (path != null) modLibPath += '$path/';
+
+		var file:String = modsSounds(modLibPath, key);
 		if(FileSystem.exists(file)) {
 			if(!currentTrackedSounds.exists(file)) {
 				currentTrackedSounds.set(file, Sound.fromFile(file));
@@ -430,7 +417,9 @@ class Paths
 		}
 		#end
 		// I hate this so god damn much
-		var gottenPath:String = getPath('$path/$key.$SOUND_EXT', SOUND, library);
+		var gottenPath:String = '$key.$SOUND_EXT';
+		if(path != null) gottenPath = '$path/$gottenPath';
+		gottenPath = getPath(gottenPath, SOUND, library);
 		gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
 		// trace(gottenPath);
 		if(!currentTrackedSounds.exists(gottenPath))
@@ -441,6 +430,7 @@ class Paths
 			var folder:String = '';
 			if(path == 'songs') folder = 'songs:';
 
+			trace(folder + getPath('$path/$key.$SOUND_EXT', SOUND, library));
 			currentTrackedSounds.set(gottenPath, Assets.getSound(folder + getPath('$path/$key.$SOUND_EXT', SOUND, library)));
 		}
 		#end
