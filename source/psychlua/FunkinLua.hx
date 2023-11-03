@@ -1122,7 +1122,7 @@ class FunkinLua {
 				object.scrollFactor.set(scrollX, scrollY);
 			}
 		});
-		Lua_helper.add_callback(lua, "addLuaSprite", function(tag:String, front:Bool = false) {
+		set("addLuaSprite", function(tag:String, front:Bool = false) {
 			if(game.modchartSprites.exists(tag)) {
 				var shit:ModchartSprite = game.modchartSprites.get(tag);
 				if(front)
