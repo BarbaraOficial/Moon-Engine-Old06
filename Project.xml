@@ -96,8 +96,10 @@
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
 	<haxelib name="discord_rpc" if="desktop" unless="hl"/>
-	<!--<haxelib name="hxjsonast" if="desktop"/>-->
-	<haxelib name="tjson" />
+	<haxelib name="flxanimate"/>
+	<haxelib name="tjson"/>
+
+	<!-- Mobile and Android Specific-->
 	<haxelib name="extension-androidtools" if="android" />
     <haxelib name="extension-orientation" if="mobile" />
 

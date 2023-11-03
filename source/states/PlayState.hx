@@ -2619,7 +2619,7 @@ class PlayState extends MusicBeatState
 		}
 
 		// let's not make this disabled by default
-		if (!ClientPrefs.data.lowQuality || cpuControlled || ClientPrefs.data.comboStacking) {
+		if ((!ClientPrefs.data.lowQuality || ClientPrefs.data.comboStacking) && !cpuControlled) {
 		rating.loadGraphic(Paths.image(uiPrefix + daRating.image + uiSuffix));
 		rating.screenCenter();
 		rating.x = placement - 40;
