@@ -8,6 +8,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@main
+        id: setup-ndk
+        with:
+          ndk-version: r15c
+
       - name: Setup Java JDK
         uses: actions/setup-java@main
         with:
@@ -17,11 +23,11 @@ jobs:
       - name: Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: latest
+          haxe-version: 4.2.5
 
       - name: Restore Previous Cache
         if: ${{ always() }}
-        id: cache-debug-build-android
+        id: cache-debug-build-android-restore
         uses: actions/cache/restore@main
         with:
           path: |
@@ -34,26 +40,20 @@ jobs:
       - name: Install Libraries
         run: |
           haxelib setup ~/haxelib
-          haxelib git extension-androidtools https://github.com/mcagabe19-stuff/extension-androidtools.git
+          haxelib git --never extension-androidtools https://github.com/mcagabe19-stuff/extension-androidtools.git
           haxelib install flixel-addons 3.0.2 --quiet
           haxelib install flixel-tools 1.5.1 --quiet
           haxelib install flixel-ui 2.5.0 --quiet
           haxelib install flixel 5.2.2 --quiet
           haxelib git hxCodec https://github.com/mcagabe19-stuff/hxCodec.git
           haxelib install SScript 7.0.0 --quiet
-          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git
+          haxelib install hxcpp 4.2.1 --quiet
           haxelib install lime 8.1.0 --quiet
           haxelib git flxanimate https://github.com/ShadowMario/flxanimate dev
           haxelib git linc_luajit https://github.com/mcagabe19-stuff/linc_luajit.git
           haxelib install openfl 9.2.2 --quiet
           haxelib install tjson 1.4.0 --quiet
           haxelib git extension-orientation https://github.com/HaxeExtension/extension-orientation.git
-
-      - name: Setup git hxcpp
-        run: |
-          cd $(haxelib libpath hxcpp)/tools/hxcpp
-          haxe compile.hxml
-          cd ${{ github.workspace }}
 
       - name: Info
         run: echo haxe --version && haxelib list
@@ -67,7 +67,7 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Compile
-        run: haxelib run lime build android -arm64 -release
+        run: haxelib run lime build android -final
         env:
           cert_pass: nullfunni
           cert_alias_pass: nullfunni
