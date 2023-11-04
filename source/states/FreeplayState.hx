@@ -3,7 +3,9 @@ package states;
 import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
-import openfl.utils.Assets;
+
+import lime.utils.Assets;
+import openfl.utils.Assets as OpenFlAssets;
 
 import objects.HealthIcon;
 import states.editors.ChartingState;
@@ -65,7 +67,7 @@ class FreeplayState extends MusicBeatState
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
 
-		#if (desktop && !hl)
+		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -171,8 +173,7 @@ class FreeplayState extends MusicBeatState
 		add(missingText);
 
 		if(curSelected >= songs.length) curSelected = 0;
-		if (songs.length > 0)
-			bg.color = songs[curSelected].color;
+		bg.color = songs[curSelected].color;
 		intendedColor = bg.color;
 		lerpSelected = curSelected;
 
@@ -189,6 +190,7 @@ class FreeplayState extends MusicBeatState
 		#else
 		var leText:String = "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";
 		#end
+		bottomString = leText;
 		var size:Int = 16;
 		bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, leText, size);
 		bottomText.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, CENTER);
@@ -196,11 +198,10 @@ class FreeplayState extends MusicBeatState
 		add(bottomText);
 		
 		updateTexts();
-		
-		#if mobileC
+
+        #if mobileC
 		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
 		#end
-                
 		super.create();
 	}
 
@@ -226,8 +227,9 @@ class FreeplayState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.7)
+		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-
+		}
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, FlxMath.bound(elapsed * 24, 0, 1)));
 		lerpRating = FlxMath.lerp(lerpRating, intendedRating, FlxMath.bound(elapsed * 12, 0, 1));
 
@@ -237,18 +239,16 @@ class FreeplayState extends MusicBeatState
 			lerpRating = intendedRating;
 
 		var ratingSplit:Array<String> = Std.string(CoolUtil.floorDecimal(lerpRating * 100, 2)).split('.');
-		if(ratingSplit.length < 2) //No decimals, add an empty space
+		if(ratingSplit.length < 2) { //No decimals, add an empty space
 			ratingSplit.push('');
+		}
 		
 		while(ratingSplit[1].length < 2) { //Less than 2 decimals in it, add decimals then
 			ratingSplit[1] += '0';
 		}
 
-		scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
-		positionHighscore();
-
 		var shiftMult:Int = 1;
-		if(FlxG.keys.pressed.SHIFT #if mobileC || virtualPad.buttonZ.pressed #end) shiftMult = 3;
+        if((FlxG.keys.pressed.SHIFT #if mobileC || virtualPad.buttonZ.pressed #end) && !playingMusic) shiftMult = 3;
 
 		if (!playingMusic)
 		{
@@ -296,20 +296,85 @@ class FreeplayState extends MusicBeatState
 					changeSelection(-shiftMult * FlxG.mouse.wheel, false);
 				}
 			}
+
+			if (controls.UI_LEFT_P)
+			{
+				changeDiff(-1);
+				_updateSongLastDifficulty();
+			}
+			else if (controls.UI_RIGHT_P)
+			{
+				changeDiff(1);
+				_updateSongLastDifficulty();
+			}
+		}
+		else 
+		{
+			if (FlxG.sound.music._paused)
+				songTxt.text = 'PLAYING: ' + songs[curSelected].songName + ' (PAUSED)';
+			else
+				songTxt.text = 'PLAYING: ' + songs[curSelected].songName;
+
+			positionSong();
+
+			var timee:Float = FlxG.sound.music.time;
+			if (controls.UI_LEFT_P)
+			{
+				pauseOrResume();
+
+				curTime = FlxG.sound.music.time - 1000;
+				holdTime = 0;
+
+				if (curTime < 0)
+					curTime = 0;
+
+				FlxG.sound.music.time = curTime;
+				vocals.time = curTime;
+			}
+			if (controls.UI_RIGHT_P)
+			{
+				pauseOrResume();
+
+				curTime = FlxG.sound.music.time + 1000;
+				holdTime = 0;
+
+				if (curTime > FlxG.sound.music.length)
+					curTime = FlxG.sound.music.length;
+
+				FlxG.sound.music.time = curTime;
+				vocals.time = curTime;
+			}
+			updateTimeTxt();
+			
+			if(controls.UI_LEFT || controls.UI_RIGHT)
+			{
+				holdTime += elapsed;
+				if(holdTime > 0.5)
+				{
+					curTime += 40000 * elapsed * (controls.UI_LEFT ? -1 : 1);
+				}
+
+				var difference:Float = Math.abs(curTime - FlxG.sound.music.time);
+				//trace(curTime, FlxG.sound.music.time);
+				if(curTime + difference > FlxG.sound.music.length) curTime = FlxG.sound.music.length;
+				else if(curTime - difference < 0) curTime = 0;
+
+				FlxG.sound.music.time = curTime;
+				vocals.time = curTime;
+				
+			}
+			updateTimeTxt();
+			if(controls.UI_LEFT_R || controls.UI_RIGHT_R)
+			{
+				FlxG.sound.music.time = curTime;
+				vocals.time = curTime;
+
+				
+			}
+			updateTimeTxt();
 		}
 
-		if (controls.UI_LEFT_P)
-		{
-			changeDiff(-1);
-			_updateSongLastDifficulty();
-		}
-		else if (controls.UI_RIGHT_P)
-		{
-			changeDiff(1);
-			_updateSongLastDifficulty();
-		}
-
-		if (controls.BACK #if mobileC && !virtualPad.buttonC.justPressed #end)
+        if (controls.BACK #if mobileC && !controls.isInSubstate #end)
 		{
 			if (playingMusic)
 			{
@@ -332,12 +397,13 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if((FlxG.keys.justPressed.CONTROL #if mobileC || virtualPad.buttonC.justPressed #end) && !playingMusic)
+        if((FlxG.keys.justPressed.CONTROL #if mobileC || virtualPad.buttonC.justPressed #end) && !playingMusic)
+
 		{
 			persistentUpdate = false;
 			openSubState(new GameplayChangersSubstate());
 		}
-		else if(FlxG.keys.justPressed.SPACE #if mobileC || virtualPad.buttonX.justPressed #end)
+        else if(FlxG.keys.justPressed.SPACE #if mobileC || virtualPad.buttonX.justPressed #end)
 		{
 			if(instPlaying != curSelected && !playingMusic)
 			{
@@ -384,7 +450,7 @@ class FreeplayState extends MusicBeatState
 			/*#if MODS_ALLOWED
 			if(!FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !FileSystem.exists(Paths.json(songLowercase + '/' + poop))) {
 			#else
-			if(!Assets.exists(Paths.json(songLowercase + '/' + poop))) {
+			if(!OpenFlAssets.exists(Paths.json(songLowercase + '/' + poop))) {
 			#end
 				poop = songLowercase;
 				curDifficulty = 1;
@@ -419,26 +485,17 @@ class FreeplayState extends MusicBeatState
 				super.update(elapsed);
 				return;
 			}
-			
-			if (FlxG.keys.pressed.SHIFT #if mobileC || virtualPad.buttonZ.pressed #end){
-				LoadingState.loadAndSwitchState(new ChartingState());
-			}else{
-				LoadingState.loadAndSwitchState(new PlayState());
-			}
-			//LoadingState.loadAndSwitchState(new PlayState());
+			LoadingState.loadAndSwitchState(new PlayState());
 
 			FlxG.sound.music.volume = 0;
 					
 			destroyFreeplayVocals();
-			#if (MODS_ALLOWED && cpp && !mobile)
+			#if (MODS_ALLOWED && cpp && desktop)
 			DiscordClient.loadModRPC();
 			#end
 		}
-		else if((controls.RESET #if mobileC || virtualPad.buttonY.justPressed #end) && !playingMusic)
+        else if((controls.RESET #if mobileC || virtualPad.buttonY.justPressed #end) && !playingMusic)
 		{
-		    #if mobileC
-			removeVirtualPad();
-			#end
 			persistentUpdate = false;
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -516,8 +573,8 @@ class FreeplayState extends MusicBeatState
 			curSelected = songs.length - 1;
 		if (curSelected >= songs.length)
 			curSelected = 0;
-
-		var newColor:Int = (songs.length > 0) ? songs[curSelected].color : 0xFFFFFFFF;
+			
+		var newColor:Int = songs[curSelected].color;
 		if(newColor != intendedColor) {
 			if(colorTween != null) {
 				colorTween.cancel();
@@ -539,8 +596,7 @@ class FreeplayState extends MusicBeatState
 			iconArray[i].alpha = 0.6;
 		}
 
-		if (iconArray.length > 0)
-			iconArray[curSelected].alpha = 1;
+		iconArray[curSelected].alpha = 1;
 
 		for (item in grpSongs.members)
 		{
@@ -571,8 +627,7 @@ class FreeplayState extends MusicBeatState
 
 	inline private function _updateSongLastDifficulty()
 	{
-		if (songs.length > 0)
-			songs[curSelected].lastDifficulty = Difficulty.getString(curDifficulty);
+		songs[curSelected].lastDifficulty = Difficulty.getString(curDifficulty);
 	}
 
 	private function positionHighscore() {
@@ -595,6 +650,13 @@ class FreeplayState extends MusicBeatState
 		@:privateAccess 
 		if (playingMusic)
 		{
+            #if mobileC
+            virtualPad.buttonX.x = virtualPad.buttonA.x;
+            virtualPad.buttonX.y = virtualPad.buttonA.y;
+            virtualPad.buttonA.x = virtualPad.buttonY.x = virtualPad.buttonZ.x = virtualPad.buttonC.x = virtualPad.buttonA.x + 20000;
+            virtualPad.buttonA.alpha = virtualPad.buttonY.alpha = virtualPad.buttonZ.alpha = virtualPad.buttonC.alpha = 0;
+
+            #end
 			scoreBG.visible = false;
 			diffText.visible = false;
 			scoreText.visible = false;
@@ -602,8 +664,11 @@ class FreeplayState extends MusicBeatState
 			songTxt.visible = true;
 			timeTxt.visible = true;
 			songBG.visible = true;
-
+            #if mobileC
+			bottomText.text = "Press X to Pause / Press B to Exit";
+            #else
 			bottomText.text = "Press SPACE to Pause / Press ESCAPE to Exit";
+            #end
 			positionSong();
 		}
 		else
@@ -618,6 +683,10 @@ class FreeplayState extends MusicBeatState
 
 			bottomText.text = bottomString;
 			positionHighscore();
+            #if mobileC
+            removeVirtualPad();
+    		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
+            #end
 		}
 	}
 

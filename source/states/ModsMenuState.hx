@@ -280,13 +280,23 @@ class ModsMenuState extends MusicBeatState
 		add(modsGroup);
 		_lastControllerMode = controls.controllerMode;
 
+		#if !mobile
 		FlxG.mouse.visible = true;
+		#end
 
 		#if mobileC
-		addVirtualPad(LEFT_FULL, A_B);
-		// virtualPad.buttonA.y -= 125; // so that you can press the touch buttons.
-		// virtualPad.buttonB.y -= 125;
-		virtualPad.alpha = 0.45;
+		#if android
+		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		bottomBG.alpha = 0.6;
+		add(bottomBG);
+		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press Back Buton On Your Phone To Leave", 16);
+		bottomText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+		bottomText.scrollFactor.set();
+		add(bottomText);
+		#end
+		addVirtualPad(UP_DOWN, #if android NONE #else B #end);
+		virtualPad.y -= 215; // so that you can press the buttons.
+		virtualPad.alpha = 0.3;
 		#end
 
 		changeSelectedMod();
@@ -303,7 +313,7 @@ class ModsMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(controls.BACK && hoveringOnMods)
+		if(controls.BACK && hoveringOnMods #if android || FlxG.android.justReleased.BACK #end)
 		{
 			if(colorTween != null) {
 				colorTween.cancel();
@@ -353,10 +363,10 @@ class ModsMenuState extends MusicBeatState
 				holdingElapsed = 0;
 				updateItemPositions();
 			}
-
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
-			{
+				{
+				#if !mobile
 				if(FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
@@ -379,6 +389,7 @@ class ModsMenuState extends MusicBeatState
 					button.ignoreCheck = button.onFocus = false;
 					gottaClickAgain = false;
 				}
+				#end // don't want to use mouse/touch on mods selecting
 
 				if(hoveringOnMods)
 				{
@@ -402,6 +413,7 @@ class ModsMenuState extends MusicBeatState
 						holdTime += elapsed;
 						if(holdTime > 0.5 && Math.floor(lastHoldTime * 8) != Math.floor(holdTime * 8)) changeSelectedMod(shiftMult * (controls.UI_UP ? -1 : 1));
 					}
+					#if !mobile
 					else if(FlxG.mouse.pressed && !gottaClickAgain)
 					{
 						var curMod:ModItem = modsGroup.members[curSelectedMod];
@@ -456,6 +468,7 @@ class ModsMenuState extends MusicBeatState
 						holdingElapsed = 0;
 						updateItemPositions();
 					}
+					#end //idfk how to get these to work properly tbh..
 				}
 			}
 
@@ -624,6 +637,7 @@ class ModsMenuState extends MusicBeatState
 			limited = true;
 		}
 		
+		#if !mobile // no thanks i don't want to hover on enable and reload with vpad
 		if(limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
@@ -643,6 +657,7 @@ class ModsMenuState extends MusicBeatState
 				return;
 			}
 		}
+		#end
 		
 		holdingMod = false;
 		holdingElapsed = 0;
@@ -874,8 +889,8 @@ class ModItem extends FlxSpriteGroup
 			if(pack.color != null)
 			{
 				this.bgColor = FlxColor.fromRGB(pack.color[0] != null ? pack.color[0] : 170,
-											  pack.color[1] != null ? pack.color[1] : 0,
-											  pack.color[2] != null ? pack.color[2] : 255);
+				pack.color[1] != null ? pack.color[1] : 0,
+				pack.color[2] != null ? pack.color[2] : 255);
 			}
 			this.mustRestart = (pack.restart == true);
 		}
@@ -950,7 +965,26 @@ class MenuButton extends FlxSpriteGroup
 			onFocus = false;
 			return;
 		}
+		#if mobile
+		if(visible){
+		for(touch in FlxG.touches.list){
+			if(!ignoreCheck && touch.pressed)
+				onFocus = touch.overlaps(this);
 
+			if(onFocus && onClick != null && touch.justPressed)
+				onClick();
+
+			if(onFocus && touch.justReleased)
+				onFocus = false;
+
+			if(_needACheck)
+			{
+				_needACheck = false;
+					onFocus = touch.overlaps(this);
+			}
+		}
+	}
+		#else
 		if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
 			onFocus = FlxG.mouse.overlaps(this);
 
@@ -963,6 +997,7 @@ class MenuButton extends FlxSpriteGroup
 			if(!Controls.instance.controllerMode)
 				onFocus = FlxG.mouse.overlaps(this);
 		}
+		#end
 	}
 
 	function set_onFocus(newValue:Bool)
