@@ -26,8 +26,8 @@
 	<define name="ACHIEVEMENTS_ALLOWED" />
 	<define name="VIDEOS_ALLOWED" if="windows || linux || android" unless="32bits || hl || BOX64 || rpi"/>
 	<define name="PSYCH_WATERMARKS"/> <!-- DELETE THIS TO REMOVE WATERMARKS/DEV NAMES ON TITLE SCREEN -->
-	<define name="TITLE_SCREEN_EASTER_EGG" /> <!-- DELETE THE if="officialBuild" for enabling this on an unofficial build -->
-	<define name="mobileC" if="mobile" /> <!--im getting annoying errors thinking the code is broken so stfu lily-->
+	<define name="TITLE_SCREEN_EASTER_EGG" if="officialBuild"/> <!-- DELETE THE if="officialBuild" for enabling this on an unofficial build -->
+	<define name="mobileC" if="mobile" /> <!-- Define for Mobile Controls -->
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
@@ -78,12 +78,12 @@
 	<library name="songs"         preload="true" />
 	<library name="week_assets"   preload="true" />
 
-	<define name="CHECK_FOR_UPDATES" if="desktop officialBuild || mobile officialBuild"/>
+	<define name="CHECK_FOR_UPDATES" if="officialBuild"/>
 
 	<section if="MODS_ALLOWED">
 		<assets path='example_mods' rename='mods' embed='false'/>
 	</section>
-	<assets path='art/readme.txt' rename='do NOT readme.txt' />
+	<assets path='art/readme.txt' rename='do NOT readme.txt' unless="mobile"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
@@ -101,12 +101,11 @@
 
 	<!-- Mobile and Android Specific-->
 	<haxelib name="extension-androidtools" if="android" />
-    <haxelib name="extension-orientation" if="mobile" />
+	<haxelib name="extension-orientation" if="mobile" />
 
 	<!-- Enables a terminal log prompt on debug builds -->
 	<haxelib name="hxcpp-debug-server" if="debug"/>
-	<haxedef name="HXC_LIBVLC_LOGGING" if="VIDEOS_ALLOWED debug" />
-	
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Enable the Flixel core recording system-->
@@ -145,7 +144,6 @@
 
 	<haxedef name='no-deprecation-warnings' />
 
-
 		<!--Always enable Null Object Reference check-->
 		<haxedef name="HXCPP_CHECK_POINTER" />
 		<haxedef name="HXCPP_STACK_LINE" />
@@ -155,8 +153,8 @@
 			<!-- Do whatever you want I'm tired uninstall and install everytime -->
 			<certificate path="key.keystore" password="nullfunni" alias="null" alias-password="nullfunni" unless="debug" />
 
-			<config>
-                <!--Gradle-->
+		        <config>
+				<!--Gradle-->
 				<android gradle-version="7.4.2" gradle-plugin="7.3.1" />
 				<!--Target SDK-->
 				<android target-sdk-version="29" if="${lime &lt; 8.1.0}" />
@@ -172,14 +170,11 @@
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
 
-        <!--No DCE is performed-->
-	<!--<haxeflag name="-dce no" />-->
-
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 
-	<assets path='art/iconOG.png' rename='icon.png' if="linux" />
+	<assets path='art/icon16.png' rename='icon.png' if="linux" />
 	<icon path="art/icon16.png" size='16'/>
 	<icon path="art/icon32.png" size='32'/>
 	<icon path="art/icon64.png" size='64'/>
