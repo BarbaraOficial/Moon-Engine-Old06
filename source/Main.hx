@@ -1,7 +1,9 @@
 package;
 
 #if android
-import android.content.Context;
+import android.os.Environment;
+//import android.content.Context;
+import lime.app.Application;
 #end
 import backend.SUtil;
 import flixel.graphics.FlxGraphic;
@@ -58,7 +60,8 @@ class Main extends Sprite
 
 		// https://github.com/MAJigsaw77/UTF/blob/972e4c27ec62e2279cddb53083a2fee98e76ce53/source/Main.hx#L45-L49 (but modified)
 	        #if android
-		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
+                //Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
+		Sys.setCwd(Path.addTrailingSlash(Environment.getExternalStorageDirectory() + '/Android/media/' + Application.current.meta.get('packageName')));
 		#elseif ios
 		Sys.setCwd(LimeSystem.applicationStorageDirectory);
 		#end
