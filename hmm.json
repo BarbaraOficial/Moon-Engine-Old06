@@ -49,7 +49,7 @@
       "name": "hxcpp-debug-server",
       "type": "haxelib",
       "version": null
-     },
+    },
     {
       "name": "discord_rpc",
       "type": "git",
@@ -84,7 +84,7 @@
       "dir": null,
       "ref": "master",
       "url": "https://github.com/HaxeExtension/extension-orientation.git"
-    }
+    },
     {
       "name": "tjson",
       "type": "haxelib",
