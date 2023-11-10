@@ -42,9 +42,6 @@ jobs:
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
 
-      - name: Info
-        run: echo haxe --version && haxelib list
-
       - name: Configure Android
         run: |
           haxelib run lime setup -alias -y
