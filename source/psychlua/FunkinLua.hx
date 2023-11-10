@@ -1658,7 +1658,7 @@ class FunkinLua {
 		if(lua == null) return;
 
 		if (Type.typeof(data) == TFunction) {
-			set(variable, data);
+			Lua_helper.add_callback(lua, variable, data);
 			return;
 		}
 
@@ -1814,7 +1814,7 @@ class FunkinLua {
 	{
 		#if LUA_ALLOWED
 		callbacks.set(name, myFunction);
-		set(name, null); //just so that it gets called
+		Lua_helper.add_callback(lua, name, null); //just so that it gets called
 		#end
 	}
 	
