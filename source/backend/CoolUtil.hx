@@ -1,9 +1,7 @@
 package backend;
 
 import flixel.util.FlxSave;
-
 import openfl.utils.Assets;
-import lime.utils.Assets as LimeAssets;
 
 
 class CoolUtil
@@ -125,7 +123,7 @@ class CoolUtil
 			Sys.command(command, [folder]);
 			trace('$command $folder');
 		#else
-			FlxG.error("Platform is not supported for CoolUtil.openFolder");
+			FlxG.log.error("Platform is not supported for CoolUtil.openFolder");
 		#end
 	}
 

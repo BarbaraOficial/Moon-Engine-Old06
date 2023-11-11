@@ -2699,8 +2699,8 @@ class ChartingState extends MusicBeatState
 
 		if (!FileSystem.exists(path))
 		#else
-		var path:String = Paths.getPreloadPath(characterPath);
-		if (!OpenFlAssets.exists(path))
+		var path:String = Paths.getSharedPath(characterPath);
+		if (!Assets.exists(path))
 		#end
 		{
 			path = Paths.getSharedPath('characters/' + Character.DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash

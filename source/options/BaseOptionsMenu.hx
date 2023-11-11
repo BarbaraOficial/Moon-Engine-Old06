@@ -126,7 +126,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			FlxTransitionableState.skipNextTransOut = true;
 			ClientPrefs.saveSettings();
 			FlxG.resetState();
-			
 			#else
 			close();
 			#end

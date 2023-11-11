@@ -1,6 +1,6 @@
 package backend;
 
-import lime.utils.Assets;
+import openfl.utils.Assets;
 import tjson.TJSON as Json;
 
 typedef WeekFile =

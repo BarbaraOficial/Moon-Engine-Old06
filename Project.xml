@@ -96,7 +96,7 @@
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
 	<haxelib name="discord_rpc" if="desktop" unless="hl"/>
-	<haxelib name="flxanimate"/>
+	<haxelib name="flxanimate" unless="web"/>
 	<haxelib name="tjson"/>
 
 	<!-- Mobile and Android Specific-->

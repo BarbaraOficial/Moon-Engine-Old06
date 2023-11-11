@@ -7,6 +7,7 @@ import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
 import openfl.Lib;
+import openfl.utils.Assets;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.addons.transition.FlxTransitionableState;

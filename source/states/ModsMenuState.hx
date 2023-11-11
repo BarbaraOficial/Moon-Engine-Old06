@@ -8,7 +8,6 @@ import flixel.ui.FlxButton;
 import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
 import openfl.geom.Rectangle;
-import lime.utils.Assets;
 import tjson.TJSON as Json;
 
 import flixel.util.FlxSpriteUtil;
