@@ -603,11 +603,9 @@ class NotesSubState extends MusicBeatSubstate
 
 		// clear groups
 		modeNotes.forEachAlive(function(note:FlxSprite) {
-			//note.kill();
 			note.destroy();
 		});
 		myNotes.forEachAlive(function(note:StrumNote) {
-			//note.kill();
 			note.destroy();
 		});
 		modeNotes.clear();

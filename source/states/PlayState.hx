@@ -2079,7 +2079,6 @@ class PlayState extends MusicBeatState
 				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
 				#end
 				videoSprites[daVideoSprite].destroy();
-				videoSprites[daVideoSprite].kill();
 				}
 				for(i in videoSprites)
 					videoSprites.remove(i);
@@ -2467,7 +2466,7 @@ class PlayState extends MusicBeatState
 
 		#if ACHIEVEMENTS_ALLOWED
 		var weekNoMiss:String = WeekData.getWeekFileName() + '_nomiss';
-		checkForAchievement([weekNoMiss, 'ur_bad', 'ur_good', 'hype', 'two_keys', 'toastie', 'debugger']);
+		checkForAchievement([weekNoMiss, 'ur_bad', 'ur_good', 'hype', 'two_keys', 'toastier', 'debugger']);
 		#end
 
 		var ret:Dynamic = callOnScripts('onEndSong', null, true);
@@ -3209,7 +3208,6 @@ class PlayState extends MusicBeatState
 			videoSprites[daVideoSprite].bitmap.onEndReached();
 			#end
 			videoSprites[daVideoSprite].destroy();
-			videoSprites[daVideoSprite].kill();
 			}
 		}
 			for(i in videoSprites)
@@ -3647,7 +3645,7 @@ class PlayState extends MusicBeatState
 					case 'two_keys':
 						unlock = (!usedPractice && keysPressed.length <= 2);
 
-					case 'toastie':
+					case 'toastier':
 						unlock = (!ClientPrefs.data.cacheOnGPU && !ClientPrefs.data.shaders && ClientPrefs.data.lowQuality && !ClientPrefs.data.antialiasing);
 
 					case 'debugger':

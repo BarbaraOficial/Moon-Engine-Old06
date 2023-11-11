@@ -571,7 +571,7 @@ class EditorPlayState extends MusicBeatSubstate
 		
 		if (!ClientPrefs.data.comboStacking)
 		{
-			if (lastRating != null) lastRating.kill();
+			if (lastRating != null) lastRating.destroy();
 			lastRating = rating;
 		}
 
@@ -597,7 +597,7 @@ class EditorPlayState extends MusicBeatSubstate
 		}
 		if (!ClientPrefs.data.comboStacking)
 		{
-			if (lastCombo != null) lastCombo.kill();
+			if (lastCombo != null) lastCombo.destroy();
 			lastCombo = comboSpr;
 		}
 		if (lastScore != null)
