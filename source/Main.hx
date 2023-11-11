@@ -65,9 +65,20 @@ class Main extends Sprite
 
 		SUtil.uncaughtErrorHandler();
 
+		#if windows
+		@:functionCode("
+		#include <windows.h>
+		#include <winuser.h>
+		setProcessDPIAware() // allows for more crisp visuals
+		DisableProcessWindowsGhosting() // lets you move the window and such if it's not responding
+		")
+		#end
+
 		#if cpp
+		@:privateAccess
 		untyped __global__.__hxcpp_set_critical_error_handler(SUtil.onCriticalError);
 		#elseif hl
+		@:privateAccess
 		Api.setErrorHandler(SUtil.onCriticalError);
 		#end
 
