@@ -11,7 +11,9 @@ class OptionsState extends MusicBeatState
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 	public static var onPlayState:Bool = false;
+        #if mobileC
 	var tipText:FlxText;
+        #end
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
@@ -72,12 +74,13 @@ class OptionsState extends MusicBeatState
 		add(bg);
 
 		#if mobileC
+                if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press C to Go In Mobile Controls Menu', 16);
 		tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 1.25;
 		tipText.scrollFactor.set();
 		tipText.antialiasing = ClientPrefs.data.antialiasing;
-		add(tipText);
+		add(tipText); }
 		#end	
 
 		grpOptions = new FlxTypedGroup<Alphabet>();

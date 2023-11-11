@@ -71,10 +71,6 @@ class EditorPlayState extends MusicBeatSubstate
 	public function new(playbackRate:Float)
 	{
 		super();
-
-		#if mobileC
-		
-		#end
 		
 		/* setting up some important data */
 		this.playbackRate = playbackRate;
@@ -134,9 +130,13 @@ class EditorPlayState extends MusicBeatSubstate
 		#if android
 		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press BACK to Go Back to Chart Editor', 16);
 		#elseif (mobileC && !android)
+                if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press X to Go Back to Chart Editor', 16);
-		#elseif (!mobileC && !android)
+                } else {
+                #end
 		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press ESC to Go Back to Chart Editor', 16);
+                #if (mobileC && !android)
+                }
 		#end
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;

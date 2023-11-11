@@ -303,14 +303,15 @@ class ModsMenuState extends MusicBeatState
 		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		bottomBG.alpha = 0.6;
 		add(bottomBG);
-		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press Back Buton On Your Phone To Leave", 16);
+		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press BACK to Leave", 16);
 		bottomText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		bottomText.scrollFactor.set();
 		add(bottomText);
 		#end
 		addVirtualPad(UP_DOWN, #if android NONE #else B #end);
 		virtualPad.y -= 215; // so that you can press the buttons.
-		virtualPad.alpha = 0.3;
+                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		virtualPad.alpha = 0.3; }
 		#end
 
 		changeSelectedMod();
@@ -860,7 +861,7 @@ class ModItem extends FlxSpriteGroup
 			{
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 				var errorMsg = 'An error occurred: $e';
-				#if windows
+				#if (desktop || mobile)
 				lime.app.Application.current.window.alert(errorMsg, errorTitle);
 				#end
 				trace('$errorTitle - $errorMsg');

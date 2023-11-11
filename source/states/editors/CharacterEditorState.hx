@@ -124,22 +124,28 @@ class CharacterEditorState extends MusicBeatState
 		camFollow.screenCenter();
 		add(camFollow);
 
+                var tipTextArray:Array<String>;
+
 		#if mobileC
-		var tipTextArray:Array<String> = "X/Y - Camera Zoom In/Out
+                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		tipTextArray = "X/Y - Camera Zoom In/Out
 		\nZ - Reset Camera Zoom
 		\nV/D - Previous/Next Animation
 		\nArrow Keys - Move Character Offset
 		\nA - Reset Current Offset
 		\nHold C to Move 10x faster\n".split('\n');
-		#else
-		var tipTextArray:Array<String> = "E/Q - Camera Zoom In/Out
-		\nR - Reset Camera Zoom
-		\nJKLI - Move Camera
-		\nW/S - Previous/Next Animation
-		\nSpace - Play Animation
-		\nArrow Keys - Move Character Offset
-		\nT - Reset Current Offset
-		\nHold Shift to Move 10x faster\n".split('\n');
+                } else {
+                #end
+                tipTextArray = "E/Q - Camera Zoom In/Out
+                \nR - Reset Camera Zoom
+                \nJKLI - Move Camera
+                \nW/S - Previous/Next Animation
+                \nSpace - Play Animation
+                \nArrow Keys - Move Character Offset
+                \nT - Reset Current Offset
+                \nHold Shift to Move 10x faster\n".split('\n');
+                #if mobileC
+                }
 		#end
 
 		for (i in 0...tipTextArray.length-1)

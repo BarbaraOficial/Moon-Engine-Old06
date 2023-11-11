@@ -113,19 +113,25 @@ class NoteSplashDebugState extends MusicBeatState
 		curAnimText.scrollFactor.set();
 		add(curAnimText);
 
-		#if mobileC
-		var text:FlxText = new FlxText(0, 520, FlxG.width,
-			"Press Y to Reset animation\n
-			Press A twice to save to the loaded Note Splash PNG's folder\n
-			Press Top LEFT/RIGHT to change selected note - Arrow Keys to change offset\n
-			C/V - Copy & Paste", 16);
-		#else
-		var text:FlxText = new FlxText(0, 520, FlxG.width,
-			"Press SPACE to Reset animation\n
-			Press ENTER twice to save to the loaded Note Splash PNG's folder\n
-			A/D change selected note - Arrow Keys to change offset (Hold shift for 10x)\n
-			Ctrl + C/V - Copy & Paste", 16);
-		#end
+                var sillytext:String;
+
+                #if mobileC
+                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+                sillytext = "Press Y to Reset animation\n
+                        Press A twice to save to the loaded Note Splash PNG's folder\n
+                        Press Top LEFT/RIGHT to change selected note - Arrow Keys to change offset\n
+                        C/V - Copy & Paste";
+                } else {
+                #end
+                sillytext = "Press SPACE to Reset animation\n
+                        Press ENTER twice to save to the loaded Note Splash PNG's folder\n
+                        A/D change selected note - Arrow Keys to change offset (Hold shift for 10x)\n
+                        Ctrl + C/V - Copy & Paste";
+                #if mobileC
+                }
+                #end
+
+		var text:FlxText = new FlxText(0, 520, FlxG.width, sillytext, 16);
 		text.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.scrollFactor.set();
 		add(text);

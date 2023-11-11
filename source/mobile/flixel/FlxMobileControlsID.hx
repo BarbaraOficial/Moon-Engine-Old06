@@ -13,7 +13,7 @@ abstract FlxMobileControlsID(Int) from Int to Int
     var A = 1;
     var B = 2;
     var C = 3;
-    var UP = 4 ;
+    var UP = 4;
     var DOWN = 5;
     var LEFT = 6;
     var RIGHT = 7;
