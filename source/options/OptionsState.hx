@@ -14,26 +14,21 @@ class OptionsState extends MusicBeatState
 	var tipText:FlxText;
 
 	function openSelectedSubstate(label:String) {
+		removeVirtualPad();
 		switch(label) {
 			case 'Note Colors':
-				virtualPad.visible = false;
 				openSubState(new options.NotesSubState());
 			case 'Controls':
-				virtualPad.visible = false;
 				openSubState(new options.ControlsSubState());
 			case 'Graphics':
-				virtualPad.visible = false;
 				openSubState(new options.GraphicsSettingsSubState());
 			case 'Visuals and UI':
-				virtualPad.visible = false;
 				openSubState(new options.VisualsUISubState());
 			case 'Gameplay':
-				virtualPad.visible = false;
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
 				MusicBeatState.switchState(new options.NoteOffsetState());
 			case 'Mobile Options':
-				virtualPad.visible = false;
 				openSubState(new options.MobileOptionsSubState());
 		}
 	}
@@ -90,7 +85,7 @@ class OptionsState extends MusicBeatState
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 		ClientPrefs.loadPrefs();
-		virtualPad.visible = true;
+		addVirtualPad(UP_DOWN, A_B_C);
 	}
 
 	override function update(elapsed:Float) {
