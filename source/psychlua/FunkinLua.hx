@@ -1677,6 +1677,8 @@ class FunkinLua {
 		}
 		Lua.close(lua);
 		lua = null;
+		#end
+		#if HSCRIPT_ALLOWED
 		if(hscript != null)
 		{
 			hscript.destroy();

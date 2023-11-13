@@ -435,6 +435,12 @@ class PlayState extends MusicBeatState
 			{
 				if(file.toLowerCase().endsWith('.lua'))
 					new FunkinLua(folder + file);
+			}
+		#end
+		#if HSCRIPT_ALLOWED
+		for (folder in foldersToCheck)
+			for (file in FileSystem.readDirectory(folder))
+			{
 				if(file.toLowerCase().endsWith('.hx'))
 					initHScript(folder + file);
 			}
@@ -662,6 +668,12 @@ class PlayState extends MusicBeatState
 			{
 				if(file.toLowerCase().endsWith('.lua'))
 					new FunkinLua(folder + file);
+			}
+		#end
+		#if HSCRIPT_ALLOWED
+		for (folder in foldersToCheck)
+			for (file in FileSystem.readDirectory(folder))
+			{
 				if(file.toLowerCase().endsWith('.hx'))
 					initHScript(folder + file);
 			}
