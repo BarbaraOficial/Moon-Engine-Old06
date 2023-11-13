@@ -1,8 +1,7 @@
 package mobile.flixel;
 import flixel.system.macros.FlxMacroUtil;
 /**
-* A enum based off flixel.inputs.gamepad.FlxGamepadInputID
-* Used for handling mobile virtualpad buttons in Controls.hx
+* A enum based off for handling mobile virtualpad buttons and hitbox hints.
 * @author Karim Akra
 */
 @:enum 

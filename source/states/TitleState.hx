@@ -161,7 +161,7 @@ class TitleState extends MusicBeatState
 		MusicBeatState.switchState(new ChartingState());
 		#else
 		if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
-			#if mobileC controls.isInSubstate = false; #end//idfk what's wrong
+			controls.isInSubstate = false; //idfk what's wrong
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
 			MusicBeatState.switchState(new FlashingState());
@@ -359,7 +359,7 @@ class TitleState extends MusicBeatState
 
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT;
 
-		#if (mobileC || mobile)
+		#if FLX_TOUCH
 		for (touch in FlxG.touches.list)
 		{
 			if (touch.justPressed)

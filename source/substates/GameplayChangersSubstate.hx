@@ -129,10 +129,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			updateTextFrom(optionsArray[i]);
 		}
 
-		#if mobileC
 		addVirtualPad(LEFT_FULL, A_B_C);
-		addPadCamera(false);
-		#end
+		addVirtualPadCamera(false);
 
 		changeSelection();
 		reloadCheckboxes();
@@ -153,14 +151,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		}
 
 		if (controls.BACK) {
-			#if mobileC
-			
-			FlxTransitionableState.skipNextTransOut = true;
-			FlxG.resetState();
-			#else
-			close();
-			#end
 			ClientPrefs.saveSettings();
+			close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
@@ -272,7 +264,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				}
 			}
 
-			if(controls.RESET #if mobileC || MusicBeatSubstate.virtualPad.buttonC.justPressed #end)
+			if(controls.RESET || MusicBeatSubstate.virtualPad.buttonC.justPressed)
 			{
 				for (i in 0...optionsArray.length)
 				{
@@ -307,13 +299,10 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if(nextAccept > 0) {
 			nextAccept -= 1;
 		}
-		#if mobileC
 		if (MusicBeatSubstate.virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
 		addVirtualPad(LEFT_FULL, A_B_C);
-		addPadCamera(false);
-		
+		addVirtualPadCamera(false);
 		}
-		#end
 		super.update(elapsed);
 	}
 

@@ -13,7 +13,7 @@ import flixel.animation.FlxAnimationController;
 import flixel.input.keyboard.FlxKey;
 import openfl.events.KeyboardEvent;
 
-class EditorPlayState extends MusicBeatSubstate
+class EditorPlaySubState extends MusicBeatSubstate
 {
 	// Borrowed from original PlayState
 	var finishTimer:FlxTimer = null;
@@ -131,13 +131,13 @@ class EditorPlayState extends MusicBeatSubstate
 
 		#if android
 		theTipText = "Press BACK to Go Back to Chart Editor";
-		#elseif (mobileC && !android)
+		#elseif !android
                 if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		theTipText = "Press X to Go Back to Chart Editor";
                 } else {
                 #end
 		theTipText = "Press ESC to Go Back to Chart Editor";
-                #if (mobileC && !android)
+                #if !android
                 }
 		#end
                 var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, theTipText, 16);
@@ -157,26 +157,22 @@ class EditorPlayState extends MusicBeatSubstate
 		DiscordClient.changePresence('Playtesting on Chart Editor', PlayState.SONG.song, null, true, songLength);
 		#end
 
-		#if (mobileC && !android)
+		#if !android
 		addVirtualPad(NONE, P);
-		addPadCamera(false);
+		addVirtualPadCamera(false);
 		#end
 
-		#if mobileC 
 		addMobileControls(false);
 		MusicBeatSubstate.mobileControls.visible = true;
-		#end
 
 		RecalculateRating();
 	}
 
 	override function update(elapsed:Float)
 	{
-		if(#if (mobileC && !android) MusicBeatSubstate.virtualPad.buttonP.justPressed || #end FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end)
+		if(#if !android MusicBeatSubstate.virtualPad.buttonP.justPressed || #end FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end)
 		{
-			#if mobileC
 			MusicBeatSubstate.mobileControls.visible = false;
-			#end
 			endSong();
 			super.update(elapsed);
 			return;

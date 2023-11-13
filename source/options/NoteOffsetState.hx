@@ -170,10 +170,8 @@ class NoteOffsetState extends MusicBeatState
 		Conductor.bpm = 128.0;
 		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
 
-		#if mobileC
 		addVirtualPad(LEFT_FULL, A_B_C);
-		addPadCamera(false);
-		#end
+		addVirtualPadCamera(false);
 
 		super.create();
 	}
@@ -351,7 +349,7 @@ class NoteOffsetState extends MusicBeatState
 				}
 			}
 
-			if(controls.RESET #if mobileC || virtualPad.buttonC.justPressed #end)
+			if(controls.RESET || virtualPad.buttonC.justPressed)
 			{
 				for (i in 0...ClientPrefs.data.comboOffset.length)
 				{
@@ -389,7 +387,7 @@ class NoteOffsetState extends MusicBeatState
 				updateNoteDelay();
 			}
 
-			if(controls.RESET #if mobileC || virtualPad.buttonC.justPressed #end)
+			if(controls.RESET || virtualPad.buttonC.justPressed)
 			{
 				holdTime = 0;
 				barPercent = 0;
@@ -544,18 +542,14 @@ class NoteOffsetState extends MusicBeatState
 		else
 			str = 'Note/Beat Delay';
 
-		#if mobileC
                 if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		str2 = '(Press A to Switch)';
                 } else {
-                str2 = '(Press Accept to Switch)';
+					if(!controls.controllerMode)
+						str2 = '(Press Accept to Switch)';
+					else
+						str2 = '(Press Start to Switch)';
                 }
-                #else
-		if(!controls.controllerMode)
-			str2 = '(Press Accept to Switch)';
-		else
-			str2 = '(Press Start to Switch)';
-		#end
 
 		changeModeText.text = '< ${str.toUpperCase()} ${str2.toUpperCase()} >';
 	}

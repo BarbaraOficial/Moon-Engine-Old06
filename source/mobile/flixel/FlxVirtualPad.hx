@@ -74,22 +74,15 @@ class FlxVirtualPad extends FlxSpriteGroup
 		buttonsString.set("buttonY", buttonY);
 		buttonsString.set("buttonZ", buttonZ);
 		buttonsString.set("buttonP", buttonP);
-		#if mobileC
 		var buttonLeftColor:Array<FlxColor>;
 		var buttonDownColor:Array<FlxColor>;
 		var buttonUpColor:Array<FlxColor>;
 		var buttonRightColor:Array<FlxColor>;
-		/*if (ClientPrefs.data.dynamicColors && MusicBeatState.instance.mobileControls != null){
-			buttonLeftColor = ClientPrefs.data.arrowRGB[0];
-			buttonDownColor = ClientPrefs.data.arrowRGB[1];
-			buttonUpColor = ClientPrefs.data.arrowRGB[2];
-			buttonRightColor = ClientPrefs.data.arrowRGB[3];
-		} else {*/
-			buttonLeftColor = ClientPrefs.defaultData.arrowRGB[0];
-			buttonDownColor = ClientPrefs.defaultData.arrowRGB[1];
-			buttonUpColor = ClientPrefs.defaultData.arrowRGB[2];
-			buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
-		//}
+
+		buttonLeftColor = ClientPrefs.defaultData.arrowRGB[0];
+		buttonDownColor = ClientPrefs.defaultData.arrowRGB[1];
+		buttonUpColor = ClientPrefs.defaultData.arrowRGB[2];
+		buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
 
 		scrollFactor.set();
 
@@ -221,7 +214,6 @@ class FlxVirtualPad extends FlxSpriteGroup
 				add(buttonB = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
 			case NONE: // do nothing
 		}
-		#end
 	}
 
 	/*

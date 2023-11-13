@@ -95,10 +95,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		changeSelection();
 		reloadCheckboxes();
-
-		#if mobileC
-                addVirtualPad(LEFT_FULL, A_B_C);
-                #end
+		
+		addVirtualPad(LEFT_FULL, A_B_C);
 	}
 
 	public function addOption(option:Option) {
@@ -122,13 +120,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 
 		if (controls.BACK) {
-			#if mobileC
-			FlxTransitionableState.skipNextTransOut = true;
 			ClientPrefs.saveSettings();
-			FlxG.resetState();
-			#else
 			close();
-			#end
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
@@ -221,7 +214,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				}
 			}
 
-			if(controls.RESET #if mobileC || MusicBeatSubstate.virtualPad.buttonC.justPressed #end)
+			if(controls.RESET || MusicBeatSubstate.virtualPad.buttonC.justPressed)
 			{
 				var leOption:Option = optionsArray[curSelected];
 				leOption.setValue(leOption.defaultValue);

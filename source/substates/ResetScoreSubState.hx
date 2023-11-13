@@ -71,10 +71,8 @@ class ResetScoreSubState extends MusicBeatSubstate
 		noText.x += 200;
 		add(noText);
 
-		#if mobileC
 		addVirtualPad(LEFT_RIGHT, A_B);
-		addPadCamera(false);
-		#end
+		addVirtualPadCamera(false);
 
 		updateOptions();
 	}
@@ -96,16 +94,9 @@ class ResetScoreSubState extends MusicBeatSubstate
 			updateOptions();
 		}
 		if(controls.BACK) {
-			#if mobileC
-			
-			#end
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
-			#if mobileC
-			FlxTransitionableState.skipNextTransOut = true;
-			FlxG.resetState();
-			#else
+			ClientPrefs.saveSettings();
 			close();
-			#end
 		} else if(controls.ACCEPT) {
 			if(onYes) {
 				if(week == -1) {
@@ -115,21 +106,13 @@ class ResetScoreSubState extends MusicBeatSubstate
 				}
 			}
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
-			#if mobileC
-			
-			FlxTransitionableState.skipNextTransOut = true;
-			FlxG.resetState();
-			#else
+			ClientPrefs.saveSettings();
 			close();
-			#end
 		}
-		#if mobileC
 		if (MusicBeatSubstate.virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
 		addVirtualPad(LEFT_RIGHT, A_B);
-		addPadCamera(false);
-		
+		addVirtualPadCamera(false);
 		}
-		#end
 		super.update(elapsed);
 	}
 

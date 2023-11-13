@@ -3,12 +3,10 @@ package backend;
 import flixel.addons.ui.FlxUIState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxState;
-#if mobileC
 import mobile.MobileControls;
 import mobile.flixel.FlxVirtualPad;
 import flixel.util.FlxDestroyUtil;
 import flixel.FlxCamera;
-#end
 
 class MusicBeatState extends FlxUIState
 {
@@ -28,7 +26,6 @@ class MusicBeatState extends FlxUIState
 		return Controls.instance;
 	}
 
-	#if mobileC
 	public static var dpadMode:Map<String, FlxDPadMode>;
 	public static var actionMode:Map<String, FlxActionMode>;
 	public var virtualPad:FlxVirtualPad;
@@ -69,7 +66,7 @@ class MusicBeatState extends FlxUIState
 			remove(mobileControls);
 	}
 
-	public function addPadCamera(DefaultDrawTarget:Bool = true):Void
+	public function addVirtualPadCamera(DefaultDrawTarget:Bool = true):Void
 	{
 		if (virtualPad != null)
 		{
@@ -79,13 +76,11 @@ class MusicBeatState extends FlxUIState
 			virtualPad.cameras = [vpadCam];
 		}
 	}
-	#end
 
 	override function destroy()
 	{
 		super.destroy();
 
-		#if mobileC
 		if (virtualPad != null)
 		{
 			virtualPad = FlxDestroyUtil.destroy(virtualPad);
@@ -97,14 +92,12 @@ class MusicBeatState extends FlxUIState
 			mobileControls = FlxDestroyUtil.destroy(mobileControls);
 			mobileControls = null;
 		}
-		#end
 	}
 
 	public static var camBeat:FlxCamera;
 
 	override function create() {
-		#if mobileC
-		// FlxDPadModes
+		// FlxDPadModes (for Mobile Controls)
 		dpadMode = new Map<String, FlxDPadMode>();
 		dpadMode.set("UP_DOWN", UP_DOWN);
 		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
@@ -123,7 +116,6 @@ class MusicBeatState extends FlxUIState
 		actionMode.set('A_B_C_X_Y', A_B_C_X_Y);
 		actionMode.set('A_B_C_X_Y_Z', A_B_C_X_Y_Z);
 		actionMode.set('A_B_C_D_V_X_Y_Z', A_B_C_D_V_X_Y_Z);
-		#end
 		instance = this;
 		camBeat = FlxG.camera;
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;

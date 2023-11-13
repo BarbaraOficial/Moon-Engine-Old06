@@ -1,17 +1,15 @@
 package backend;
 
 import flixel.FlxSubState;
-#if mobileC
 import mobile.MobileControls;
 import mobile.flixel.FlxVirtualPad;
 import flixel.util.FlxDestroyUtil;
-#end
 
 class MusicBeatSubstate extends FlxSubState
 {
 	public function new()
 	{
-		#if mobileC controls.isInSubstate = true; #end
+		controls.isInSubstate = true;
 		super();
 	}
 	private var curSection:Int = 0;
@@ -30,7 +28,6 @@ class MusicBeatSubstate extends FlxSubState
 	inline function get_controls():Controls
 		return Controls.instance;
 
-	#if mobileC
 	public static var virtualPad:FlxVirtualPad;
 	public static var mobileControls:MobileControls;
 
@@ -67,7 +64,7 @@ class MusicBeatSubstate extends FlxSubState
 			remove(virtualPad);
 	}
 
-	public function addPadCamera(DefaultDrawTarget:Bool = true):Void
+	public function addVirtualPadCamera(DefaultDrawTarget:Bool = true):Void
 	{
 		if (virtualPad != null)
 		{
@@ -77,13 +74,11 @@ class MusicBeatSubstate extends FlxSubState
 			virtualPad.cameras = [camControls];
 		}
 	}
-	#end
 
 	override function destroy()
 	{
 		super.destroy();
 
-		#if mobileC
 		controls.isInSubstate = false;
 		if (virtualPad != null)
 		{
@@ -95,7 +90,6 @@ class MusicBeatSubstate extends FlxSubState
 				mobileControls = FlxDestroyUtil.destroy(mobileControls);
 				mobileControls = null;
 			}
-		#end
 	}
 
 	override function update(elapsed:Float)

@@ -1,8 +1,6 @@
 package psychlua;
 
-#if mobileC
 import mobile.MobileControls;
-#end
 import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
@@ -200,7 +198,6 @@ class FunkinLua {
 		// build target (windows, mac, linux, etc.)
 		set('buildTarget', getBuildTarget());
 
-		#if mobileC
 		function getMobileControlsAsString():String {
 			switch (MobileControls.getMode()){
 			case 0:
@@ -224,37 +221,39 @@ class FunkinLua {
 			if(game.luaVirtualPad == null)
 				game.addLuaVirtualPad(MusicBeatState.dpadMode.get(directionButton), MusicBeatState.actionMode.get(actionButton));
 			else
-				luaTrace('virtual pad already exists!!');
+				luaTrace('addVirtualPad: VPAD already exists.');
 		});
 
 		set("addVirtualPadCamera", function(){
 			if(game.luaVirtualPad != null)
 				game.addLuaPadCamera();
 			else
-				luaTrace("virtual pad doesn't exists!!");
+				luaTrace("addVirtualPadCamera: VPAD doesn't exists.");
 		});
 		set("virtualPadJustPressed", function(button:String){
 			if(game.luaVirtualPad != null)
 				game.luaVpadJustPressed(button)
 			else
-				luaTrace("virtual pad doesn't exists!!");
+				luaTrace("virtualPadJustPressed: VPAD doesn't exists.");
 		});
 		set("virtualPadPressed", function(button:String){
 			if(game.luaVirtualPad != null)
 				game.luaVpadPressed(button)
 			else
-				luaTrace("virtual pad doesn't exists!!");
+				luaTrace("virtualPadPressed: VPAD doesn't exists.");
 		});
 		set("virtualPadJustReleased", function(button:String){
 			if(game.luaVirtualPad != null)
 				game.luaVpadJustReleased(button)
 			else
-				luaTrace("virtual pad doesn't exists!!");
+				luaTrace("virtualPadJustReleased: VPAD doesn't exists.");
 		});
 		set("removeVirtualPad", function(){
-			game.removeLuaVirtualPad();
+			if(game.luaVirtualPad != null)
+				game.removeLuaVirtualPad();
+			else
+				luaTrace("rmoveVirtualPad: VPAD doesn't exists.");
 		});
-		#end
 
 		for (name => func in customFunctions)
 		{

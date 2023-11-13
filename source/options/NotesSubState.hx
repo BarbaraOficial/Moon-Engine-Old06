@@ -86,11 +86,18 @@ class NotesSubState extends MusicBeatSubstate
 		bg.alpha = 0.25;
 		add(bg);
 
-		#if mobileC
-		var text:Alphabet = new Alphabet(44, 86, 'PRESS', false);
-		#else
-		var text:Alphabet = new Alphabet(50, 86, 'CTRL', false);
-		#end
+		var sigh:String;
+		var sighPosX:Int;
+
+		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+			sigh = "PRESS";
+			sighPosX = 44;
+		} else {
+			sigh = "CTRL";
+			sighPosX = 50;
+		}
+
+		var text:Alphabet = new Alphabet(sighPosX, 86, sigh, false);
 		text.alignment = CENTERED;
 		text.setScale(0.4);
 		add(text);
@@ -147,12 +154,16 @@ class NotesSubState extends MusicBeatSubstate
 
 		var tipX = 20;
 		var tipY = 660;
-		#if mobileC
-		var tip:FlxText = new FlxText(tipX, tipY, 0, "Press C to Reset the selected Note Part.", 16);
-		tipY = 0;
-		#else
-		var tip:FlxText = new FlxText(tipX, tipY, 0, "Press RELOAD to Reset the selected Note Part.", 16);
-		#end
+		var tipText:String;
+
+		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+			tipText = "Press C to Reset the selected Note Part.";
+			tipY = 0;
+		} else {
+			tipText = "Press RELOAD to Reset the selected Note Part.";
+		}
+
+		var tip:FlxText = new FlxText(tipX, tipY, 0, tipText, 16);
 		tip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tip.borderSize = 2;
 		add(tip);
@@ -173,20 +184,18 @@ class NotesSubState extends MusicBeatSubstate
 		controllerPointer.visible = controls.controllerMode;
 		_lastControllerMode = controls.controllerMode;
 
-		#if mobileC
         addVirtualPad(NONE, B_C);
 		MusicBeatSubstate.virtualPad.buttonC.x = 0;
 		MusicBeatSubstate.virtualPad.buttonC.y = FlxG.height - 135;
-        #end
 	}
 
 	function updateTip()
 	{
-		#if mobileC
+		if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		// do sex
-		#else
+		} else {
 		tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RELOAD to fully reset the selected Note.';
-		#end
+		}
 	}
 
 	var _storedColor:FlxColor;
@@ -201,13 +210,8 @@ class NotesSubState extends MusicBeatSubstate
 		if (controls.BACK) {
 			FlxG.mouse.visible = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			#if mobileC
-			FlxTransitionableState.skipNextTransOut = true;
 			ClientPrefs.saveSettings();
-			FlxG.resetState();
-			#else
 			close();
-			#end
 			return;
 		}
 
@@ -488,9 +492,9 @@ class NotesSubState extends MusicBeatSubstate
 				}
 			} 
 		}
-		else if(#if mobileC MusicBeatSubstate.virtualPad.buttonC.justPressed || #end controls.RESET && hexTypeNum < 0)
+		else if(MusicBeatSubstate.virtualPad.buttonC.justPressed || controls.RESET && hexTypeNum < 0)
 		{
-			if(/*#if mobileC virtualPad.buttonC.justPressed || #end*/ FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER))
+			if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER))
 			{
 				for (i in 0...3)
 				{

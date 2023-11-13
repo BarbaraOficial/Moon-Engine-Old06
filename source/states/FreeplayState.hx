@@ -186,15 +186,11 @@ class FreeplayState extends MusicBeatState
 
                 var leText:String;
 
-		#if mobileC
                 if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		leText = "Press X to listen to the Song / Press C to open the Gameplay Changers Menu / Press Y to Reset your Score and Accuracy.";
                 } else {
-		#end
 		leText = "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";
-                #if mobileC
                 }
-		#end
 		bottomString = leText;
 		var size:Int = 16;
 		bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, leText, size);
@@ -204,9 +200,7 @@ class FreeplayState extends MusicBeatState
 		
 		updateTexts();
 
-        #if mobileC
 		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
-		#end
 		super.create();
 	}
 
@@ -214,6 +208,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection(0, false);
 		persistentUpdate = true;
 		super.closeSubState();
+		virtualPad.visible = true;
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
@@ -253,7 +248,7 @@ class FreeplayState extends MusicBeatState
 		}
 
 		var shiftMult:Int = 1;
-        if((FlxG.keys.pressed.SHIFT #if mobileC || virtualPad.buttonZ.pressed #end) && !playingMusic) shiftMult = 3;
+        if((FlxG.keys.pressed.SHIFT || virtualPad.buttonZ.pressed) && !playingMusic) shiftMult = 3;
 
 		if (!playingMusic)
 		{
@@ -379,7 +374,7 @@ class FreeplayState extends MusicBeatState
 			updateTimeTxt();
 		}
 
-        if (controls.BACK #if mobileC && !controls.isInSubstate #end)
+        if (controls.BACK && !controls.isInSubstate)
 		{
 			if (playingMusic)
 			{
@@ -402,13 +397,13 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-        if((FlxG.keys.justPressed.CONTROL #if mobileC || virtualPad.buttonC.justPressed #end) && !playingMusic)
-
+        if((FlxG.keys.justPressed.CONTROL || virtualPad.buttonC.justPressed) && !playingMusic)
 		{
 			persistentUpdate = false;
+			virtualPad.visible = false;
 			openSubState(new GameplayChangersSubstate());
 		}
-        else if(FlxG.keys.justPressed.SPACE #if mobileC || virtualPad.buttonX.justPressed #end)
+        else if(FlxG.keys.justPressed.SPACE || virtualPad.buttonX.justPressed)
 		{
 			if(instPlaying != curSelected && !playingMusic)
 			{
@@ -499,9 +494,10 @@ class FreeplayState extends MusicBeatState
 			DiscordClient.loadModRPC();
 			#end
 		}
-        else if((controls.RESET #if mobileC || virtualPad.buttonY.justPressed #end) && !playingMusic)
+        else if((controls.RESET || virtualPad.buttonY.justPressed) && !playingMusic)
 		{
 			persistentUpdate = false;
+			virtualPad.visible = false;
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
@@ -655,13 +651,10 @@ class FreeplayState extends MusicBeatState
 		@:privateAccess 
 		if (playingMusic)
 		{
-            #if mobileC
             virtualPad.buttonX.x = virtualPad.buttonA.x;
             virtualPad.buttonX.y = virtualPad.buttonA.y;
             virtualPad.buttonA.x = virtualPad.buttonY.x = virtualPad.buttonZ.x = virtualPad.buttonC.x = virtualPad.buttonA.x + 20000;
             virtualPad.buttonA.alpha = virtualPad.buttonY.alpha = virtualPad.buttonZ.alpha = virtualPad.buttonC.alpha = 0;
-
-            #end
 			scoreBG.visible = false;
 			diffText.visible = false;
 			scoreText.visible = false;
@@ -669,11 +662,11 @@ class FreeplayState extends MusicBeatState
 			songTxt.visible = true;
 			timeTxt.visible = true;
 			songBG.visible = true;
-            #if mobileC
+            if (ClientPrefs.data.controlsAlpha >= 0.1) {
 			bottomText.text = "Press X to Pause / Press B to Exit";
-            #else
+			} else {
 			bottomText.text = "Press SPACE to Pause / Press ESCAPE to Exit";
-            #end
+			}
 			positionSong();
 		}
 		else
@@ -688,10 +681,8 @@ class FreeplayState extends MusicBeatState
 
 			bottomText.text = bottomString;
 			positionHighscore();
-            #if mobileC
             removeVirtualPad();
     		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
-            #end
 		}
 	}
 

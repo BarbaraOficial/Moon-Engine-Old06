@@ -105,9 +105,7 @@ class WeekEditorState extends MusicBeatState
 
 		FlxG.mouse.visible = true;
 
-		#if mobileC
 		addVirtualPad(UP_DOWN, B);
-		#end
 
 		super.create();
 	}
@@ -445,7 +443,7 @@ class WeekEditorState extends MusicBeatState
 
 		if(!blockInput) {
 			ClientPrefs.toggleVolumeKeys(true);
-			if(FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end #if mobileC || virtualPad.buttonB.justPressed #end) {
+			if(FlxG.keys.justPressed.ESCAPE || virtualPad.buttonB.justPressed) {
 				MusicBeatState.switchState(new MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}
@@ -630,9 +628,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 
 		addEditorBox();
 		changeSelection();
-		#if mobileC
 		addVirtualPad(UP_DOWN, B);
-		#end
 		super.create();
 	}
 	
@@ -812,7 +808,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 			}
 		} else {
 			ClientPrefs.toggleVolumeKeys(true);
-			if(FlxG.keys.justPressed.ESCAPE #if mobileC || virtualPad.buttonB.justPressed #end) {
+			if(FlxG.keys.justPressed.ESCAPE || virtualPad.buttonB.justPressed) {
 				MusicBeatState.switchState(new MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}

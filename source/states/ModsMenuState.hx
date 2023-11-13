@@ -297,7 +297,6 @@ class ModsMenuState extends MusicBeatState
 		FlxG.mouse.visible = true;
 		#end
 
-		#if mobileC
 		#if android
 		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		bottomBG.alpha = 0.6;
@@ -309,9 +308,8 @@ class ModsMenuState extends MusicBeatState
 		#end
 		addVirtualPad(UP_DOWN, #if android NONE #else B #end);
 		virtualPad.y -= 215; // so that you can press the buttons.
-                if (ClientPrefs.data.controlsAlpha >= 0.1) {
-		virtualPad.alpha = 0.3; }
-		#end
+        if (ClientPrefs.data.controlsAlpha >= 0.1) 
+			virtualPad.alpha = 0.3; 
 
 		changeSelectedMod();
 		super.create();
