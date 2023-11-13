@@ -14,6 +14,7 @@ class OptionsState extends MusicBeatState
 	var tipText:FlxText;
 
 	function openSelectedSubstate(label:String) {
+		persistentUpdate = false;
 		removeVirtualPad();
 		switch(label) {
 			case 'Note Colors':
@@ -86,6 +87,7 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 		ClientPrefs.loadPrefs();
 		addVirtualPad(UP_DOWN, A_B_C);
+		persistentUpdate = true;
 	}
 
 	override function update(elapsed:Float) {
