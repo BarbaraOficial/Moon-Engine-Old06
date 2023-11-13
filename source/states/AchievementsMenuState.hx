@@ -109,13 +109,6 @@ class AchievementsMenuState extends MusicBeatState
 		descText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
 		descText.scrollFactor.set();
 
-		#if mobileC
-		addVirtualPad(LEFT_FULL, B_C);
-		#end
-
-		#if mobileC
-		addVirtualPad(LEFT_FULL, B_C);
-		#end
 		progressBar = new Bar(0, descText.y + 52);
 		progressBar.screenCenter(X);
 		progressBar.scrollFactor.set();
@@ -132,7 +125,15 @@ class AchievementsMenuState extends MusicBeatState
 		add(nameText);
 		
 		_changeSelection();
+
+		addVirtualPad(LEFT_FULL, B_C);
+
 		super.create();
+	}
+
+	override function closeSubState() {
+		super.closeSubState();
+		virtualPad.visible = true;
 	}
 
 	function makeAchievement(achievement:String, data:Achievement, unlocked:Bool, mod:String = null)
@@ -206,8 +207,9 @@ class AchievementsMenuState extends MusicBeatState
 				}
 			}
 			
-			if(#if mobileC virtualPad.buttonC.justPressed || #end controls.RESET && (options[curSelected].unlocked || options[curSelected].curProgress > 0))
+			if(MusicBeatState.instance.virtualPad.buttonC.justPressed || controls.RESET && (options[curSelected].unlocked || options[curSelected].curProgress > 0))
 			{
+				virtualPad.visible = false;
 				openSubState(new ResetAchievementSubstate());
 			}
 		}
@@ -302,9 +304,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		add(noText);
 		updateOptions();
 
-		#if mobileC
 		addVirtualPad(LEFT_RIGHT, A);
-		#end
 	}
 
 	override function update(elapsed:Float)
@@ -352,12 +352,8 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 			}
-			#if mobileC
-			FlxTransitionableState.skipNextTransOut = true;
-			FlxG.resetState();
-			#else
+			removeVirtualPad();
 			close();
-			#end
 			return;
 		}
 	}

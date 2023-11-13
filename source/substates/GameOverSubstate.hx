@@ -76,12 +76,9 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollow.setPosition(boyfriend.getGraphicMidpoint().x, boyfriend.getGraphicMidpoint().y);
 		FlxG.camera.focusOn(FlxPoint.weak(FlxG.camera.scroll.x + (FlxG.camera.width / 2), FlxG.camera.scroll.y + (FlxG.camera.height / 2)));
 		add(camFollow);
-		#if mobileC
+
 		addVirtualPad(NONE, A_B);
-		addPadCamera(false);
-		
-		#end
-		
+		addVirtualPadCamera(false);
 	}
 
 	public var startedDeath:Bool = false;
@@ -100,8 +97,6 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if (controls.BACK)
 		{
-			
-			
 			#if (desktop && !hl) DiscordClient.resetClientID(); #end
 			FlxG.sound.music.stop();
 			PlayState.deathCounter = 0;

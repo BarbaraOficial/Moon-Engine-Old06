@@ -8,7 +8,6 @@ import flixel.ui.FlxButton;
 import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
 import openfl.geom.Rectangle;
-import lime.utils.Assets;
 import tjson.TJSON as Json;
 
 import flixel.util.FlxSpriteUtil;
@@ -49,6 +48,7 @@ class ModsMenuState extends MusicBeatState
 
 	var _lastControllerMode:Bool = false;
 	var startMod:String = null;
+	var key:String;
 	public function new(startMod:String = null)
 	{
 		this.startMod = startMod;
@@ -62,6 +62,12 @@ class ModsMenuState extends MusicBeatState
 
 		modsList = Mods.parseList();
 		Mods.currentModDirectory = modsList.all[0] != null ? modsList.all[0] : '';
+
+		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+			key = "B";
+		} else {
+			key = "BACK";
+		}
 
 		#if (desktop && !hl)
 		// Updating Discord Rich Presence
@@ -162,7 +168,7 @@ class ModsMenuState extends MusicBeatState
 			buttonEnableAll.visible = true;
 
 			var myX = bgList.x + bgList.width + 20;
-			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "NO MODS INSTALLED\nPRESS BACK TO EXIT OR INSTALL A MOD", 48);
+			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "NO MODS INSTALLED\nPRESS " + key + " TO EXIT OR INSTALL A MOD", 48);
 			if(FlxG.random.bool(0.1)) noModsTxt.text += '\nBITCH.'; //meanie
 			noModsTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			noModsTxt.borderSize = 2;
@@ -298,20 +304,20 @@ class ModsMenuState extends MusicBeatState
 		FlxG.mouse.visible = true;
 		#end
 
-		#if mobileC
-		#if android
+		if (modsList.all.length >= 1) {
 		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		bottomBG.alpha = 0.6;
 		add(bottomBG);
-		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press Back Buton On Your Phone To Leave", 16);
+
+		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press " + key + " to Leave", 16);
 		bottomText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		bottomText.scrollFactor.set();
 		add(bottomText);
-		#end
-		addVirtualPad(UP_DOWN, #if android NONE #else B #end);
+		}
+
+		addVirtualPad(UP_DOWN, B);
 		virtualPad.y -= 215; // so that you can press the buttons.
-		virtualPad.alpha = 0.3;
-		#end
+        if (ClientPrefs.data.controlsAlpha >= 0.1) virtualPad.alpha = 0.3; 
 
 		changeSelectedMod();
 		super.create();
@@ -327,7 +333,7 @@ class ModsMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(controls.BACK && hoveringOnMods #if android || FlxG.android.justReleased.BACK #end)
+		if(controls.BACK && hoveringOnMods)
 		{
 			if(colorTween != null) {
 				colorTween.cancel();
@@ -380,8 +386,7 @@ class ModsMenuState extends MusicBeatState
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
 				{
-				#if !mobile
-				if(FlxG.mouse.justPressed)
+				if(FlxG.mouse.justPressed && ClientPrefs.data.controlsAlpha >= 0.1)
 				{
 					for (i in centerMod-2...centerMod+3)
 					{
@@ -403,7 +408,6 @@ class ModsMenuState extends MusicBeatState
 					button.ignoreCheck = button.onFocus = false;
 					gottaClickAgain = false;
 				}
-				#end // don't want to use mouse/touch on mods selecting
 
 				if(hoveringOnMods)
 				{
@@ -427,8 +431,7 @@ class ModsMenuState extends MusicBeatState
 						holdTime += elapsed;
 						if(holdTime > 0.5 && Math.floor(lastHoldTime * 8) != Math.floor(holdTime * 8)) changeSelectedMod(shiftMult * (controls.UI_UP ? -1 : 1));
 					}
-					#if !mobile
-					else if(FlxG.mouse.pressed && !gottaClickAgain)
+					else if(FlxG.mouse.pressed && ClientPrefs.data.controlsAlpha >= 0.1 && !gottaClickAgain)
 					{
 						var curMod:ModItem = modsGroup.members[curSelectedMod];
 						if(curMod != null)
@@ -474,7 +477,6 @@ class ModsMenuState extends MusicBeatState
 								curMod.y = FlxG.mouse.y - mouseOffsets.y;
 							}
 						}
-						
 					}
 					else if(FlxG.mouse.justReleased && holdingMod)
 					{
@@ -482,7 +484,6 @@ class ModsMenuState extends MusicBeatState
 						holdingElapsed = 0;
 						updateItemPositions();
 					}
-					#end //idfk how to get these to work properly tbh..
 				}
 			}
 
@@ -651,8 +652,7 @@ class ModsMenuState extends MusicBeatState
 			limited = true;
 		}
 		
-		#if !mobile // no thanks i don't want to hover on enable and reload with vpad
-		if(limited && Math.abs(add) == 1)
+		if(ClientPrefs.data.controlsAlpha >= 0.1 && limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
 			{
@@ -671,7 +671,6 @@ class ModsMenuState extends MusicBeatState
 				return;
 			}
 		}
-		#end
 		
 		holdingMod = false;
 		holdingElapsed = 0;
@@ -860,7 +859,7 @@ class ModItem extends FlxSpriteGroup
 			{
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 				var errorMsg = 'An error occurred: $e';
-				#if windows
+				#if (desktop || mobile)
 				lime.app.Application.current.window.alert(errorMsg, errorTitle);
 				#end
 				trace('$errorTitle - $errorMsg');
@@ -986,7 +985,7 @@ class MenuButton extends FlxSpriteGroup
 			onFocus = false;
 			return;
 		}
-		#if mobile
+		if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		if(visible){
 		for(touch in FlxG.touches.list){
 			if(!ignoreCheck && touch.pressed)
@@ -1005,7 +1004,7 @@ class MenuButton extends FlxSpriteGroup
 			}
 		}
 	}
-		#else
+} else {
 		if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
 			onFocus = FlxG.mouse.overlaps(this);
 
@@ -1018,7 +1017,7 @@ class MenuButton extends FlxSpriteGroup
 			if(!Controls.instance.controllerMode)
 				setButtonVisibility(FlxG.mouse.overlaps(this));
 		}
-		#end
+	}
 	}
 
 	function set_onFocus(newValue:Bool)

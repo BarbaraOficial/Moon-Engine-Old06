@@ -64,10 +64,6 @@ class ControlsSubState extends MusicBeatSubstate
 	{
 		super();
 
-		#if mobileC
-		
-		#end
-
 		options.push([true]);
 		options.push([true]);
 		options.push([true, defaultKey]);
@@ -109,9 +105,7 @@ class ControlsSubState extends MusicBeatSubstate
 		text.setScale(0.4);
 		add(text);
 
-		#if mobileC
 		addVirtualPad(LEFT_FULL, A_B_C);
-		#end
 
 		createTexts();
 	}
@@ -280,13 +274,8 @@ class ControlsSubState extends MusicBeatSubstate
 		{
 			if(controls.BACK || FlxG.gamepads.anyJustPressed(B))
 			{
-				#if mobileC
-				
-				FlxTransitionableState.skipNextTransOut = true;
-				FlxG.resetState();
-				#else
+				ClientPrefs.saveSettings();
 				close();
-				#end
 				return;
 			}
 			if(FlxG.keys.justPressed.CONTROL || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER) || FlxG.gamepads.anyJustPressed(RIGHT_SHOULDER)) swapMode();
@@ -310,11 +299,15 @@ class ControlsSubState extends MusicBeatSubstate
 					bindingText.alignment = CENTERED;
 					add(bindingText);
 
-					#if mobileC
-					bindingText2 = new Alphabet(FlxG.width / 2, 340, "Hold B to Cancel\nHold C to Delete", true);
-					#else
-					bindingText2 = new Alphabet(FlxG.width / 2, 340, "Hold ESC to Cancel\nHold Backspace to Delete", true);
-					#end
+					var funnyText:String;
+
+					if (ClientPrefs.data.controlsAlpha >= 0.1) {
+						funnyText = "Hold B to Cancel\nHold C to Delete";
+					} else {
+						funnyText = "Hold ESC to Cancel\nHold Backspace to Delete";
+					}
+
+					bindingText2 = new Alphabet(FlxG.width / 2, 340, funnyText, true);
 					bindingText2.alignment = CENTERED;
 					add(bindingText2);
 
@@ -322,9 +315,6 @@ class ControlsSubState extends MusicBeatSubstate
 					holdingEsc = 0;
 					ClientPrefs.toggleVolumeKeys(false);
 					FlxG.sound.play(Paths.sound('scrollMenu'));
-					/*#if mobileC
-					addVirtualPad(NONE, A_B);
-					#end*/
 				}
 				else
 				{
@@ -343,7 +333,7 @@ class ControlsSubState extends MusicBeatSubstate
 		{
 			var altNum:Int = curAlt ? 1 : 0;
 			var curOption:Array<Dynamic> = options[curOptions[curSelected]];
-			if(#if mobileC MusicBeatSubstate.virtualPad.buttonB.pressed || #end controls.BACK || FlxG.gamepads.anyPressed(B))
+			if(MusicBeatSubstate.virtualPad.buttonB.pressed || controls.BACK || FlxG.gamepads.anyPressed(B))
 			{
 				holdingEsc += elapsed;
 				if(holdingEsc > 0.5)
@@ -352,7 +342,7 @@ class ControlsSubState extends MusicBeatSubstate
 					closeBinding();
 				}
 			}
-			else if (#if mobileC MusicBeatSubstate.virtualPad.buttonC.pressed || #end FlxG.keys.pressed.BACKSPACE || FlxG.gamepads.anyPressed(BACK))
+			else if (MusicBeatSubstate.virtualPad.buttonC.pressed || FlxG.keys.pressed.BACKSPACE || FlxG.gamepads.anyPressed(BACK))
 			{
 				holdingEsc += elapsed;
 				if(holdingEsc > 0.5)
@@ -474,10 +464,6 @@ class ControlsSubState extends MusicBeatSubstate
 		bindingText2.destroy();
 		remove(bindingText2);
 		ClientPrefs.reloadVolumeKeys();
-		
-		/*#if mobileC
-		removeVirtualPad();
-		#end*/
 	}
 
 	function updateText(?move:Int = 0)

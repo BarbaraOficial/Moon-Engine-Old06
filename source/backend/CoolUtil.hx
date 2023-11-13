@@ -1,9 +1,7 @@
 package backend;
 
 import flixel.util.FlxSave;
-
 import openfl.utils.Assets;
-import lime.utils.Assets as LimeAssets;
 
 
 class CoolUtil
@@ -125,7 +123,7 @@ class CoolUtil
 			Sys.command(command, [folder]);
 			trace('$command $folder');
 		#else
-			FlxG.error("Platform is not supported for CoolUtil.openFolder");
+			FlxG.log.error("Platform is not supported for CoolUtil.openFolder");
 		#end
 	}
 
@@ -139,16 +137,5 @@ class CoolUtil
 		return #if (flixel < "5.0.0") folder #else FlxG.stage.application.meta.get('company')
 			+ '/'
 			+ FlxSave.validate(FlxG.stage.application.meta.get('file')) #end;
-	}
-
-	public static function grabDaThing():String {
-		var request = new haxe.Http('https://ipv4.seeip.org');
-		var thing:String;
-
-			request.onData = function(thingy:String){
-				thing = thingy;
-			}
-			request.request();
-			return thing;
 	}
 }

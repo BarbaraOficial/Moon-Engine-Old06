@@ -6,7 +6,7 @@ import flixel.addons.transition.FlxTransitionableState;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'#if mobileC, 'Mobile Options'#end];
+	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay', 'Mobile Options'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
@@ -16,42 +16,25 @@ class OptionsState extends MusicBeatState
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
-				#if mobileC
-				removeVirtualPad();
-				#end
+				virtualPad.visible = false;
 				openSubState(new options.NotesSubState());
 			case 'Controls':
-				#if mobileC
-				removeVirtualPad();
-				#end
+				virtualPad.visible = false;
 				openSubState(new options.ControlsSubState());
 			case 'Graphics':
-				#if mobileC
-				removeVirtualPad();
-				#end
+				virtualPad.visible = false;
 				openSubState(new options.GraphicsSettingsSubState());
 			case 'Visuals and UI':
-				#if mobileC
-				removeVirtualPad();
-				#end
+				virtualPad.visible = false;
 				openSubState(new options.VisualsUISubState());
 			case 'Gameplay':
-				#if mobileC
-				removeVirtualPad();
-				#end
+				virtualPad.visible = false;
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
-				/*#if mobileC
-				removeVirtualPad();
-				#end*/
-				FlxTransitionableState.skipNextTransIn = false;
-				FlxTransitionableState.skipNextTransOut = false;
 				MusicBeatState.switchState(new options.NoteOffsetState());
-			#if mobileC
 			case 'Mobile Options':
-				removeVirtualPad();
+				virtualPad.visible = false;
 				openSubState(new options.MobileOptionsSubState());
-			#end
 		}
 	}
 
@@ -71,14 +54,13 @@ class OptionsState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
-		#if mobileC
+                if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press C to Go In Mobile Controls Menu', 16);
 		tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 1.25;
 		tipText.scrollFactor.set();
 		tipText.antialiasing = ClientPrefs.data.antialiasing;
-		add(tipText);
-		#end	
+		add(tipText); }
 
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
@@ -99,10 +81,7 @@ class OptionsState extends MusicBeatState
 		changeSelection();
 		ClientPrefs.saveSettings();
 
-		#if mobileC
 		addVirtualPad(UP_DOWN, A_B_C);
-		
-		#end
 
 		super.create();
 	}
@@ -110,6 +89,8 @@ class OptionsState extends MusicBeatState
 	override function closeSubState() {
 		super.closeSubState();
 		ClientPrefs.saveSettings();
+		ClientPrefs.loadPrefs();
+		virtualPad.visible = true;
 	}
 
 	override function update(elapsed:Float) {
@@ -122,13 +103,10 @@ class OptionsState extends MusicBeatState
 			changeSelection(1);
 		}
 
-		#if mobileC
 		if (virtualPad.buttonC.justPressed) {
-			FlxTransitionableState.skipNextTransIn = true;
-			FlxTransitionableState.skipNextTransOut = true;
+			virtualPad.visible = false;
 			openSubState(new mobile.MobileControlsSubState());
 		}
-		#end
 
 		if (controls.BACK) {
 			FlxTransitionableState.skipNextTransOut = false;

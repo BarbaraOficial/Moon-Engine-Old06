@@ -70,9 +70,7 @@ import psychlua.HScript;
 import tea.SScript;
 #end
 
-#if mobileC
 import mobile.flixel.FlxVirtualPad;
-#end
 
 class PlayState extends MusicBeatState
 {
@@ -83,7 +81,7 @@ class PlayState extends MusicBeatState
 		['You Suck!', 0.2], //From 0% to 19%
 		['Shit', 0.4], //From 20% to 39%
 		['Bad', 0.5], //From 40% to 49%
-		['Bruh', 0.6], //From 50% to 59%
+		['Bleh', 0.6], //From 50% to 59%
 		['Meh', 0.69], //From 60% to 68%
 		['Nice', 0.7], //69%
 		['Good', 0.8], //From 70% to 79%
@@ -275,9 +273,7 @@ class PlayState extends MusicBeatState
 
 	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteManager> = []; #end
 
-	#if mobileC
 	public var luaVirtualPad:FlxVirtualPad;
-	#end
 
 	override public function create()
 	{
@@ -596,7 +592,6 @@ class PlayState extends MusicBeatState
 		uiGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
 
-		#if mobileC
 		var buttonLeftColor:Array<FlxColor>;
 		var buttonDownColor:Array<FlxColor>;
 		var buttonUpColor:Array<FlxColor>;
@@ -613,7 +608,6 @@ class PlayState extends MusicBeatState
 			buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
 		}
 		addMobileControls(false);
-		mobileControls.visible = true;
 		if (ClientPrefs.data.dynamicColors){
 		switch(mobile.MobileControls.getMode())
 		{
@@ -633,8 +627,6 @@ class PlayState extends MusicBeatState
 			mobileControls.virtualPad.buttonRight2.color =  buttonRightColor[0];
 		}
 	}
-		#end
-		
 
 		startingSong = true;
 		
@@ -718,9 +710,9 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		#if (mobileC && !android)
+		#if (!android)
 		addVirtualPad(NONE, P);
-       		addPadCamera(false);
+       		addVirtualPadCamera(false);
 		#end
 
 		super.create();
@@ -1012,7 +1004,7 @@ class PlayState extends MusicBeatState
 
 	public function startCountdown()
 	{
-		#if mobileC mobileControls.visible = true; #end
+		mobileControls.visible = true;
 		if(startedCountdown) {
 			callOnScripts('onStartCountdown');
 			return false;
@@ -1721,6 +1713,8 @@ class PlayState extends MusicBeatState
 			#end
 
 			paused = false;
+			mobileControls.visible = true;
+			virtualPad.visible = true;
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
@@ -1811,7 +1805,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if (#if !mobileC controls.PAUSE #elseif android FlxG.android.justReleased.BACK || FlxG.keys.anyPressed(controls.keyboardBinds["pause"]) #elseif (mobileC && !android) virtualPad.buttonP.justPressed || FlxG.keys.anyPressed(controls.keyboardBinds["pause"]) #end && startedCountdown && canPause)
+		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end || FlxG.keys.anyPressed(controls.keyboardBinds["pause"]) #if (!android) || virtualPad.buttonP.justPressed #end && startedCountdown && canPause)
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != FunkinLua.Function_Stop) {
@@ -2002,6 +1996,8 @@ class PlayState extends MusicBeatState
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
 		persistentDraw = true;
+		mobileControls.visible = false;
+		virtualPad.visible = false;
 		paused = true;
 
 		#if VIDEOS_ALLOWED
@@ -2091,7 +2087,6 @@ class PlayState extends MusicBeatState
 				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
 				#end
 				videoSprites[daVideoSprite].destroy();
-				videoSprites[daVideoSprite].kill();
 				}
 				for(i in videoSprites)
 					videoSprites.remove(i);
@@ -2447,7 +2442,8 @@ class PlayState extends MusicBeatState
 	public var transitioning = false;
 	public function endSong()
 	{
-		#if mobileC mobileControls.visible = false; #end
+		mobileControls.visible = false;
+		virtualPad.visible = false;
 		//Should kill you if you tried to cheat
 		if(!startingSong) {
 			notes.forEach(function(daNote:Note) {
@@ -2479,7 +2475,7 @@ class PlayState extends MusicBeatState
 
 		#if ACHIEVEMENTS_ALLOWED
 		var weekNoMiss:String = WeekData.getWeekFileName() + '_nomiss';
-		checkForAchievement([weekNoMiss, 'ur_bad', 'ur_good', 'hype', 'two_keys', 'toastie', 'debugger']);
+		checkForAchievement([weekNoMiss, 'ur_bad', 'ur_good', 'hype', 'two_keys', 'toastier', 'debugger']);
 		#end
 
 		var ret:Dynamic = callOnScripts('onEndSong', null, true);
@@ -3221,7 +3217,6 @@ class PlayState extends MusicBeatState
 			videoSprites[daVideoSprite].bitmap.onEndReached();
 			#end
 			videoSprites[daVideoSprite].destroy();
-			videoSprites[daVideoSprite].kill();
 			}
 		}
 			for(i in videoSprites)
@@ -3659,7 +3654,7 @@ class PlayState extends MusicBeatState
 					case 'two_keys':
 						unlock = (!usedPractice && keysPressed.length <= 2);
 
-					case 'toastie':
+					case 'toastier':
 						unlock = (!ClientPrefs.data.cacheOnGPU && !ClientPrefs.data.shaders && ClientPrefs.data.lowQuality && !ClientPrefs.data.antialiasing);
 
 					case 'debugger':
@@ -3754,7 +3749,6 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
-	#if mobileC
 	public function addLuaVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
 		{
 			luaVirtualPad = new FlxVirtualPad(DPad, Action);
@@ -3792,5 +3786,4 @@ class PlayState extends MusicBeatState
 	
 		return luaVirtualPad.checkButtonPressByString(button, "JustReleased");
 	}
-	#end
 }

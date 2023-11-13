@@ -33,17 +33,9 @@ class SUtil
 		#if mobile
 		if (!FileSystem.exists('assets') && !FileSystem.exists('mods'))
 		{
-			if (FlxG.random.bool(10))
-			{
-				Lib.application.window.alert(backend.CoolUtil.grabDaThing() + "\n W E  A R E\n C O M I N G . . .", 'look through the window... =)');
-				LimeSystem.exit(1);
-			}
-			else
-			{
-				Lib.application.window.alert("Whoops, seems like you didn't extract the files from the .APK!\nPlease copy the files from the .APK to\n"
-					+ Sys.getCwd(), 'Error!');
-				LimeSystem.exit(1);
-			}
+			Lib.application.window.alert("Whoops, seems like you didn't extract the files from the .APK!\nPlease copy the files from the .APK to\n"
+				+ Sys.getCwd(), 'Error!');
+			LimeSystem.exit(1);
 		}
 		else if ((FileSystem.exists('assets') && !FileSystem.isDirectory('assets'))
 			&& (FileSystem.exists('mods') && !FileSystem.isDirectory('mods')))

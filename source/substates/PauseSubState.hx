@@ -17,7 +17,7 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song',#if mobileC 'Chart Editor', #end'Change Difficulty', 'Options', 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Chart Editor', 'Change Difficulty', 'Options', 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -143,7 +143,6 @@ class PauseSubState extends MusicBeatSubstate
 		missingText.visible = false;
 		add(missingText);
 
-		#if mobileC
 		if (PlayState.chartingMode)
 		{
 			addVirtualPad(LEFT_FULL, A);
@@ -152,8 +151,7 @@ class PauseSubState extends MusicBeatSubstate
 		{
 			addVirtualPad(UP_DOWN, A);
 		}
-		addPadCamera(false);
-		#end
+		addVirtualPadCamera(false);
 
 		regenMenu();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
@@ -267,12 +265,9 @@ class PauseSubState extends MusicBeatSubstate
 					practiceText.visible = PlayState.instance.practiceMode;
 				case "Restart Song":
 					restartSong();
-				#if mobileC
 				case 'Chart Editor':
 					MusicBeatState.switchState(new states.editors.ChartingState());
 					PlayState.chartingMode = true;
-					
-				#end
 				case "Leave Charting Mode":
 					restartSong();
 					PlayState.chartingMode = false;
@@ -334,7 +329,6 @@ class PauseSubState extends MusicBeatSubstate
 			}
 		}
         if (controls.BACK) close();
-		#if mobileC
 		if (MusicBeatSubstate.virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
 			if (PlayState.chartingMode)
 				{
@@ -350,10 +344,8 @@ class PauseSubState extends MusicBeatSubstate
 					MusicBeatSubstate.virtualPad.buttonDown.color = 0xFF00FFFF;
 					MusicBeatSubstate.virtualPad.buttonUp.color = 0xFF12FA05;
 				}
-				addPadCamera(false);
-		
+				addVirtualPadCamera(false);
 		}
-		#end
 	}
 
 	function deleteSkipTimeText()

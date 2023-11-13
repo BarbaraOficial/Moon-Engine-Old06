@@ -13,7 +13,7 @@ import flixel.animation.FlxAnimationController;
 import flixel.input.keyboard.FlxKey;
 import openfl.events.KeyboardEvent;
 
-class EditorPlayState extends MusicBeatSubstate
+class EditorPlaySubState extends MusicBeatSubstate
 {
 	// Borrowed from original PlayState
 	var finishTimer:FlxTimer = null;
@@ -71,10 +71,6 @@ class EditorPlayState extends MusicBeatSubstate
 	public function new(playbackRate:Float)
 	{
 		super();
-
-		#if mobileC
-		
-		#end
 		
 		/* setting up some important data */
 		this.playbackRate = playbackRate;
@@ -131,13 +127,20 @@ class EditorPlayState extends MusicBeatSubstate
 		dataTxt.borderSize = 1.25;
 		add(dataTxt);
 
+                var theTipText:String;
+
 		#if android
-		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press BACK to Go Back to Chart Editor', 16);
-		#elseif (mobileC && !android)
-		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press X to Go Back to Chart Editor', 16);
-		#elseif (!mobileC && !android)
-		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press ESC to Go Back to Chart Editor', 16);
+		theTipText = "Press BACK to Go Back to Chart Editor";
+		#elseif !android
+                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		theTipText = "Press X to Go Back to Chart Editor";
+                } else {
+                #end
+		theTipText = "Press ESC to Go Back to Chart Editor";
+                #if !android
+                }
 		#end
+                var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, theTipText, 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
@@ -154,26 +157,22 @@ class EditorPlayState extends MusicBeatSubstate
 		DiscordClient.changePresence('Playtesting on Chart Editor', PlayState.SONG.song, null, true, songLength);
 		#end
 
-		#if (mobileC && !android)
+		#if !android
 		addVirtualPad(NONE, P);
-		addPadCamera(false);
+		addVirtualPadCamera(false);
 		#end
 
-		#if mobileC 
 		addMobileControls(false);
 		MusicBeatSubstate.mobileControls.visible = true;
-		#end
 
 		RecalculateRating();
 	}
 
 	override function update(elapsed:Float)
 	{
-		if(#if (mobileC && !android) MusicBeatSubstate.virtualPad.buttonP.justPressed || #end FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end)
+		if(#if !android MusicBeatSubstate.virtualPad.buttonP.justPressed || #end FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end)
 		{
-			#if mobileC
 			MusicBeatSubstate.mobileControls.visible = false;
-			#end
 			endSong();
 			super.update(elapsed);
 			return;
@@ -568,7 +567,7 @@ class EditorPlayState extends MusicBeatSubstate
 		
 		if (!ClientPrefs.data.comboStacking)
 		{
-			if (lastRating != null) lastRating.kill();
+			if (lastRating != null) lastRating.destroy();
 			lastRating = rating;
 		}
 
@@ -594,7 +593,7 @@ class EditorPlayState extends MusicBeatSubstate
 		}
 		if (!ClientPrefs.data.comboStacking)
 		{
-			if (lastCombo != null) lastCombo.kill();
+			if (lastCombo != null) lastCombo.destroy();
 			lastCombo = comboSpr;
 		}
 		if (lastScore != null)

@@ -13,7 +13,6 @@ class FlxAnimateFunctions
 			var lastSprite = PlayState.instance.variables.get(tag);
 			if(lastSprite != null)
 			{
-				lastSprite.kill();
 				PlayState.instance.remove(lastSprite);
 				lastSprite.destroy();
 			}

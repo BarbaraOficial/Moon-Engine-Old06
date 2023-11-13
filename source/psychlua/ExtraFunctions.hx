@@ -2,9 +2,7 @@ package psychlua;
 
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
-#if mobileC
 import mobile.MobileControls;
-#end
 #if mobile
 import extension.eightsines.EsOrientation;
 #end
@@ -23,14 +21,14 @@ class ExtraFunctions
 		{
 			switch(name.toUpperCase()){
 				case 'SPACE':
-					#if mobileC
+				if (ClientPrefs.data.controlsAlpha >= 0.1) {
 					if (MobileControls.instance.virtualPadExtra == null)
 						return false;
 					else
 						return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed || Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
-					#else 
+				} else {
 						return Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
-					#end
+				}
 				default:
 					return Reflect.getProperty(FlxG.keys.justPressed, name.toUpperCase());
 			}
@@ -39,14 +37,14 @@ class ExtraFunctions
 		{
 			switch(name.toUpperCase()){
 				case 'SPACE':
-					#if mobileC
+				if (ClientPrefs.data.controlsAlpha >= 0.1) {
 					if (MobileControls.instance.virtualPadExtra != null)
 						return false;
 					else
 						return MobileControls.instance.virtualPadExtra.buttonExtra.pressed || Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
-					#else 
+				} else {
 						return Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
-					#end
+				}
 				default:
 					return Reflect.getProperty(FlxG.keys.pressed, name.toUpperCase());
 			}
@@ -55,14 +53,14 @@ class ExtraFunctions
 		{
 			switch(name.toUpperCase()){
 				case 'SPACE':
-					#if mobileC
+				if (ClientPrefs.data.controlsAlpha >= 0.1) {
 					if (MobileControls.instance.virtualPadExtra != null)
 						return false;
 					else
 						return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased || Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
-					#else 
+				} else {
 						return Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
-					#end
+				}
 				default:
 					return Reflect.getProperty(FlxG.keys.justReleased, name.toUpperCase());
 			}
@@ -160,7 +158,6 @@ class ExtraFunctions
 			}
 			return false;
 		});
-		#if mobileC
 		funk.set("extraButtonPressed", function(button:String) {
 			button = button.toLowerCase();
 			switch (mobile.MobileControls.getMode()){
@@ -253,7 +250,6 @@ class ExtraFunctions
 		}
 			return false;
 		});
-                #end
 
 		funk.set("vibrate", function(duration:Null<Int>, ?period:Null<Int>){
 		    if (period == null) period = 0;

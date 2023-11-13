@@ -1,13 +1,11 @@
 package backend;
 
-#if mobileC
 import mobile.flixel.FlxMobileControlsID;
 import mobile.flixel.FlxButton;
 import mobile.flixel.FlxHitbox;
 import mobile.flixel.FlxVirtualPad;
 import backend.MusicBeatSubstate;
 import mobile.MobileControls;
-#end
 import flixel.input.actions.FlxActionSet;
 import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
@@ -146,9 +144,7 @@ class Controls
 	// Gamepad, Keyboard & Mobile stuff
 	public var keyboardBinds:Map<String, Array<FlxKey>>;
 	public var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;
-	#if mobileC
 	public var mobileBinds:Map<String, Array<FlxMobileControlsID>>;
-	#end
 
 	public function justPressed(key:String)
 	{
@@ -156,7 +152,7 @@ class Controls
 		if (result)
 			controllerMode = false;
 
-		return result || _myGamepadJustPressed(gamepadBinds[key]) == true #if mobileC || mobileCJustPressed(mobileBinds[key]) == true || virtualPadJustPressed(mobileBinds[key]) == true #end;
+		return result || _myGamepadJustPressed(gamepadBinds[key]) == true || mobileCJustPressed(mobileBinds[key]) == true || virtualPadJustPressed(mobileBinds[key]) == true;
 	}
 
 	public function pressed(key:String)
@@ -165,7 +161,7 @@ class Controls
 		if (result)
 			controllerMode = false;
 
-		return result || _myGamepadPressed(gamepadBinds[key]) == true #if mobileC || mobileCPressed(mobileBinds[key]) == true || virtualPadPressed(mobileBinds[key]) == true #end;
+		return result || _myGamepadPressed(gamepadBinds[key]) == true || mobileCPressed(mobileBinds[key]) == true || virtualPadPressed(mobileBinds[key]) == true;
 	}
 
 	public function justReleased(key:String)
@@ -174,7 +170,7 @@ class Controls
 		if (result)
 			controllerMode = false;
 
-		return result || _myGamepadJustReleased(gamepadBinds[key]) == true #if mobileC || mobileCJustReleased(mobileBinds[key]) == true || virtualPadJustReleased(mobileBinds[key]) == true #end;
+		return result || _myGamepadJustReleased(gamepadBinds[key]) == true || mobileCJustReleased(mobileBinds[key]) == true || virtualPadJustReleased(mobileBinds[key]) == true;
 	}
 
 	public var controllerMode:Bool = false;
@@ -227,7 +223,6 @@ class Controls
 		return false;
 	}
 
-	#if mobileC
 	public var isInSubstate:Bool = false; // just make this true when adding virtualPad into a substate and false while exiting/destroying the VirtualPad
 	public var requested(get, default):Dynamic; // is set to MusicBeatState or MusicBeatSubstate when the constructor is called
 
@@ -371,15 +366,12 @@ class Controls
 		else
 			return MusicBeatState.instance;
 	}
-	#end
 
 	// IGNORE THESE/ karim: no.
 	public static var instance:Controls;
 	public function new()
 	{
-		#if mobileC
 		mobileBinds = ClientPrefs.mobileBinds;
-		#end
 		gamepadBinds = ClientPrefs.gamepadBinds;
 		keyboardBinds = ClientPrefs.keyBinds;
 	}
