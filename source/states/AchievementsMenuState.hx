@@ -271,6 +271,8 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 
 	public function new()
 	{
+                controls.isInSubstate = true;
+
 		super();
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
@@ -312,7 +314,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		if(controls.BACK)
 		{
 			close();
-			removeVirtualPad();
+                        controls.isInSubstate = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			return;
 		}
@@ -353,7 +355,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 			}
-			removeVirtualPad();
+                        controls.isInSubstate = false;
 			close();
 			return;
 		}

@@ -208,7 +208,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection(0, false);
 		persistentUpdate = true;
 		super.closeSubState();
-		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
+                addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
@@ -378,9 +378,6 @@ class FreeplayState extends MusicBeatState
 		{
 			if (playingMusic)
 			{
-				removeVirtualPad();
-				addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
-	
 				FlxG.sound.music.stop();
 				destroyFreeplayVocals();
 				FlxG.sound.music.volume = 0;
@@ -411,9 +408,6 @@ class FreeplayState extends MusicBeatState
 		{
 			if(instPlaying != curSelected && !playingMusic)
 			{
-				removeVirtualPad();
-				addVirtualPad(LEFT_FULL, B_X);
-
 				destroyFreeplayVocals();
 				FlxG.sound.music.volume = 0;
 				Mods.currentModDirectory = songs[curSelected].folder;

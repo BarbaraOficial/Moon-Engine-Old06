@@ -99,7 +99,6 @@ class ResetScoreSubState extends MusicBeatSubstate
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
 			ClientPrefs.saveSettings();
 			close();
-			removeVirtualPad();
 			controls.isInSubstate = false;
 		} else if(controls.ACCEPT) {
 			if(onYes) {
