@@ -117,7 +117,8 @@ class FlxVirtualPad extends FlxSpriteGroup
 				add(buttonLeft2 = createButton(FlxG.width - 384, FlxG.height - 309, 132, 127, 'left', buttonLeftColor[0]));
 				add(buttonRight2 = createButton(FlxG.width - 132, FlxG.height - 309, 132, 127, 'right', buttonRightColor[0]));
 				add(buttonDown2 = createButton(FlxG.width - 258, FlxG.height - 201, 132, 127, 'down', buttonDownColor[0]));
-			case DIALOGUE_PORTRAIT_EDITOR:
+			// PSYCH RELEATED BUTTONS
+			case DIALOGUE_PORTRAIT:
 				add(buttonUp = createButton(105, FlxG.height - 345, 132, 127, 'up', buttonUpColor[0]));
 				add(buttonLeft = createButton(0, FlxG.height - 243, 132, 127, 'left', buttonLeftColor[0]));
 				add(buttonRight = createButton(207, FlxG.height - 243, 132, 127, 'right', buttonRightColor[0]));
@@ -187,7 +188,8 @@ class FlxVirtualPad extends FlxSpriteGroup
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
 				add(buttonZ = createButton(FlxG.width - 132, FlxG.height - 255, 132, 127, 'z', 0xCCB98E));
 				add(buttonA = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'a', 0xFF0000));
-			case DIALOGUE_PORTRAIT_EDITOR:
+			// PSYCH RELEATED BUTTONS
+			case DIALOGUE_PORTRAIT:
 				add(buttonX = createButton(FlxG.width - 384, 0, 132, 127, 'x', 0x99062D));
 				add(buttonC = createButton(FlxG.width - 384, 125, 132, 127, 'c', 0x44FF00));
 				add(buttonY = createButton(FlxG.width - 258, 0, 132, 127, 'y', 0x4A35B9));
@@ -210,8 +212,11 @@ class FlxVirtualPad extends FlxSpriteGroup
 			case P:
 				add(buttonP = createButton(FlxG.width - 132, 0, 132, 127, 'x', 0x99062D));
 			case B_C:
-				add(buttonC = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'c', 0x44FF00));
-				add(buttonB = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
+				add(buttonC = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'c', 0x44FF00));
+				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
+			case B_X:
+				add(buttonX = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'x', 0x99062D));
+				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
 			case NONE: // do nothing
 		}
 	}
@@ -462,7 +467,7 @@ enum FlxDPadMode
 	LEFT_FULL;
 	RIGHT_FULL;
 	BOTH;
-	DIALOGUE_PORTRAIT_EDITOR;
+	DIALOGUE_PORTRAIT;
 	MENU_CHARACTER;
 	NOTE_SPLASH_DEBUG;
 	NONE;
@@ -479,10 +484,11 @@ enum FlxActionMode
 	A_B_C_X_Y;
 	A_B_C_X_Y_Z;
 	A_B_C_D_V_X_Y_Z;
-	DIALOGUE_PORTRAIT_EDITOR;
+	DIALOGUE_PORTRAIT;
 	MENU_CHARACTER;
 	NOTE_SPLASH_DEBUG;
 	P;
 	B_C;
+	B_X;
 	NONE;
 }

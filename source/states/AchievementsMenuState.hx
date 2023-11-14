@@ -133,7 +133,7 @@ class AchievementsMenuState extends MusicBeatState
 
 	override function closeSubState() {
 		super.closeSubState();
-		virtualPad.visible = true;
+		addVirtualPad(LEFT_FULL, B_C);
 	}
 
 	function makeAchievement(achievement:String, data:Achievement, unlocked:Bool, mod:String = null)
@@ -209,7 +209,7 @@ class AchievementsMenuState extends MusicBeatState
 			
 			if(MusicBeatState.instance.virtualPad.buttonC.justPressed || controls.RESET && (options[curSelected].unlocked || options[curSelected].curProgress > 0))
 			{
-				virtualPad.visible = false;
+				removeVirtualPad();
 				openSubState(new ResetAchievementSubstate());
 			}
 		}
@@ -312,6 +312,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		if(controls.BACK)
 		{
 			close();
+			removeVirtualPad();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			return;
 		}

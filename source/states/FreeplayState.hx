@@ -208,7 +208,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection(0, false);
 		persistentUpdate = true;
 		super.closeSubState();
-		virtualPad.visible = true;
+		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
@@ -374,16 +374,20 @@ class FreeplayState extends MusicBeatState
 			updateTimeTxt();
 		}
 
-        if (controls.BACK && !controls.isInSubstate)
+        if (controls.BACK)
 		{
 			if (playingMusic)
 			{
+				removeVirtualPad();
+				addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
+	
 				FlxG.sound.music.stop();
 				destroyFreeplayVocals();
 				FlxG.sound.music.volume = 0;
 				instPlaying = -1;
 
 				playingMusic = false;
+
 				switchPlayMusic();
 			}
 			else 
@@ -400,13 +404,16 @@ class FreeplayState extends MusicBeatState
         if((FlxG.keys.justPressed.CONTROL || virtualPad.buttonC.justPressed) && !playingMusic)
 		{
 			persistentUpdate = false;
-			virtualPad.visible = false;
 			openSubState(new GameplayChangersSubstate());
+			removeVirtualPad();
 		}
         else if(FlxG.keys.justPressed.SPACE || virtualPad.buttonX.justPressed)
 		{
 			if(instPlaying != curSelected && !playingMusic)
 			{
+				removeVirtualPad();
+				addVirtualPad(LEFT_FULL, B_X);
+
 				destroyFreeplayVocals();
 				FlxG.sound.music.volume = 0;
 				Mods.currentModDirectory = songs[curSelected].folder;
@@ -497,8 +504,8 @@ class FreeplayState extends MusicBeatState
         else if((controls.RESET || virtualPad.buttonY.justPressed) && !playingMusic)
 		{
 			persistentUpdate = false;
-			virtualPad.visible = false;
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
+			removeVirtualPad();
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
 
@@ -651,10 +658,6 @@ class FreeplayState extends MusicBeatState
 		@:privateAccess 
 		if (playingMusic)
 		{
-            virtualPad.buttonX.x = virtualPad.buttonA.x;
-            virtualPad.buttonX.y = virtualPad.buttonA.y;
-            virtualPad.buttonA.x = virtualPad.buttonY.x = virtualPad.buttonZ.x = virtualPad.buttonC.x = virtualPad.buttonA.x + 20000;
-            virtualPad.buttonA.alpha = virtualPad.buttonY.alpha = virtualPad.buttonZ.alpha = virtualPad.buttonC.alpha = 0;
 			scoreBG.visible = false;
 			diffText.visible = false;
 			scoreText.visible = false;
@@ -681,8 +684,6 @@ class FreeplayState extends MusicBeatState
 
 			bottomText.text = bottomString;
 			positionHighscore();
-            removeVirtualPad();
-    		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
 		}
 	}
 

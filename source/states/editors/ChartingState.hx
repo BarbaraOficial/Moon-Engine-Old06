@@ -379,10 +379,11 @@ class ChartingState extends MusicBeatState
 		zoomTxt = new FlxText(10, 10, 0, "Zoom: 1 / 1", 16);
 		zoomTxt.scrollFactor.set();
 		add(zoomTxt);
-		
-		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
 
 		updateGrid();
+
+		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+
 		super.create();
 	}
 
@@ -1449,7 +1450,7 @@ class ChartingState extends MusicBeatState
 			#end
 		}
 		super.closeSubState();
-		virtualPad.visible = true;
+		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
 	}
 
 	function generateSong() {
@@ -1808,7 +1809,7 @@ class ChartingState extends MusicBeatState
 				playtesting = true;
 				playtestingTime = Conductor.songPosition;
 				playtestingOnComplete = FlxG.sound.music.onComplete;
-				virtualPad.visible = false;
+				removeVirtualPad();
 				openSubState(new states.editors.EditorPlaySubState(playbackSpeed));
 			}
 			if (FlxG.keys.justPressed.ENTER || virtualPad.buttonA.justPressed)

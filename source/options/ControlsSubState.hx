@@ -62,6 +62,8 @@ class ControlsSubState extends MusicBeatSubstate
 	
 	public function new()
 	{
+                controls.isInSubstate = true;
+
 		super();
 
 		options.push([true]);
@@ -275,6 +277,7 @@ class ControlsSubState extends MusicBeatSubstate
 			if(controls.BACK || FlxG.gamepads.anyJustPressed(B))
 			{
 				ClientPrefs.saveSettings();
+                                controls.isInSubstate = false;
 				close();
 				return;
 			}

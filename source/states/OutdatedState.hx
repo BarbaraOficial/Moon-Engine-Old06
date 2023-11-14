@@ -27,7 +27,7 @@ class OutdatedState extends MusicBeatState
 			please update to " + TitleState.updateVersion + "!\n
 			Press ESCAPE to proceed anyway.\n
 			\n
-			Thank you for using the Engine!";
+			Thank you for using the Port!";
 		}
 
 		warnText = new FlxText(0, 0, FlxG.width, guh, 32);

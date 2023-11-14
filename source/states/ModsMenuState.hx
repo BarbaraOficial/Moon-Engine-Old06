@@ -300,9 +300,7 @@ class ModsMenuState extends MusicBeatState
 		add(modsGroup);
 		_lastControllerMode = controls.controllerMode;
 
-		#if !mobile
 		FlxG.mouse.visible = true;
-		#end
 
 		if (modsList.all.length >= 1) {
 		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
@@ -315,7 +313,7 @@ class ModsMenuState extends MusicBeatState
 		add(bottomText);
 		}
 
-		addVirtualPad(UP_DOWN, B);
+		addVirtualPad(NONE, B);
 		virtualPad.y -= 215; // so that you can press the buttons.
         if (ClientPrefs.data.controlsAlpha >= 0.1) virtualPad.alpha = 0.3; 
 
@@ -328,16 +326,18 @@ class ModsMenuState extends MusicBeatState
 	var mouseOffsets:FlxPoint = new FlxPoint();
 	var holdingElapsed:Float = 0;
 	var gottaClickAgain:Bool = false;
+        var exiting:Bool = false;
 
 	var holdTime:Float = 0;
 
 	override function update(elapsed:Float)
 	{
-		if(controls.BACK && hoveringOnMods)
+		if(controls.BACK && hoveringOnMods && !exiting)
 		{
 			if(colorTween != null) {
 				colorTween.cancel();
 			}
+                        exiting = true;
 			saveTxt();
 
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -386,7 +386,7 @@ class ModsMenuState extends MusicBeatState
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
 				{
-				if(FlxG.mouse.justPressed && ClientPrefs.data.controlsAlpha >= 0.1)
+				if(FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
 					{
@@ -985,26 +985,7 @@ class MenuButton extends FlxSpriteGroup
 			onFocus = false;
 			return;
 		}
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
-		if(visible){
-		for(touch in FlxG.touches.list){
-			if(!ignoreCheck && touch.pressed)
-				onFocus = touch.overlaps(this);
-
-			if(onFocus && onClick != null && touch.justPressed)
-				onClick();
-
-			if(onFocus && touch.justReleased)
-				onFocus = false;
-
-			if(_needACheck)
-			{
-				_needACheck = false;
-					onFocus = touch.overlaps(this);
-			}
-		}
-	}
-} else {
+                if (visible) {
 		if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
 			onFocus = FlxG.mouse.overlaps(this);
 
@@ -1017,7 +998,7 @@ class MenuButton extends FlxSpriteGroup
 			if(!Controls.instance.controllerMode)
 				setButtonVisibility(FlxG.mouse.overlaps(this));
 		}
-	}
+            }
 	}
 
 	function set_onFocus(newValue:Bool)

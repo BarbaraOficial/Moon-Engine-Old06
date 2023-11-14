@@ -81,6 +81,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 	public function new()
 	{
+                controls.isInSubstate = true;
+
 		super();
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
@@ -153,6 +155,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if (controls.BACK) {
 			ClientPrefs.saveSettings();
 			close();
+			removeVirtualPad();
+			controls.isInSubstate = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 

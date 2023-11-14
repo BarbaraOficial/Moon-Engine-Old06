@@ -1714,7 +1714,7 @@ class PlayState extends MusicBeatState
 
 			paused = false;
 			mobileControls.visible = true;
-			virtualPad.visible = true;
+			#if !android virtualPad.visible = true; #end
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
@@ -1997,7 +1997,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		persistentDraw = true;
 		mobileControls.visible = false;
-		virtualPad.visible = false;
+		#if !android virtualPad.visible = false; #end
 		paused = true;
 
 		#if VIDEOS_ALLOWED
@@ -2443,7 +2443,7 @@ class PlayState extends MusicBeatState
 	public function endSong()
 	{
 		mobileControls.visible = false;
-		virtualPad.visible = false;
+		#if !android virtualPad.visible = false; #end
 		//Should kill you if you tried to cheat
 		if(!startingSong) {
 			notes.forEach(function(daNote:Note) {
