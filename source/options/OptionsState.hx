@@ -101,6 +101,7 @@ class OptionsState extends MusicBeatState
 		}
 
 		if (virtualPad.buttonC.justPressed) {
+			persistentUpdate = false;
 			openSubState(new mobile.MobileControlsSubState());
 		}
 
