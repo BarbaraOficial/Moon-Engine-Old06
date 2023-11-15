@@ -159,30 +159,30 @@ class ExtraFunctions
 		});
 		funk.set("extraButtonPressed", function(button:String) {
 			button = button.toLowerCase();
-			switch (mobile.MobileControls.getMode()){
+			switch (MobileControls.getMode()){
 				case 0 | 1 | 2 | 3:
 			switch(button){
 				case 'first':
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra.pressed;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra.pressed;
 			case 'second':
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra1.pressed;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra1.pressed;
 			default:
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra.pressed;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra.pressed;
 			}
 				case 4:
 			switch(button){
 				case 'first':
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra.pressed;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra.pressed;
 				case 'second':
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra1.pressed;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra1.pressed;
 				default:
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra.pressed;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra.pressed;
 				}
 		}
 			return false;
@@ -190,30 +190,30 @@ class ExtraFunctions
 
 		funk.set("extraButtonJustPressed", function(button:String) {
 			button = button.toLowerCase();
-			switch (mobile.MobileControls.getMode()){
+			switch (MobileControls.getMode()){
 				case 0 | 1 | 2 | 3:
 			switch(button){
 				case 'first':
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra.justPressed;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed;
 			case 'second':
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra1.justPressed;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra1.justPressed;
 			default:
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra.justPressed;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed;
 			}
 				case 4:
 			switch(button){
 				case 'first':
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra.justPressed;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra.justPressed;
 				case 'second':
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra1.justPressed;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra1.justPressed;
 				default:
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra.justPressed;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra.justPressed;
 				}
 		}
 			return false;
@@ -221,30 +221,30 @@ class ExtraFunctions
 
 		funk.set("extraButtonJustReleased", function(button:String) {
 			button = button.toLowerCase();
-			switch (mobile.MobileControls.getMode()){
+			switch (MobileControls.getMode()){
 				case 0 | 1 | 2 | 3:
 			switch(button){
 				case 'first':
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra.justReleased;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased;
 			case 'second':
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra1.justReleased;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra1.justReleased;
 			default:
-				if (mobile.MobileControls.instance.virtualPadExtra != null)
-					return mobile.MobileControls.instance.virtualPadExtra.buttonExtra.justReleased;
+				if (MobileControls.instance.virtualPadExtra != null)
+					return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased;
 			}
 				case 4:
 			switch(button){
 				case 'first':
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra.justReleased;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra.justReleased;
 				case 'second':
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra1.justReleased;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra1.justReleased;
 				default:
-				if (mobile.MobileControls.instance.hitbox != null)
-					return mobile.MobileControls.instance.hitbox.buttonExtra.justReleased;
+				if (MobileControls.instance.hitbox != null)
+					return MobileControls.instance.hitbox.buttonExtra.justReleased;
 				}
 		}
 			return false;

@@ -8,8 +8,12 @@ import backend.Discord;
 #if ACHIEVEMENTS_ALLOWED
 import backend.Achievements;
 #end
+#if VIDEOS_ALLOWED
+import backend.VideoManager;
+import backend.VideoSpriteManager;
+#end
 
-// Mobile Controls
+//Mobile Controls
 import mobile.MobileControls;
 import mobile.MobileControlsSubState;
 import mobile.flixel.FlxHitbox;

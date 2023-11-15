@@ -50,10 +50,6 @@ import openfl.display.Shader;
 import shaders.CustomShaders;
 #end
 
-#if VIDEOS_ALLOWED 
-import backend.VideoManager;
-#end
-
 import objects.Note.EventNote;
 import objects.*;
 import states.stages.objects.*;
@@ -269,7 +265,7 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	#if VIDEOS_ALLOWED public var videoSprites:Array<backend.VideoSpriteManager> = []; #end
+	#if VIDEOS_ALLOWED public var videoSprites:Array<VideoSpriteManager> = []; #end
 
 	public var luaVirtualPad:FlxVirtualPad;
 
@@ -607,13 +603,15 @@ class PlayState extends MusicBeatState
 		}
 		addMobileControls(false);
 		if (ClientPrefs.data.dynamicColors){
-		switch(mobile.MobileControls.getMode())
+		switch(MobileControls.getMode())
 		{
+			//VPAD
 			case 0 | 1 | 2:
 			mobileControls.virtualPad.buttonLeft.color =  buttonLeftColor[0];
 			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
 			mobileControls.virtualPad.buttonUp.color =  buttonUpColor[0];
 			mobileControls.virtualPad.buttonRight.color =  buttonRightColor[0];
+			//HITBOX
 			case 3:
 			mobileControls.virtualPad.buttonLeft.color =  buttonLeftColor[0];
 			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
