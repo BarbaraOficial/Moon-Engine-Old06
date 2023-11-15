@@ -15,7 +15,7 @@ class OptionsState extends MusicBeatState
 
 	function openSelectedSubstate(label:String) {
 		persistentUpdate = false;
-		removeVirtualPad();
+		if (label != "Adjust Delay and Combo") removeVirtualPad();
 		switch(label) {
 			case 'Note Colors':
 				openSubState(new options.NotesSubState());
@@ -86,6 +86,7 @@ class OptionsState extends MusicBeatState
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 		ClientPrefs.loadPrefs();
+		removeVirtualPad();
 		addVirtualPad(UP_DOWN, A_B_C);
 		persistentUpdate = true;
 	}
@@ -94,6 +95,7 @@ class OptionsState extends MusicBeatState
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		if (!exiting) {
 		if (controls.UI_UP_P) {
 			changeSelection(-1);
 		}
@@ -102,10 +104,11 @@ class OptionsState extends MusicBeatState
 		}
 
 		if (virtualPad.buttonC.justPressed) {
+			persistentUpdate = false;
 			openSubState(new MobileControlsSubState());
 		}
 
-		if (controls.BACK && !exiting) {
+		if (controls.BACK) {
                         exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(onPlayState)
@@ -117,6 +120,7 @@ class OptionsState extends MusicBeatState
 			else MusicBeatState.switchState(new MainMenuState());
 		}
 		else if (controls.ACCEPT) openSelectedSubstate(options[curSelected]);
+	}
 	}
 	
 	function changeSelection(change:Int = 0) {
