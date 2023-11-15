@@ -126,20 +126,19 @@ class EditorPlaySubState extends MusicBeatSubstate
 		dataTxt.borderSize = 1.25;
 		add(dataTxt);
 
-                var theTipText:String;
+                var daButton:String;
 
 		#if android
-		theTipText = "Press BACK to Go Back to Chart Editor";
-		#elseif !android
+		daButton = "BACK";
+		#else
                 if (ClientPrefs.data.controlsAlpha >= 0.1) {
-		theTipText = "Press X to Go Back to Chart Editor";
+                daButton = "X";
                 } else {
-                #end
-		theTipText = "Press ESC to Go Back to Chart Editor";
-                #if !android
+                daButton = "ESC";
                 }
-		#end
-                var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, theTipText, 16);
+                #end
+
+                var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press ' + daButton + ' to Go Back to Chart Editor', 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
