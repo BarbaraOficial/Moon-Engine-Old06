@@ -15,32 +15,33 @@ abstract FlxMobileControlsID(Int) from Int to Int
     var C = 3;
     var D = 4;
     var E = 5;
-    var G = 6;
-    var P = 7;
-    var S = 8;
-    var V = 9;
-    var X = 10;
-    var Y = 11;
-    var Z = 12;
+    var F = 6;
+    var G = 7;
+    var P = 8;
+    var S = 9;
+    var V = 10;
+    var X = 11;
+    var Y = 12;
+    var Z = 13;
     // VPAD Buttons
-    var UP = 13;
-    var UP2 = 14;
-    var DOWN = 15;
-    var DOWN2 = 16;
-    var LEFT = 17;
-    var LEFT2 = 18;
-    var RIGHT = 19;
-    var RIGHT2 = 20;
+    var UP = 14;
+    var UP2 = 15;
+    var DOWN = 16;
+    var DOWN2 = 17;
+    var LEFT = 18;
+    var LEFT2 = 19;
+    var RIGHT = 20;
+    var RIGHT2 = 21;
     // HITBOX Hints
-    var hitboxUP = 21;
-    var hitboxDOWN = 22;
-    var hitboxLEFT = 23;
-    var hitboxRIGHT = 24;
+    var hitboxUP = 22;
+    var hitboxDOWN = 23;
+    var hitboxLEFT = 24;
+    var hitboxRIGHT = 25;
     // PlayState x Controls Releated
-    var noteUP = 25;
-    var noteDOWN = 26;
-    var noteLEFT = 27;
-    var noteRIGHT = 28;
+    var noteUP = 26;
+    var noteDOWN = 27;
+    var noteLEFT = 28;
+    var noteRIGHT = 29;
     // Nothing or null
     var NONE = -1;
 

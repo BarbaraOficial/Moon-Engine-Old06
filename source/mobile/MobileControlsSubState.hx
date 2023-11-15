@@ -4,7 +4,6 @@ import openfl.sensors.Accelerometer;
 import mobile.flixel.FlxButton;
 import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxSave;
 import flixel.input.touch.FlxTouch;
 import openfl.utils.Assets;
@@ -149,16 +148,16 @@ class MobileControlsSubState extends FlxSubState
 		add(inputvari);
 
 		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y - 25);
-		leftArrow.frames = FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/mobile/menu/arrows.png'),
-			Assets.getText('assets/mobile/menu/arrows.xml'));
+		leftArrow.frames = Paths.getSparrowAtlas('campaign_menu_UI_assets');
 		leftArrow.animation.addByPrefix('idle', 'arrow left');
+		leftArrow.animation.addByPrefix('press', "arrow push left");
 		leftArrow.animation.play('idle');
 		add(leftArrow);
 
 		rightArrow = new FlxSprite(inputvari.x + inputvari.width + 10, inputvari.y - 25);
-		rightArrow.frames = FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/mobile/menu/arrows.png'),
-			Assets.getText('assets/mobile/menu/arrows.xml'));
+		rightArrow.frames = Paths.getSparrowAtlas('campaign_menu_UI_assets');
 		rightArrow.animation.addByPrefix('idle', 'arrow right');
+		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
 		add(rightArrow);
 
@@ -218,6 +217,16 @@ class MobileControlsSubState extends FlxSubState
 
 		for (touch in FlxG.touches.list)
 		{
+			if (touch.overlaps(leftArrow) && touch.pressed)
+				leftArrow.animation.play('press');
+			else
+				leftArrow.animation.play('idle');
+
+			if (touch.overlaps(rightArrow) && touch.pressed)
+				rightArrow.animation.play('press')
+			else
+				rightArrow.animation.play('idle');
+
 			if (touch.overlaps(leftArrow) && touch.justPressed)
 				changeSelection(-1);
 			else if (touch.overlaps(rightArrow) && touch.justPressed)

@@ -8,7 +8,8 @@ import mobile.flixel.FlxButton;
  * A zone with 4 hint's (A hitbox).
  * It's really easy to customize the layout.
  *
- * @author: Saw (M.A. Jigsaw)
+ * @author: Mihai Alexandru
+ * @modification's author: Karim Akra (UTFan) & Lily (mcagabe19)
  */
 class FlxHitbox extends FlxSpriteGroup
 {

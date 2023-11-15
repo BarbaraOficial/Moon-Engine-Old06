@@ -3,17 +3,14 @@ package mobile.flixel;
 import mobile.flixel.FlxButton;
 import flixel.graphics.frames.FlxTileFrames;
 import flixel.math.FlxPoint;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.graphics.FlxGraphic;
-import openfl.utils.Assets;
 import haxe.ds.Map;
 
 /**
  * A gamepad.
  * It's easy to customize the layout.
  *
- * @original author Ka Wing Chin
- * @modification's author: Saw (M.A. Jigsaw) & Karim Akra (UTFan)
+ * @original author Ka Wing Chin & Mihai Alexandru
+ * @modification's author: Karim Akra (UTFan) & Lily (mcagabe19)
  */
 class FlxVirtualPad extends FlxSpriteGroup
 {
@@ -30,6 +27,9 @@ class FlxVirtualPad extends FlxSpriteGroup
 	public var buttonC:FlxButton = new FlxButton(0, 0);
 	public var buttonD:FlxButton = new FlxButton(0, 0);
 	public var buttonE:FlxButton = new FlxButton(0, 0);
+        public var buttonF:FlxButton = new FlxButton(0, 0);
+        public var buttonG:FlxButton = new FlxButton(0, 0);
+        public var buttonS:FlxButton = new FlxButton(0, 0);
 	public var buttonV:FlxButton = new FlxButton(0, 0);
 	public var buttonX:FlxButton = new FlxButton(0, 0);
 	public var buttonY:FlxButton = new FlxButton(0, 0);
@@ -234,6 +234,9 @@ class FlxVirtualPad extends FlxSpriteGroup
 		buttonC = FlxDestroyUtil.destroy(buttonC);
 		buttonD = FlxDestroyUtil.destroy(buttonD);
 		buttonE = FlxDestroyUtil.destroy(buttonE);
+                buttonF = FlxDestroyUtil.destroy(buttonF);
+                buttonG = FlxDestroyUtil.destroy(buttonG);
+                buttonS = FlxDestroyUtil.destroy(buttonS);
 		buttonV = FlxDestroyUtil.destroy(buttonV);
 		buttonX = FlxDestroyUtil.destroy(buttonX);
 		buttonY = FlxDestroyUtil.destroy(buttonY);
@@ -244,10 +247,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 	private function createButton(X:Float, Y:Float, Width:Int, Height:Int, Graphic:String, ?Color:Int = 0xFFFFFF):FlxButton
 	{
 		var button:FlxButton = new FlxButton(X, Y);
-		button.frames = FlxTileFrames.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/mobile/virtualpad.png'),
-			Assets.getText('assets/mobile/virtualpad.xml'))
-			.getByName(Graphic),
-			FlxPoint.get(Width, Height));
+		button.frames = FlxTileFrames.fromFrame(Paths.getSparrowAtlas('virtualpad').getByName(Graphic), FlxPoint.get(Width, Height));
 		button.resetSizeFromFrame();
 		button.solid = false;
 		button.immovable = true;
@@ -293,6 +293,12 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonD.pressed;
 				case FlxMobileControlsID.E:
 					return buttonE.pressed;
+                                case FlxMobileControlsID.F:
+                                        return buttonF.pressed;
+                                case FlxMobileControlsID.G:
+                                        return buttonG.pressed;
+                                case FlxMobileControlsID.S:
+                                        return buttonS.pressed;
 				case FlxMobileControlsID.P:
 					return buttonP.pressed;
 				case FlxMobileControlsID.V:
@@ -351,6 +357,12 @@ class FlxVirtualPad extends FlxSpriteGroup
 				return buttonD.justPressed;
 			case FlxMobileControlsID.E:
 				return buttonE.justPressed;
+                                case FlxMobileControlsID.F:
+                                        return buttonF.justPressed;
+                                case FlxMobileControlsID.G:
+                                        return buttonG.justPressed;
+                                case FlxMobileControlsID.S:
+                                        return buttonS.justPressed;
 			case FlxMobileControlsID.P:
 				return buttonP.justPressed;
 			case FlxMobileControlsID.V:
@@ -409,6 +421,12 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonD.justReleased;
 				case FlxMobileControlsID.E:
 					return buttonE.justReleased;
+                                case FlxMobileControlsID.F:
+                                        return buttonF.justReleased;
+                                case FlxMobileControlsID.G:
+                                        return buttonG.justReleased;
+                                case FlxMobileControlsID.S:
+                                        return buttonS.justReleased;
 				case FlxMobileControlsID.P:
 					return buttonP.justReleased;
 				case FlxMobileControlsID.V:
@@ -435,7 +453,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 			}
 
 		/**
-		* Checks if a button from `this` VirtuaPad is pressed.
+		* Checks the `this` virtualpad button's status.
 		* @param button			The button you want to check if it's pressed as a string.
 		* @param type 			The type that should be checked, can be `"justPressed"`, `"pressed"` or `"justReleased"`.
 		*/
