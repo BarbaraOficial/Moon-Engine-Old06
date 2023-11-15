@@ -5,7 +5,6 @@ import backend.Highscore;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxSubState;
 import objects.HealthIcon;
-import flixel.util.FlxDestroyUtil;
 
 class ResetScoreSubState extends MusicBeatSubstate
 {

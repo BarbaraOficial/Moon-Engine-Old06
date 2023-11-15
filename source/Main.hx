@@ -3,7 +3,6 @@ package;
 #if android
 import android.content.Context;
 #end
-import backend.SUtil;
 import flixel.graphics.FlxGraphic;
 import flixel.FlxGame;
 import flixel.FlxState;

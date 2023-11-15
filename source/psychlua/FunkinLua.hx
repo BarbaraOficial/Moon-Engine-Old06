@@ -1,6 +1,5 @@
 package psychlua;
 
-import mobile.MobileControls;
 import backend.WeekData;
 import backend.Highscore;
 import backend.Song;

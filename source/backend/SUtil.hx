@@ -10,12 +10,7 @@ import lime.utils.Assets as LimeAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
-import backend.CoolUtil;
 import flixel.util.FlxSave;
-#if sys
-import sys.io.File;
-import sys.FileSystem;
-#end
 
 using StringTools;
 

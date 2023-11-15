@@ -3,13 +3,6 @@ package mobile.flixel;
 import openfl.display.Shape;
 import openfl.display.BitmapData;
 import mobile.flixel.FlxButton;
-import flixel.FlxG;
-import flixel.util.FlxColor;
-import flixel.util.FlxDestroyUtil;
-import flixel.tweens.FlxTween;
-import flixel.tweens.FlxEase;
-import flixel.group.FlxSpriteGroup;
-import flixel.util.FlxDestroyUtil;
 
 /**
  * A zone with 4 hint's (A hitbox).

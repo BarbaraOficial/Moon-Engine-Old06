@@ -1,7 +1,5 @@
 package objects;
 
-import flixel.util.FlxDestroyUtil;
-
 class HealthIcon extends FlxSprite
 {
 	public var sprTracker:FlxSprite;

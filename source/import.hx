@@ -9,6 +9,14 @@ import backend.Discord;
 import backend.Achievements;
 #end
 
+// Mobile Controls
+import mobile.MobileControls;
+import mobile.MobileControlsSubState;
+import mobile.flixel.FlxHitbox;
+import mobile.flixel.FlxVirtualPad;
+import mobile.flixel.FlxVirtualPadExtra;
+import mobile.flixel.id.FlxMobileControlsID;
+
 #if sys
 import sys.*;
 import sys.io.*;
@@ -48,6 +56,7 @@ import flixel.system.FlxSound;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
+import flixel.util.FlxDestroyUtil;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;

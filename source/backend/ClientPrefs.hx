@@ -1,6 +1,5 @@
 package backend;
-import mobile.flixel.FlxMobileControlsID;
-import mobile.MobileControls;
+
 import flixel.util.FlxSave;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
@@ -133,10 +132,10 @@ class ClientPrefs {
 		'reset'			=> [BACK]
 	];
 	public static var mobileBinds:Map<String, Array<FlxMobileControlsID>> = [
-		'note_up'		=> [noteUP, dpadUP2],
-		'note_left'		=> [noteLEFT, dpadLEFT2],
-		'note_down'		=> [noteDOWN, dpadDOWN2],
-		'note_right'	=> [noteRIGHT, dpadRIGHT2],
+		'note_up'		=> [noteUP, UP2],
+		'note_left'		=> [noteLEFT, LEFT2],
+		'note_down'		=> [noteDOWN, DOWN2],
+		'note_right'	=> [noteRIGHT, RIGHT2],
 
 		'ui_up'			=> [UP, noteUP],
 		'ui_left'		=> [LEFT, noteLEFT],

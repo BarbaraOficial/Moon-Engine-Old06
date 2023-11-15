@@ -9,8 +9,6 @@ import flixel.addons.ui.FlxUI.NamedString;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 
-import flixel.util.FlxDestroyUtil;
-
 /**
  * FlxInputText v1.11, ported to Haxe
  * @author larsiusprime, (Lars Doucet)

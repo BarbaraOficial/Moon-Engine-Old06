@@ -7,7 +7,6 @@ import flixel.addons.ui.interfaces.IHasParams;
 
 import flixel.ui.FlxButton;
 
-import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxStringUtil;
 import flixel.addons.ui.FlxUIGroup;
 import flixel.addons.ui.FlxUIText;

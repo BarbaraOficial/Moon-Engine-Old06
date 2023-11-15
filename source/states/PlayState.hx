@@ -70,8 +70,6 @@ import psychlua.HScript;
 import tea.SScript;
 #end
 
-import mobile.flixel.FlxVirtualPad;
-
 class PlayState extends MusicBeatState
 {
 	public static var STRUM_X = 48.5;

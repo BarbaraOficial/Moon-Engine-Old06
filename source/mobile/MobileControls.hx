@@ -1,13 +1,7 @@
 package mobile;
 
-import mobile.flixel.FlxVirtualPadExtra;
 import haxe.ds.Map;
-import mobile.flixel.FlxHitbox;
-import mobile.flixel.FlxVirtualPad;
-import flixel.FlxG;
-import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
-import flixel.util.FlxDestroyUtil;
 
 class MobileControls extends FlxSpriteGroup
 {

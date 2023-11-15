@@ -2,21 +2,11 @@ package mobile;
 
 import openfl.sensors.Accelerometer;
 import mobile.flixel.FlxButton;
-import mobile.flixel.FlxHitbox;
-import mobile.flixel.FlxVirtualPad;
-import mobile.flixel.FlxVirtualPadExtra;
-import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxSave;
-import flixel.util.FlxColor;
 import flixel.input.touch.FlxTouch;
-import flixel.text.FlxText;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import openfl.utils.Assets;
 
 class MobileControlsSubState extends FlxSubState

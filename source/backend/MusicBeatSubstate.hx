@@ -1,9 +1,6 @@
 package backend;
 
 import flixel.FlxSubState;
-import mobile.MobileControls;
-import mobile.flixel.FlxVirtualPad;
-import flixel.util.FlxDestroyUtil;
 
 class MusicBeatSubstate extends FlxSubState
 {

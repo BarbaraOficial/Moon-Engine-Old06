@@ -3,10 +3,6 @@ package backend;
 import flixel.addons.ui.FlxUIState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxState;
-import mobile.MobileControls;
-import mobile.flixel.FlxVirtualPad;
-import flixel.util.FlxDestroyUtil;
-import flixel.FlxCamera;
 
 class MusicBeatState extends FlxUIState
 {

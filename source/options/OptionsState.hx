@@ -90,6 +90,7 @@ class OptionsState extends MusicBeatState
 		persistentUpdate = true;
 	}
 
+        var exiting:Bool = false;
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
@@ -101,12 +102,11 @@ class OptionsState extends MusicBeatState
 		}
 
 		if (virtualPad.buttonC.justPressed) {
-			openSubState(new mobile.MobileControlsSubState());
+			openSubState(new MobileControlsSubState());
 		}
 
-		if (controls.BACK) {
-			FlxTransitionableState.skipNextTransOut = false;
-			FlxTransitionableState.skipNextTransIn = false;
+		if (controls.BACK && !exiting) {
+                        exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(onPlayState)
 			{

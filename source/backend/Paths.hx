@@ -15,13 +15,7 @@ import openfl.utils.Assets;
 import openfl.system.System;
 import openfl.geom.Rectangle;
 import openfl.media.Sound;
-
 import tjson.TJSON as Json;
-
-
-#if MODS_ALLOWED
-import backend.Mods;
-#end
 
 class Paths
 {

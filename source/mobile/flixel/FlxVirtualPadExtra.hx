@@ -1,15 +1,11 @@
 package mobile.flixel;
 
 import mobile.flixel.FlxButton;
-import flixel.FlxG;
 import flixel.graphics.frames.FlxTileFrames;
-import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
-import flixel.util.FlxDestroyUtil;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 import openfl.utils.Assets;
-import flixel.util.FlxDestroyUtil;
 
 /**
  * This code is a extend for extra virtualpad buttons 

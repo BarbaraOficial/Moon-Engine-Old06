@@ -2,7 +2,6 @@ package psychlua;
 
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
-import mobile.MobileControls;
 #if mobile
 import extension.eightsines.EsOrientation;
 #end

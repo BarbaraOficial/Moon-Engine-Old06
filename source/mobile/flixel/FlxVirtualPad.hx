@@ -1,15 +1,11 @@
 package mobile.flixel;
 
 import mobile.flixel.FlxButton;
-import flixel.FlxG;
 import flixel.graphics.frames.FlxTileFrames;
-import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
-import flixel.util.FlxDestroyUtil;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 import openfl.utils.Assets;
-import flixel.util.FlxDestroyUtil;
 import haxe.ds.Map;
 
 /**
@@ -214,9 +210,6 @@ class FlxVirtualPad extends FlxSpriteGroup
 			case B_C:
 				add(buttonC = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'c', 0x44FF00));
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
-			case B_X:
-				add(buttonX = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'x', 0x99062D));
-				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
 			case NONE: // do nothing
 		}
 	}
@@ -282,13 +275,13 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonRight.pressed;
 				case FlxMobileControlsID.DOWN:
 					return buttonDown.pressed;
-				case FlxMobileControlsID.dpadLEFT2:
+				case FlxMobileControlsID.LEFT2:
 					return buttonLeft2.pressed;
-				case FlxMobileControlsID.dpadUP2:
+				case FlxMobileControlsID.UP2:
 					return buttonUp2.pressed;
-				case FlxMobileControlsID.dpadRIGHT2:
+				case FlxMobileControlsID.RIGHT2:
 					return buttonRight2.pressed;
-				case FlxMobileControlsID.dpadDOWN2:
+				case FlxMobileControlsID.DOWN2:
 					return buttonDown2.pressed;
 				case FlxMobileControlsID.A:
 					return buttonA.pressed;
@@ -300,6 +293,8 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonD.pressed;
 				case FlxMobileControlsID.E:
 					return buttonE.pressed;
+				case FlxMobileControlsID.P:
+					return buttonP.pressed;
 				case FlxMobileControlsID.V:
 					return buttonV.pressed;
 				case FlxMobileControlsID.X:
@@ -338,13 +333,13 @@ class FlxVirtualPad extends FlxSpriteGroup
 				return buttonRight.justPressed;
 			case FlxMobileControlsID.DOWN:
 				return buttonDown.justPressed;
-			case FlxMobileControlsID.dpadLEFT2:
+			case FlxMobileControlsID.LEFT2:
 				return buttonLeft2.justPressed;
-			case FlxMobileControlsID.dpadUP2:
+			case FlxMobileControlsID.UP2:
 				return buttonUp2.justPressed;
-			case FlxMobileControlsID.dpadRIGHT2:
+			case FlxMobileControlsID.RIGHT2:
 				return buttonRight2.justPressed;
-			case FlxMobileControlsID.dpadDOWN2:
+			case FlxMobileControlsID.DOWN2:
 				return buttonDown2.justPressed;
 			case FlxMobileControlsID.A:
 				return buttonA.justPressed;
@@ -356,6 +351,8 @@ class FlxVirtualPad extends FlxSpriteGroup
 				return buttonD.justPressed;
 			case FlxMobileControlsID.E:
 				return buttonE.justPressed;
+			case FlxMobileControlsID.P:
+				return buttonP.justPressed;
 			case FlxMobileControlsID.V:
 				return buttonV.justPressed;
 			case FlxMobileControlsID.X:
@@ -394,13 +391,13 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonRight.justReleased;
 				case FlxMobileControlsID.DOWN:
 					return buttonDown.justReleased;
-				case FlxMobileControlsID.dpadLEFT2:
+				case FlxMobileControlsID.LEFT2:
 					return buttonLeft2.justReleased;
-				case FlxMobileControlsID.dpadUP2:
+				case FlxMobileControlsID.UP2:
 					return buttonUp2.justReleased;
-				case FlxMobileControlsID.dpadRIGHT2:
+				case FlxMobileControlsID.RIGHT2:
 					return buttonRight2.justReleased;
-				case FlxMobileControlsID.dpadDOWN2:
+				case FlxMobileControlsID.DOWN2:
 					return buttonDown2.justReleased;
 				case FlxMobileControlsID.A:
 					return buttonA.justReleased;
@@ -412,6 +409,8 @@ class FlxVirtualPad extends FlxSpriteGroup
 					return buttonD.justReleased;
 				case FlxMobileControlsID.E:
 					return buttonE.justReleased;
+				case FlxMobileControlsID.P:
+					return buttonP.justReleased;
 				case FlxMobileControlsID.V:
 					return buttonV.justReleased;
 				case FlxMobileControlsID.X:
@@ -489,6 +488,5 @@ enum FlxActionMode
 	NOTE_SPLASH_DEBUG;
 	P;
 	B_C;
-	B_X;
 	NONE;
 }
