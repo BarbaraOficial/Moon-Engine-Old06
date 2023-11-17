@@ -1,14 +1,13 @@
 package mobile;
 
 import openfl.sensors.Accelerometer;
-import mobile.flixel.FlxButton;
-import flixel.FlxSubState;
+import mobile.flixel.FlxButton
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.util.FlxSave;
 import flixel.input.touch.FlxTouch;
 import openfl.utils.Assets;
 
-class MobileControlsSubState extends FlxSubState
+class MobileControlsSubState extends MusicBeatSubstate
 {
 	public var controlsItems:Array<String> = ['Pad-Right', 'Pad-Left', 'Pad-Custom', 'Pad-Duo', 'Hitbox', 'Keyboard', 'Pad-Extras'];
 	var virtualPad:FlxVirtualPad;
@@ -37,6 +36,8 @@ class MobileControlsSubState extends FlxSubState
 
 	override function create()
 	{
+                controls.isInSubstate = true;
+
 		if (ClientPrefs.data.dynamicColors){
 			buttonLeftColor = ClientPrefs.data.arrowRGB[0];
 			buttonDownColor = ClientPrefs.data.arrowRGB[1];
@@ -73,8 +74,9 @@ class MobileControlsSubState extends FlxSubState
 
 				MobileControls.setExtraCustomMode(virtualPadExtra); // allways save on exit
 
-			FlxTransitionableState.skipNextTransOut = true;
-			FlxG.resetState();
+			controls.isInSubstate = false;
+                        close();
+                        FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
 		});
@@ -294,7 +296,7 @@ class MobileControlsSubState extends FlxSubState
 				leftPozition.text = 'Button Left X:' + virtualPad.buttonLeft.x + ' Y:' + virtualPad.buttonLeft.y;
 
 			if (virtualPad.buttonRight != null)
-				rightPozition.text = 'Button Right x:' + virtualPad.buttonRight.x + ' Y:' + virtualPad.buttonRight.y;
+				rightPozition.text = 'Button Right X:' + virtualPad.buttonRight.x + ' Y:' + virtualPad.buttonRight.y;
 
 			if (virtualPadExtra != null)
 				{

@@ -611,7 +611,7 @@ class PlayState extends MusicBeatState
 			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
 			mobileControls.virtualPad.buttonUp.color =  buttonUpColor[0];
 			mobileControls.virtualPad.buttonRight.color =  buttonRightColor[0];
-			//HITBOX
+			//DUO VPAD
 			case 3:
 			mobileControls.virtualPad.buttonLeft.color =  buttonLeftColor[0];
 			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
