@@ -1,7 +1,7 @@
 package mobile;
 
 import openfl.sensors.Accelerometer;
-import mobile.flixel.FlxButton
+import mobile.flixel.FlxButton;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.util.FlxSave;
 import flixel.input.touch.FlxTouch;
