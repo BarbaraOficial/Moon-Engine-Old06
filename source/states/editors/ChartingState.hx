@@ -1906,8 +1906,7 @@ class ChartingState extends MusicBeatState
 					resetSection();
 			}
 
-			// doesn't seem right (had !mobileC)
-			if (ClientPrefs.data.controlsAlpha <= 0.1) {
+			if (ClientPrefs.data.controlsAlpha < 0.1) {
 			if (FlxG.mouse.wheel != 0)
 			{
 				FlxG.sound.music.pause();
