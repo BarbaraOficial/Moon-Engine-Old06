@@ -382,8 +382,8 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 
-		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
-
+        addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+				
 		super.create();
 	}
 
@@ -1449,9 +1449,9 @@ class ChartingState extends MusicBeatState
 			DiscordClient.changePresence("Chart Editor", StringTools.replace(_song.song, '-', ' '));
 			#end
 		}
-		super.closeSubState();
 		removeVirtualPad();
 		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+		super.closeSubState();
 	}
 
 	function generateSong() {
@@ -1669,7 +1669,7 @@ class ChartingState extends MusicBeatState
 		FlxG.watch.addQuick('daBeat', curBeat);
 		FlxG.watch.addQuick('daStep', curStep);
 
-		#if FLX_TOUCH
+		if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		for (touch in FlxG.touches.list)
 		{
 			if (touch.justReleased)
@@ -1712,7 +1712,8 @@ class ChartingState extends MusicBeatState
 				dummyArrow.visible = false;
 			}
 		}
-		#end
+
+		} else {
 
 		if (FlxG.mouse.justPressed)
 		{
@@ -1766,6 +1767,7 @@ class ChartingState extends MusicBeatState
 				dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
 		}else{
 			dummyArrow.visible = false;
+		}
 		}
 
 		var blockInput:Bool = false;
@@ -1905,7 +1907,7 @@ class ChartingState extends MusicBeatState
 			}
 
 			// doesn't seem right (had !mobileC)
-			if (!(ClientPrefs.data.controlsAlpha >= 0.1)) {
+			if (ClientPrefs.data.controlsAlpha <= 0.1) {
 			if (FlxG.mouse.wheel != 0)
 			{
 				FlxG.sound.music.pause();
@@ -1931,7 +1933,7 @@ class ChartingState extends MusicBeatState
 					vocals.time = FlxG.sound.music.time;
 				}
 			}
-		}
+			}
 
 			//ARROW VORTEX SHIT NO DEADASS
 
