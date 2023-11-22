@@ -1,6 +1,6 @@
 package macro;
 
-// award for the most useless macro ever goes to sscript
+// award for the most useless macro ever goes to tahir
 
 import haxe.macro.Compiler;
 import haxe.macro.ComplexTypeTools;
