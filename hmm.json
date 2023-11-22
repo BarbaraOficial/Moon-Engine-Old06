@@ -3,7 +3,7 @@
     {
       "name": "lime",
       "type": "haxelib",
-      "version": "8.1.0"
+      "version": "8.1.1"
     },
     {
       "name": "openfl",
@@ -32,8 +32,10 @@
     },
     {
       "name": "hxcpp",
-      "type": "haxelib",
-      "version": "4.2.1"
+      "type": "git",
+      "dir": null,
+      "ref": "master",
+      "url": "https://github.com/HaxeFoundation/hxcpp"
     },
     {
       "name": "hxCodec",
