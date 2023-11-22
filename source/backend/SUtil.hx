@@ -20,6 +20,30 @@ using StringTools;
  */
 class SUtil
 {
+
+	/**
+	* ...
+	* @author Karim Akra (UTFan)
+	* NO MORE MANUAL COPYING, THIS BAD BOY WILL DO THE JOB!!!!
+	*/
+	public static function copyAssets(?to:String = '') {
+		if(!FileSystem.exists('assets') || !FileSystem.exists('mods'))
+			Lib.application.window.alert("
+			The game have noticed that there are missing files so it'll begin copying them\n
+			This operation might take time so please wait\n
+			When copying is done the game will run normally",
+			"Notice!");
+		for(file in LimeAssets.list()) {
+			if(!file.contains('plugins') || !file.contains('manifest') || !file.contains('flixel') || !file.contains('dll') || !FileSystem.exists('$to/$file')){
+				var directory = Path.directory(file);
+				if(!FileSystem.exists(directory))
+					mkDirs(directory);
+				copyContent(file, '$to/$file');
+				trace('COPIED $file!!!');
+			}
+		}
+	}
+
 	/**
 	 * A simple function that checks for game files/folders.
 	 */

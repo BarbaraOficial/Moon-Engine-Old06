@@ -115,8 +115,8 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
-		#if MODS_ALLOWED
-		SUtil.checkFiles();
+		#if mobile
+		SUtil.copyAssets();
 		#end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
