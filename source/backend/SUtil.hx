@@ -6,7 +6,7 @@ import android.widget.Toast;
 import haxe.io.Path;
 import haxe.CallStack;
 import lime.system.System as LimeSystem;
-import openfl.utils.Assets;
+import lime.utils.Assets as LimeAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
@@ -33,7 +33,7 @@ class SUtil
 			This operation might take time so please wait\n
 			When copying is done the game will run normally",
 			"Notice!");
-		for(file in Assets.list()) {
+		for(file in LimeAssets.list()) {
 			if(!file.contains('plugins') || !file.contains('manifest') || !file.contains('flixel') || !file.contains('dll') || !FileSystem.exists('$to/$file')){
 				var directory = Path.directory(file);
 				if(!FileSystem.exists(directory))
@@ -265,12 +265,12 @@ class SUtil
 	public static function copyContent(copyPath:String, savePath:String):Void
 	{
 		try {
-			if (!FileSystem.exists(savePath) && Assets.exists(copyPath))
+			if (!FileSystem.exists(savePath) && LimeAssets.exists(copyPath))
 			{
 				if (!FileSystem.exists(Path.directory(savePath)))
 					SUtil.mkDirs(Path.directory(savePath));
 
-				File.saveBytes(savePath, Assets.getBytes(copyPath));
+				File.saveBytes(savePath, LimeAssets.getBytes(copyPath));
 			}
 		}
 		catch (e:Dynamic)
