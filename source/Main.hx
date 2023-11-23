@@ -17,6 +17,15 @@ import openfl.display.StageScaleMode;
 import lime.system.System as LimeSystem;
 import lime.app.Application;
 import states.TitleState;
+//crash handler stuff(sutil handler dosen't work on desktop idk)
+#if desktop
+import openfl.events.UncaughtErrorEvent;
+import haxe.CallStack;
+import haxe.io.Path;
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.Process;
+#end
 #if hl
 import hl.Api;
 #end
@@ -56,13 +65,14 @@ class Main extends Sprite
 		super();
 
 		// https://github.com/MAJigsaw77/UTF/blob/972e4c27ec62e2279cddb53083a2fee98e76ce53/source/Main.hx#L45-L49 (but modified)
-	        #if android
+	    #if android
 		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
 		#elseif ios
 		Sys.setCwd(LimeSystem.applicationStorageDirectory);
 		#end
-
+		#if mobile
 		SUtil.uncaughtErrorHandler();
+		#end
 
 		#if windows
 		@:functionCode("
@@ -116,7 +126,7 @@ class Main extends Sprite
 		}
 
 		#if (mobile && MODS_ALLOWED)
-		SUtil.copyAssets();
+		SUtil.copyAssets(); //rn it just copies shared for some reason...
 		#end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
@@ -149,6 +159,10 @@ class Main extends Sprite
 		FlxG.mouse.visible = false;
 		#end
 
+		#if desktop
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#end
+
 		#if (desktop && !hl)
 		DiscordClient.start();
 		#end
@@ -174,4 +188,46 @@ class Main extends Sprite
 			sprite.__cacheBitmapData = null;
 		}
 	}
+
+	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
+	// very cool person for real they don't get enough credit for their work
+	#if desktop
+	function onCrash(e:UncaughtErrorEvent):Void
+	{
+		var errMsg:String = "";
+		var path:String;
+		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+		var dateNow:String = Date.now().toString();
+
+		dateNow = dateNow.replace(" ", "_");
+		dateNow = dateNow.replace(":", "'");
+
+		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+
+		for (stackItem in callStack)
+		{
+			switch (stackItem)
+			{
+				case FilePos(s, file, line, column):
+					errMsg += file + " (line " + line + ")\n";
+				default:
+					Sys.println(stackItem);
+			}
+		}
+
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Snirozu/Funkin-Psych-Online\n\n> Crash Handler written by: sqirra-rng";
+
+		if (!FileSystem.exists("./crash/"))
+			FileSystem.createDirectory("./crash/");
+
+		File.saveContent(path, errMsg + "\n");
+
+		Sys.println(errMsg);
+		Sys.println("Crash dump saved in " + Path.normalize(path));
+
+		Application.current.window.alert(errMsg, "Error!");
+		DiscordClient.shutdown();
+		Sys.exit(1);
+	}
+	#end
 }

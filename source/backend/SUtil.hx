@@ -10,7 +10,7 @@ import lime.utils.Assets as LimeAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
-import flixel.util.FlxSave;
+import lime.utils.AssetType;
 
 using StringTools;
 
@@ -28,16 +28,11 @@ class SUtil
 	*/
 	public static function copyAssets(?to:String = '') {
 		if(!FileSystem.exists('assets') || !FileSystem.exists('mods'))
-			Lib.application.window.alert("
-			The game have noticed that there are missing files so it'll begin copying them\n
-			This operation might take time so please wait\n
-			When copying is done the game will run normally",
+			Lib.application.window.alert(
+			"The game have noticed that there are missing files so it'll begin copying them\nThis operation might take time so please wait\nWhen copying is done the game will run normally",
 			"Notice!");
 		for(file in LimeAssets.list()) {
-			if(!file.contains('plugins') || !file.contains('manifest') || !file.contains('flixel') || !file.contains('dll') || !FileSystem.exists('$to/$file')){
-				var directory = Path.directory(file);
-				if(!FileSystem.exists(directory))
-					mkDirs(directory);
+			if((file.contains('mods') || file.contains('assets') || file.contains('week')) && !FileSystem.exists('$to/$file')){
 				copyContent(file, '$to/$file');
 				trace('COPIED $file!!!');
 			}
@@ -268,9 +263,13 @@ class SUtil
 			if (!FileSystem.exists(savePath) && LimeAssets.exists(copyPath))
 			{
 				if (!FileSystem.exists(Path.directory(savePath)))
-					SUtil.mkDirs(Path.directory(savePath));
-
-				File.saveBytes(savePath, LimeAssets.getBytes(copyPath));
+					mkDirs(Path.directory(savePath));
+				if(copyPath.endsWith('.otf') || copyPath.endsWith('.ttf'))
+					File.saveBytes(savePath, cast LimeAssets.getFont(copyPath));
+				else if(copyPath.endsWith('.txt'))
+					File.saveBytes(savePath, cast LimeAssets.getText(copyPath));
+				else
+					File.saveBytes(savePath, LimeAssets.getBytes(copyPath));
 			}
 		}
 		catch (e:Dynamic)
@@ -283,4 +282,17 @@ class SUtil
 		}
 	}
 	#end
+	public static function getFileType(file:String):AssetType {
+		if(file.endsWith('.png'))
+			return IMAGE;
+		else if(file.endsWith('.txt') || file.endsWith('.xml') || file.endsWith('.json') || file.endsWith('.lua') || file.endsWith('.hx'))
+			return TEXT;
+		else if(file.endsWith('.otf') || file.endsWith('.ttf'))
+			return FONT;
+		else if(file.endsWith('.ogg') || file.endsWith('.mp3'))
+			return SOUND;
+		else
+			return BINARY;
+
+	}
 }
