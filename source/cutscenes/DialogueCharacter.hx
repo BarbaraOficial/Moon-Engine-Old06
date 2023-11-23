@@ -1,7 +1,7 @@
 package cutscenes;
 
 import tjson.TJSON as Json;
-import openfl.utils.Assets;
+import lime.utils.Assets;
 
 typedef DialogueAnimArray = {
 	var anim:String;
