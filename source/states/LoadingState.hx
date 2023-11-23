@@ -6,9 +6,8 @@ import lime.app.Future;
 import flixel.FlxState;
 
 import openfl.utils.Assets;
-import lime.utils.Assets as LimeAssets;
-import lime.utils.AssetLibrary;
-import lime.utils.AssetManifest;
+import openfl.utils.AssetLibrary;
+import openfl.utils.AssetManifest;
 
 import backend.StageData;
 
@@ -99,7 +98,7 @@ class LoadingState extends MusicBeatState
 		if (Assets.getLibrary(library) == null)
 		{
 			@:privateAccess
-			if (!LimeAssets.libraryPaths.exists(library))
+			if (!Assets.libraryPaths.exists(library))
 				throw new haxe.Exception("Missing library: " + library);
 
 			var callback = callbacks.add("library:" + library);
@@ -198,7 +197,7 @@ class LoadingState extends MusicBeatState
 		var id = "songs";
 		var promise = new Promise<AssetLibrary>();
 
-		var library = LimeAssets.getLibrary(id);
+		var library = Assets.getLibrary(id);
 
 		if (library != null)
 		{
@@ -209,7 +208,7 @@ class LoadingState extends MusicBeatState
 		var rootPath = null;
 
 		@:privateAccess
-		var libraryPaths = LimeAssets.libraryPaths;
+		var libraryPaths = Assets.libraryPaths;
 		if (libraryPaths.exists(id))
 		{
 			path = libraryPaths[id];
@@ -227,7 +226,7 @@ class LoadingState extends MusicBeatState
 				rootPath = Path.directory(path);
 			}
 			@:privateAccess
-			path = LimeAssets.__cacheBreak(path);
+			path = Assets.__cacheBreak(path);
 		}
 
 		AssetManifest.loadFromFile(path, rootPath).onComplete(function(manifest)
@@ -247,8 +246,8 @@ class LoadingState extends MusicBeatState
 			else
 			{
 				@:privateAccess
-				LimeAssets.libraries.set(id, library);
-				library.onChange.add(LimeAssets.onChange.dispatch);
+				Assets.libraries.set(id, library);
+				library.onChange.add(Assets.onChange.dispatch);
 				promise.completeWith(Future.withValue(library));
 			}
 		}).onError(function(_)
