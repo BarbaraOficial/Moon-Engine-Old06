@@ -126,7 +126,7 @@ class Main extends Sprite
 		}
 
 		#if (mobile && MODS_ALLOWED)
-		SUtil.copyAssets(); //rn it just copies shared for some reason...
+		SUtil.copyAssets(); //TODO: Fix weeks assets not beign copied for some reason(idk if something else is also beign ignored)
 		#end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end

@@ -23,7 +23,7 @@ class SUtil
 
 	/**
 	* ...
-	* @author Karim Akra (UTFan)
+	* @author Karim Akra (UTFan) & Mihai Alexandru (M.A. Jigsaw)
 	* NO MORE MANUAL COPYING, THIS BAD BOY WILL DO THE JOB!!!!
 	*/
 	public static function copyAssets(?to:String = '') {
@@ -32,11 +32,31 @@ class SUtil
 			"The game have noticed that there are missing files so it'll begin copying them\nThis operation might take time so please wait\nWhen copying is done the game will run normally",
 			"Notice!");
 		for(file in LimeAssets.list()) {
-			if((file.contains('mods') || file.contains('assets') || file.contains('week')) && !FileSystem.exists('$to/$file')){
+			if((file.contains('mods') || file.contains('assets')) && !FileSystem.exists('$to/$file'))
 				copyContent(file, '$to/$file');
-				trace('COPIED $file!!!');
+		}
+		//source: https://github.com/MAJigsaw77-Ports/the-shaggy-mod/blob/main/source/Storage.hx#L19
+		for(index in 0...7) { // IDFK IT WON'T COPY WEEKS
+			for (file in LimeAssets.list().filter(folder -> folder.startsWith('assets/week$index'))) {
+				// Ment for FNF's libraries system...
+				final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
+				final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
+				@:privateAccess
+				copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
 			}
 		}
+		for (file in LimeAssets.list().filter(folder -> folder.startsWith('assets/songs'))) {
+			final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
+			final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
+			@:privateAccess
+			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
+		}
+		for (file in LimeAssets.list().filter(folder -> folder.startsWith('assets/videos'))) {
+			final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
+			final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
+			@:privateAccess
+			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
+}
 	}
 
 	/**
