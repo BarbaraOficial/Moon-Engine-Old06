@@ -119,11 +119,9 @@ class SUtil
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
 	}
 
-	private static function onError(error:Dynamic):Void
+	private static function onError(error:UncaughtErrorEvent):Void
 	{
-		final log:Array<String> = [Std.string(error)];
-		
-		//log.push(UncaughtErrorEvent.error);
+		final log:Array<String> = [error.error];
 
 		for (item in CallStack.exceptionStack(true))
 		{
