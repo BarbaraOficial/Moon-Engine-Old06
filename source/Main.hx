@@ -115,7 +115,7 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
-		#if mobile
+		#if (mobile && MODS_ALLOWED)
 		SUtil.copyAssets();
 		#end
 	
