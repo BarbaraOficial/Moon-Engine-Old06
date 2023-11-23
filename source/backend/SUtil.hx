@@ -123,7 +123,7 @@ class SUtil
 	{
 		final log:Array<String> = [Std.string(error)];
 		
-		log.push(UncaughtErrorEvent.error);
+		//log.push(UncaughtErrorEvent.error);
 
 		for (item in CallStack.exceptionStack(true))
 		{
