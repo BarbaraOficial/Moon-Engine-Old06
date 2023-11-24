@@ -32,7 +32,14 @@ class SUtil
 				var directory = Path.directory(file);
 				if(!FileSystem.exists(directory))
 					mkDirs(directory);
-				File.saveBytes(fixedPath, cast LimeAssets.getAsset(file, getFileType(Path.withoutDirectory(file)), false));
+				final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
+				final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
+				try {
+					@:privateAccess
+					File.saveBytes(fixedPath, cast LimeAssets.getAsset(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, getFileType(Path.withoutDirectory(file)), false));
+				} catch(error:Dynamic) {
+					Toast.makeText('Error!\nClouldn\'t copy $file because:\n' + erro, Toast.LENGTH_LONG);
+				}
 			}
 		}
 	}
