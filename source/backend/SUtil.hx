@@ -1,5 +1,6 @@
 package backend;
 
+import states.MainMenuState;
 #if android
 import android.widget.Toast;
 #end
@@ -32,11 +33,9 @@ class SUtil
 				var directory = Path.directory(file);
 				if(!FileSystem.exists(directory))
 					mkDirs(directory);
-				final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
-				final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
 				try {
 					@:privateAccess
-					File.saveBytes(fixedPath, cast LimeAssets.getAsset(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, getFileType(Path.withoutDirectory(file)), false));
+					File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(file, getFileLibrary(file)), getFileType(Path.withoutDirectory(file)), false));
 				} catch(error:Dynamic) {
 					#if (android && debug) Toast.makeText("Error!\nClouldn't copy $file because:\n" + error, Toast.LENGTH_LONG); #else LimeLogger.println("Error!\nClouldn't copy $file because:\n" + error); #end
 				}
@@ -242,6 +241,23 @@ class SUtil
 				return SOUND;
 			default:
 				return BINARY;
+		}
+	}
+	public static function getFileLibrary(file:String):String {
+		if(file.contains('shared'))
+			return 'shared';
+		else if(file.contains('week'))
+			return 'week_assets';
+		else if(file.contains('videos'))
+			return 'videos';
+		else if(file.contains('songs'))
+			return 'songs';
+		else {
+			var fucking;
+			if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
+				return 'preload';
+			else
+				return null;
 		}
 	}
 }
