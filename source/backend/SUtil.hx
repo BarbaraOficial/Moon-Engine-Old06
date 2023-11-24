@@ -38,7 +38,7 @@ class SUtil
 					@:privateAccess
 					File.saveBytes(fixedPath, cast LimeAssets.getAsset(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, getFileType(Path.withoutDirectory(file)), false));
 				} catch(error:Dynamic) {
-					Toast.makeText('Error!\nClouldn\'t copy $file because:\n' + error, Toast.LENGTH_LONG);
+					#if (android && debug) Toast.makeText("Error!\nClouldn't copy the file because:\n" + error, Toast.LENGTH_LONG); #else LimeLogger.println("Error!\nClouldn't copy the file because:\n" + error); #end
 				}
 			}
 		}
