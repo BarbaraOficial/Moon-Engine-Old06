@@ -55,8 +55,8 @@ class SUtil
 			final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
 			final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
 			@:privateAccess
-			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');*/
-}
+			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
+}*/
 	}
 
 	/**
