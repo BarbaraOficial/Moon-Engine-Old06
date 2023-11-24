@@ -34,8 +34,13 @@ class SUtil
 				if(!FileSystem.exists(directory))
 					mkDirs(directory);
 				try {
+					if(!file.contains('week')){
+						@:privateAccess
+						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(file, getFileLibrary(file)), getFileType(Path.withoutDirectory(file)), false));
+				} else {
 					@:privateAccess
-					File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(file, getFileLibrary(file)), getFileType(Path.withoutDirectory(file)), false));
+						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(file, getFileLibrary(file), getWeekLevel(file)), getFileType(Path.withoutDirectory(file)), false));
+				}
 				} catch(error:Dynamic) {
 					#if (android && debug) Toast.makeText("Error!\nClouldn't copy $file because:\n" + error, Toast.LENGTH_LONG); #else LimeLogger.println("Error!\nClouldn't copy $file because:\n" + error); #end
 				}
@@ -246,16 +251,8 @@ class SUtil
 	public static function getFileLibrary(file:String):String {
 		if(file.contains('shared'))
 			return 'shared';
-		else if(file.contains('week')){
-			var fuckoff;
-			for(index in 0...7){
-				if(file.contains('week$index'))
-					fuckoff = 'week$index';
-				else
-					fuckoff = 'week_assets';
-			}
-			return fuckoff;
-		}
+		else if(file.contains('week'))
+			return 'week_assets';
 		else if(file.contains('videos'))
 			return 'videos';
 		else if(file.contains('songs'))
@@ -267,5 +264,15 @@ class SUtil
 			else
 				return null;
 		}
+	}
+	static function getWeekLevel(file:String):String {
+		var fuckoff = '';
+		for(index in 1...8){
+			if(file.contains('week$index'))
+				fuckoff = 'week$index';
+			else
+				fuckoff = 'week_assets';
+		}
+		return fuckoff;
 	}
 }
