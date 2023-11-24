@@ -32,13 +32,7 @@ class SUtil
 				var directory = Path.directory(file);
 				if(!FileSystem.exists(directory))
 					mkDirs(directory);
-				var extension = Path.extension(file);
-				if(extension == 'otf' || extension == 'ttf')
-					File.saveBytes(fixedPath, cast LimeAssets.getFont(file));
-				else if(extension == 'txt')
-					File.saveBytes(fixedPath, cast LimeAssets.getText(file));
-				else
-					File.saveBytes(fixedPath, LimeAssets.getBytes(file));
+				File.saveBytes(fixedPath, cast LimeAssets.getAsset(file, getFileType(Path.withoutDirectory(file)), false));
 			}
 		}
 	}
