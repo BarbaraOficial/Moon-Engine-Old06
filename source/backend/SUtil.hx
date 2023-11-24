@@ -21,42 +21,26 @@ using StringTools;
 class SUtil
 {
 
-	/**
-	* ...
-	* @author Karim Akra (UTFan) & Mihai Alexandru (M.A. Jigsaw)
-	* NO MORE MANUAL COPYING, THIS BAD BOY WILL DO THE JOB!!!!
-	*/
 	public static function copyAssets(?to:String = '') {
 		if(!FileSystem.exists('assets') || !FileSystem.exists('mods'))
 			Lib.application.window.alert(
 			"The game have noticed that there are missing files so it'll begin copying them\nThis operation might take time so please wait\nWhen copying is done the game will run normally",
 			"Notice!");
 		for(file in LimeAssets.list()) {
-			if((file.contains('mods') || file.contains('assets')) && !FileSystem.exists('$to/$file'))
-				copyContent(file, '$to/$file');
-		}
-		//source: https://github.com/MAJigsaw77-Ports/the-shaggy-mod/blob/main/source/Storage.hx#L19
-		/*for(index in 0...7) { // IDFK IT WON'T COPY WEEKS
-			for (file in LimeAssets.list().filter(folder -> folder.startsWith('assets/week$index'))) {
-				// Ment for FNF's libraries system...
-				final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
-				final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
-				@:privateAccess
-				copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
+			var fixedPath = Path.join([to, file]);
+			if((file.contains('mods') || file.contains('assets')) && !FileSystem.exists(fixedPath)) {
+				var directory = Path.directory(file);
+				if(!FileSystem.exists(directory))
+					mkDirs(directory);
+				var extension = Path.extension(file);
+				if(extension == 'otf' || extension == 'ttf')
+					File.saveBytes(fixedPath, cast LimeAssets.getFont(file));
+				else if(extension == 'txt')
+					File.saveBytes(fixedPath, cast LimeAssets.getText(file));
+				else
+					File.saveBytes(fixedPath, LimeAssets.getBytes(file));
 			}
 		}
-		for (file in LimeAssets.list().filter(folder -> folder.startsWith('assets/songs'))) {
-			final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
-			final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
-			@:privateAccess
-			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
-		}
-		for (file in LimeAssets.list().filter(folder -> folder.startsWith('assets/videos'))) {
-			final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
-			final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
-			@:privateAccess
-			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
-}*/
 	}
 
 	/**
@@ -246,16 +230,17 @@ class SUtil
 	}
 	#end
 	public static function getFileType(file:String):AssetType {
-		if(file.endsWith('.png') || file.endsWith('.jpg'))
-			return IMAGE;
-		else if(file.endsWith('.txt') || file.endsWith('.xml') || file.endsWith('.json') || file.endsWith('.lua') || file.endsWith('.hx'))
-			return TEXT;
-		else if(file.endsWith('.otf') || file.endsWith('.ttf'))
-			return FONT;
-		else if(file.endsWith('.ogg') || file.endsWith('.mp3'))
-			return SOUND;
-		else
-			return BINARY;
-
+		switch(Path.extension(file)) {
+			case 'png':
+				return IMAGE;
+			case 'txt' | 'xml' | 'json' | 'lua' | 'hx':
+				return TEXT;
+			case 'otf' | 'ttf':
+				return FONT;
+			case 'ogg' | 'mp3':
+				return SOUND;
+			default:
+				return BINARY;
+		}
 	}
 }
