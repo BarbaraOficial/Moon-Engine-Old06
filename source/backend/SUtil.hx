@@ -8,10 +8,13 @@ import haxe.io.Path;
 import haxe.CallStack;
 import lime.system.System as LimeSystem;
 import lime.utils.Assets as LimeAssets;
+import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
-import lime.utils.AssetType;
+import openfl.utils.AssetType;
+import lime.utils.Bytes;
+
 
 using StringTools;
 
@@ -37,11 +40,11 @@ class SUtil
 					if(!file.contains('week')){
 						var fixedSource = file.replace('assets/${getFileLibrary(file)}', '');
 						@:privateAccess
-						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file)), getFileType(Path.withoutDirectory(file)), false));
+						File.saveBytes(fixedPath, getFileBytes(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file))));
 					} else {
 						var fixedSource = file.replace('assets/${getWeekLevel(file)}/', '');
 						@:privateAccess
-						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file), getWeekLevel(file)), getFileType(Path.withoutDirectory(file)), false));
+						File.saveBytes(fixedPath, getFileBytes(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file), getWeekLevel(file))));
 					}
 				} catch(error:Dynamic) {
 					#if (android && debug) Toast.makeText("Error!\nClouldn't copy $file because:\n" + error, Toast.LENGTH_LONG); #else LimeLogger.println("Error!\nClouldn't copy $file because:\n" + error); #end
@@ -236,18 +239,18 @@ class SUtil
 		}
 	}
 	#end
-	public static function getFileType(file:String):AssetType {
+	public static function getFileBytes(file:String):Bytes {
 		switch(Path.extension(file)) {
 			case 'png' | 'jpg' | 'jpeg':
-				return IMAGE;
+				return cast LimeAssets.getImage(file);
 			case 'txt' | 'xml' | 'json' | 'lua' | 'hx':
-				return TEXT;
+				return cast LimeAssets.getText(file);
 			case 'otf' | 'ttf':
-				return FONT;
+				return cast LimeAssets.getFont(file);
 			case 'ogg' | 'mp3':
-				return SOUND;
+				return cast OpenflAssets.getSound(file);
 			default:
-				return BINARY;
+				return cast LimeAssets.getBytes(file);
 		}
 	}
 	public static function getFileLibrary(file:String):String {
@@ -260,7 +263,6 @@ class SUtil
 		else if(file.contains('songs'))
 			return 'songs';
 		else {
-			var fucking;
 			if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
 				return 'preload';
 			else
