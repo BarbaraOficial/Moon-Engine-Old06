@@ -231,7 +231,7 @@ class SUtil
 	#end
 	public static function getFileType(file:String):AssetType {
 		switch(Path.extension(file)) {
-			case 'png':
+			case 'png' | 'jpg' | 'jpeg':
 				return IMAGE;
 			case 'txt' | 'xml' | 'json' | 'lua' | 'hx':
 				return TEXT;
