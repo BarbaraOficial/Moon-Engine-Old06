@@ -56,13 +56,17 @@ class Main extends Sprite
 		super();
 
 		// https://github.com/MAJigsaw77/UTF/blob/972e4c27ec62e2279cddb53083a2fee98e76ce53/source/Main.hx#L45-L49 (but modified)
-	    #if android
+	   	#if android
 		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
 		#elseif ios
 		Sys.setCwd(LimeSystem.applicationStorageDirectory);
 		#end
 
 		SUtil.uncaughtErrorHandler();
+		
+		#if (mobile && MODS_ALLOWED)
+		SUtil.copyAssets(); //TODO: Fix weeks assets not beign copied for some reason(idk if something else is also beign ignored)
+		#end
 
 		#if windows
 		@:functionCode("
@@ -114,10 +118,6 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
-
-		#if (mobile && MODS_ALLOWED)
-		SUtil.copyAssets(); //TODO: Fix weeks assets not beign copied for some reason(idk if something else is also beign ignored)
-		#end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
