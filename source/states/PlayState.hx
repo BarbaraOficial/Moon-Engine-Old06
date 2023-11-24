@@ -919,14 +919,15 @@ class PlayState extends MusicBeatState
 				return null;
 			});
 		return video;
+	}
 		#else
-                //because it returns a VideoManager which dosen't exists on unsupported platforms so it results in a error during compile.
+        //because it returns a VideoManager which dosen't exists on unsupported platforms so it results in a error during compile.
 		public function startVideo(ignoreThisThing:String){
 		FlxG.log.warn('Platform not supported!');
 		startAndEnd();
 		return null;
-		#end
 	}
+	#end
 
 	function startAndEnd()
 	{
@@ -1309,10 +1310,11 @@ class PlayState extends MusicBeatState
 
 		var file:String = Paths.json(songName + '/events');
 		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file)) {
+		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file))
 		#else
-		if (Assets.exists(file)) {
+		if (Assets.exists(file))
 		#end
+		{
 			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
 			for (event in eventsData) //Event Notes
 				for (i in 0...event[1].length)
@@ -1487,7 +1489,7 @@ class PlayState extends MusicBeatState
 		callOnScripts('onEventPushed', [subEvent.event, subEvent.value1 != null ? subEvent.value1 : '', subEvent.value2 != null ? subEvent.value2 : '', subEvent.strumTime]);
 	}
 
-        #if !flash
+    #if !flash
    public function addShaderToCamera(cam:String,effect:Dynamic){//STOLE FROM ANDROMEDA
 
 
