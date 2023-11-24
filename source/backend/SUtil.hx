@@ -36,7 +36,7 @@ class SUtil
 				copyContent(file, '$to/$file');
 		}
 		//source: https://github.com/MAJigsaw77-Ports/the-shaggy-mod/blob/main/source/Storage.hx#L19
-		for(index in 0...7) { // IDFK IT WON'T COPY WEEKS
+		/*for(index in 0...7) { // IDFK IT WON'T COPY WEEKS
 			for (file in LimeAssets.list().filter(folder -> folder.startsWith('assets/week$index'))) {
 				// Ment for FNF's libraries system...
 				final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
@@ -55,7 +55,7 @@ class SUtil
 			final shit:String = file.replace(file.substring(0, file.indexOf('/', 0) + 1), '');
 			final library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
 			@:privateAccess
-			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');
+			copyContent(LimeAssets.libraryPaths.exists(library) ? '$library:$file' : file, '$to/$file');*/
 }
 	}
 
