@@ -35,12 +35,14 @@ class SUtil
 					mkDirs(directory);
 				try {
 					if(!file.contains('week')){
+						var fixedSource = file.replace('assets/${getFileLibrary(file)}', '');
 						@:privateAccess
-						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(file, getFileLibrary(file)), getFileType(Path.withoutDirectory(file)), false));
-				} else {
-					@:privateAccess
-						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(file, getFileLibrary(file), getWeekLevel(file)), getFileType(Path.withoutDirectory(file)), false));
-				}
+						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file)), getFileType(Path.withoutDirectory(file)), false));
+					} else {
+						var fixedSource = file.replace('assets/${getWeekLevel(file)}/', '');
+						@:privateAccess
+						File.saveBytes(fixedPath, cast LimeAssets.getAsset(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file), getWeekLevel(file)), getFileType(Path.withoutDirectory(file)), false));
+					}
 				} catch(error:Dynamic) {
 					#if (android && debug) Toast.makeText("Error!\nClouldn't copy $file because:\n" + error, Toast.LENGTH_LONG); #else LimeLogger.println("Error!\nClouldn't copy $file because:\n" + error); #end
 				}
