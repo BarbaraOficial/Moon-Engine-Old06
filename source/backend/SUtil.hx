@@ -119,66 +119,9 @@ class SUtil
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
 	}
 
-	private static function onError(e:UncaughtErrorEvent):Void
+	private static function onError(error:UncaughtErrorEvent):Void
 	{
-		var stack:Array<String> = [];
-
-		stack.push(e.error);
-
-		for (stackItem in CallStack.exceptionStack(true))
-		{
-			switch (stackItem)
-			{
-				case CFunction:
-					stack.push('C Function');
-				case Module(m):
-					stack.push('Module ($m)');
-				case FilePos(s, file, line, column):
-					stack.push('$file (line $line)');
-				case Method(classname, method):
-					stack.push('$classname (method $method)');
-				case LocalFunction(name):
-					stack.push('Local Function ($name)');
-			}
-		}
-
-		e.preventDefault();
-		e.stopPropagation();
-		e.stopImmediatePropagation();
-
-		final msg:String = stack.join('\n');
-
-		#if sys
-		try
-		{
-			if (!FileSystem.exists('logs'))
-				FileSystem.createDirectory('logs');
-
-			File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', msg + '\n');
-		}
-		catch (e:Dynamic)
-		{
-			#if (android && debug)
-			Toast.makeText("Error!\nClouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
-			#else
-			LimeLogger.println("Error!\nClouldn't save the crash dump because:\n" + e);
-			#end
-		}
-		#end
-
-		LimeLogger.println(msg);
-		Lib.application.window.alert(msg, 'Error!');
-
-		#if (desktop && !hl)
-		DiscordClient.shutdown();
-		#end
-
-		LimeSystem.exit(1);
-	}
-
-	public static function onCriticalError(error:Dynamic):Void
-	{
-		final log:Array<String> = [Std.string(error)];
+		final log:Array<String> = [error.error];
 
 		for (item in CallStack.exceptionStack(true))
 		{
@@ -218,7 +161,7 @@ class SUtil
 		#end
 
 		LimeLogger.println(msg);
-		Lib.application.window.alert(msg, 'Fatal Error!');
+		Lib.application.window.alert(msg, 'Error!');
 
 		#if (desktop && !hl)
 		DiscordClient.shutdown();
@@ -303,7 +246,7 @@ class SUtil
 	}
 	#end
 	public static function getFileType(file:String):AssetType {
-		if(file.endsWith('.png'))
+		if(file.endsWith('.png') || file.endsWith('.jpg'))
 			return IMAGE;
 		else if(file.endsWith('.txt') || file.endsWith('.xml') || file.endsWith('.json') || file.endsWith('.lua') || file.endsWith('.hx'))
 			return TEXT;
