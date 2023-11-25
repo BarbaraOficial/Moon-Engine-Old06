@@ -20,6 +20,9 @@ import shaders.ColorSwap;
 import states.StoryMenuState;
 import states.OutdatedState;
 import states.MainMenuState;
+#if mobile
+import mobile.states.CopyState;
+#end
 
 typedef TitleData =
 {
@@ -92,6 +95,10 @@ class TitleState extends MusicBeatState
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 
 		ClientPrefs.loadPrefs();
+		#if mobile
+		if(!SUtil.filesExists())
+			FlxG.switchState(new CopyState());
+		#end
 
 		#if CHECK_FOR_UPDATES
 		if(ClientPrefs.data.checkForUpdates && !closedState) {
