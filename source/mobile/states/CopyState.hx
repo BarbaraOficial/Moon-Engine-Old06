@@ -36,7 +36,7 @@ class CopyState extends MusicBeatState {
         if(!SUtil.filesExists()){
             shouldCopy = true;
 			FlxG.stage.application.window.alert(
-			"The game have noticed that there are missing files so it'll begin copying them\nThis operation might take time so please wait\nWhen copying is done the game will run normally",
+			"Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
 			"Notice!");
             filesToCopy = LimeAssets.list();
             // removes unwanted paths
@@ -54,9 +54,11 @@ class CopyState extends MusicBeatState {
             bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		    bottomBG.alpha = 0.6;
 		    add(bottomBG);
+
             loadedText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, '', 16);
             loadedText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
             add(loadedText);
+    
             #if (target.threaded) Thread.create(() -> {#end
             copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, 17);
             add(copyLoop);
