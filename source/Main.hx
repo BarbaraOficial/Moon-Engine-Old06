@@ -63,11 +63,11 @@ class Main extends Sprite
 		#end
 
 		SUtil.uncaughtErrorHandler();
-		
+		/*
 		#if (mobile && MODS_ALLOWED)
 		SUtil.copyAssets(); //TODO: Fix weeks assets not beign copied for some reason(idk if something else is also beign ignored)
 		#end
-
+		*/
 		#if windows
 		@:functionCode("
 		#include <windows.h>

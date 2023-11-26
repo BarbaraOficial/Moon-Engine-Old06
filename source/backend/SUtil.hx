@@ -1,6 +1,5 @@
 package backend;
 
-import states.MainMenuState;
 #if android
 import android.widget.Toast;
 #end
@@ -12,9 +11,6 @@ import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
-import openfl.utils.AssetType;
-import lime.utils.Bytes;
-
 
 using StringTools;
 
@@ -24,33 +20,11 @@ using StringTools;
  */
 class SUtil
 {
-
-	public static function copyAssets(?to:String = '') {
-		if(!FileSystem.exists('assets') || !FileSystem.exists('mods'))
-			Lib.application.window.alert(
-			"The game have noticed that there are missing files so it'll begin copying them\nThis operation might take time so please wait\nWhen copying is done the game will run normally",
-			"Notice!");
-		for(file in LimeAssets.list()) {
-			var fixedPath = Path.join([to, file]);
-			if((file.contains('mods') || file.contains('assets')) && !FileSystem.exists(fixedPath)) {
-				var directory = Path.directory(file);
-				if(!FileSystem.exists(directory))
-					mkDirs(directory);
-				try {
-					if(!file.contains('week')){
-						var fixedSource = file.replace('assets/${getFileLibrary(file)}', '');
-						@:privateAccess
-						File.saveBytes(fixedPath, getFileBytes(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file))));
-					} else {
-						var fixedSource = file.replace('assets/${getWeekLevel(file)}/', '');
-						@:privateAccess
-						File.saveBytes(fixedPath, getFileBytes(Paths.getLibraryPathForce(fixedSource, getFileLibrary(file), getWeekLevel(file))));
-					}
-				} catch(error:Dynamic) {
-					#if (android && debug) Toast.makeText("Error!\nClouldn't copy $file because:\n" + error, Toast.LENGTH_LONG); #else LimeLogger.println("Error!\nClouldn't copy $file because:\n" + error); #end
-				}
-			}
-		}
+	public static function filesExists():Bool {
+		if((!FileSystem.exists('assets') && !FileSystem.exists('mods') || !FileSystem.exists('mods') || !FileSystem.exists('assets')))
+			return false;
+		else
+			return true;
 	}
 
 	/**
@@ -239,44 +213,4 @@ class SUtil
 		}
 	}
 	#end
-	public static function getFileBytes(file:String):Bytes {
-		switch(Path.extension(file)) {
-			case 'png' | 'jpg' | 'jpeg':
-				return cast LimeAssets.getImage(file);
-			case 'txt' | 'xml' | 'json' | 'lua' | 'hx':
-				return cast LimeAssets.getText(file);
-			case 'otf' | 'ttf':
-				return cast LimeAssets.getFont(file);
-			case 'ogg' | 'mp3':
-				return cast OpenflAssets.getSound(file);
-			default:
-				return cast LimeAssets.getBytes(file);
-		}
-	}
-	public static function getFileLibrary(file:String):String {
-		if(file.contains('shared'))
-			return 'shared';
-		else if(file.contains('week'))
-			return 'week_assets';
-		else if(file.contains('videos'))
-			return 'videos';
-		else if(file.contains('songs'))
-			return 'songs';
-		else {
-			if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
-				return 'preload';
-			else
-				return null;
-		}
-	}
-	static function getWeekLevel(file:String):String {
-		var fuckoff = '';
-		for(index in 1...8){
-			if(file.contains('week$index'))
-				fuckoff = 'week$index';
-			else
-				fuckoff = 'week_assets';
-		}
-		return fuckoff;
-	}
 }
