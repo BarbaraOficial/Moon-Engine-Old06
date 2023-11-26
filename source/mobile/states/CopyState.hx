@@ -1,7 +1,8 @@
 /* KNNOWN ISSUES:
-    - Beign a dick and attempt to copy flixel files
-    - Unable to copy .txt and fonts
-    - Almost 70% of the files are missing
+    - Errors while copying .txt, .ttf and .otf
+   TODO: 
+    - Figure out a way to calculate the ammount files in FileSystem directory to get the exact ammount of files that should be copied
+    - Add a loading bar (probably wont)    
 */
 package mobile.states;
 
@@ -28,6 +29,8 @@ class CopyState extends MusicBeatState {
     public var copyLoop:FlxAsyncLoop;
     var loopTimes:Int = 0;
     var maxLoopTimes:Int = 0;
+    var failedFiles:Int = 0;
+    var failedFilesStr:String = '';
     var shouldCopy:Bool = false;
     override function create() {
         if(!SUtil.filesExists()){
@@ -37,10 +40,12 @@ class CopyState extends MusicBeatState {
 			"Notice!");
             filesToCopy = LimeAssets.list();
             // removes unwanted paths
-            for(path in filesToCopy)
-                if(!path.contains('assets') || !path.contains('mods') || path.contains('flixel'))
-                    filesToCopy.remove(path);
-            maxLoopTimes = filesToCopy.length; // TODO: Make it use how many files should be copied and not the whole list
+            var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
+            var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
+            var allPaths = assets.concat(mods);
+            filesToCopy = allPaths;
+
+            maxLoopTimes = filesToCopy.length;
             loadingImage = new FlxSprite(0, 0, Paths.image('funkin'));
             loadingImage.scale.set(0.8, 0.8);
             loadingImage.screenCenter();
@@ -53,7 +58,7 @@ class CopyState extends MusicBeatState {
             loadedText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
             add(loadedText);
             #if (target.threaded) Thread.create(() -> {#end
-            copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, 1);
+            copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, 17);
             add(copyLoop);
             copyLoop.start();
             #if (target.threaded) }); #end
@@ -64,34 +69,39 @@ class CopyState extends MusicBeatState {
 
     override function update(elapsed:Float) {
         if(shouldCopy){
-            if(copyLoop.finished)
+            if(copyLoop.finished){
+                if(failedFiles > 0)
+                    FlxG.stage.application.window.alert(failedFilesStr, 'Failed To Copy $failedFiles File.');
                 FlxG.switchState(new TitleState());
+            }
             loadedText.text = '$loopTimes/$maxLoopTimes';
         }
         super.update(elapsed);
     }
 
     public function copyAsset() {
-        var file = filesToCopy[0];
+        ++loopTimes;
+        var file = filesToCopy[loopTimes];
 		if(!FileSystem.exists(file)) {
 			var directory = Path.directory(file);
 		    if(!FileSystem.exists(directory))
 					SUtil.mkDirs(directory);
-				//File.saveBytes(file, SUtil.getFileBytes('${SUtil.getFileLibrary(file)}$file'));
-                try{
-                    File.saveBytes(file, getFileBytes('${getFileLibrary(file)}$file'));
-                }catch(e:Dynamic){
-                    FlxG.stage.application.window.alert('Failed to copy $file because\n$e', 'Error while Copying ${Path.withoutDirectory(file)}');
-                }
-            ++loopTimes;
-            filesToCopy.remove(filesToCopy[0]);
+            try{
+                File.saveBytes(file, getFileBytes('${getFileLibrary(file)}$file'));
+            }catch(e:Dynamic){
+                --loopTimes;
+                ++failedFiles;
+                failedFilesStr += '$file\n';
+            }
 		}
 	}
 
     public static function getFileBytes(file:String):Bytes {
 		switch(Path.extension(file)) {
 			case 'otf' | 'ttf':
-				return cast OpenflAssets.getFont(file);
+				return cast LimeAssets.getAsset(file, FONT, false);
+            case 'txt':
+				return cast LimeAssets.getAsset(file, TEXT, false);
 			default:
 				return OpenflAssets.getBytes(file);
 		}
