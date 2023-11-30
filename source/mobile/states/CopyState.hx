@@ -64,7 +64,7 @@ class CopyState extends MusicBeatState {
             copyLoop.start();
             #if (target.threaded) }); #end
         } else
-            FlxG.switchState(new TitleState());
+            MusicBeatState.switchState(new TitleState());
         super.create();
     }
 
@@ -82,7 +82,7 @@ class CopyState extends MusicBeatState {
 
     public function copyAsset() {
         var file = filesToCopy[loopTimes];
-	++loopTimes; 
+	    ++loopTimes; 
 		if(!FileSystem.exists(file)) {
 			var directory = Path.directory(file);
 		    if(!FileSystem.exists(directory))
@@ -114,13 +114,11 @@ class CopyState extends MusicBeatState {
 		for(index in 1...8)
 			if(file.contains('/week$index/'))
 				return 'week_assets:';
-	    if(file.contains('songs'))
+	    if(file.contains('songs/'))
 			return 'songs:';
-        #if VIDEOS_ALLOWED
-        else if(file.contains('videos'))
+        else if(file.contains('videos/'))
             return 'videos:';
-        #end
-		else if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
+		else if(!MainMenuState.psychEngineVersion.contains('7.2') && file.contains('shared/')) // for versions with preload
 			return 'shared:';
 		else
 			return '';
