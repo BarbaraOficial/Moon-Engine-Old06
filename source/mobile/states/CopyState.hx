@@ -121,6 +121,6 @@ class CopyState extends MusicBeatState {
 		else if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
 			return 'shared:';
 		else
-			return ''; trace('no library to return');
+			trace('no library to return'); return '';
 	}
 }
