@@ -114,13 +114,13 @@ class CopyState extends MusicBeatState {
 		for(index in 1...8)
 			if(file.contains('/week$index/'))
 				return 'week_assets:';
-	    if(file.contains('songs/'))
+		if(file.contains('videos'))
+			return 'videos:';
+		else if(file.contains('songs'))
 			return 'songs:';
-        else if(file.contains('videos/'))
-            return 'videos:';
-		else if(!MainMenuState.psychEngineVersion.contains('7.2') && file.contains('shared/')) // for versions with preload
+		else if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
 			return 'shared:';
 		else
-			return '';
+			return ''; trace('no library to return');
 	}
 }
