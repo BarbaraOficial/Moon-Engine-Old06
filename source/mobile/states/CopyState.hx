@@ -37,7 +37,7 @@ class CopyState extends MusicBeatState {
 			FlxG.stage.application.window.alert(
 			"Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
 			"Notice!");
-            filesToCopy = OpenflAssets.list();
+            filesToCopy = lime.utils.Assets.list();
             // removes unwanted paths
             var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
             var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
