@@ -168,7 +168,7 @@ class SUtil
 	}
 
 	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
-			fileData:String = 'you forgot to add something in your code lol'):Void
+			fileData:String = 'you forgot to add something in your code lol', ?alertWindow:Bool = true):Void
 	{
 		try
 		{
@@ -176,7 +176,8 @@ class SUtil
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			Lib.application.window.alert(fileName + " file has been saved", "Success!");
+			if(alertWindow)
+				Lib.application.window.alert(fileName + " file has been saved", "Success!");
 		}
 		catch (e:Dynamic)
 		{

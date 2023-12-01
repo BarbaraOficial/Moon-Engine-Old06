@@ -1,24 +1,20 @@
-/* KNNOWN ISSUES:
-    - Errors while copying .txt, .ttf and .otf (i think i fixed it now?)
+/* KNNOWN ISSUE:
+    - Null Object Refrence while copying .ttf, .otf
    TODO: 
     - Figure out a way to calculate the ammount files in FileSystem directory to get the exact ammount of files that should be copied
-    - Add a loading bar (probably wont)    
 */
 package mobile.states;
 
-import flixel.addons.util.FlxAsyncLoop;
 import openfl.utils.Assets as OpenflAssets;
-import haxe.io.Path;
-import flixel.ui.FlxBar;
-import states.TitleState;
-import lime.utils.Bytes;
+import lime.utils.Assets as LimeAssets;
+import flixel.addons.util.FlxAsyncLoop;
+import openfl.utils.ByteArray;
 import states.MainMenuState;
+import states.TitleState;
 #if (target.threaded)
 import sys.thread.Thread;
 #end
-#if android
-import android.widget.Toast;
-#end
+import haxe.io.Path;
 
 class CopyState extends MusicBeatState {
     public static var filesToCopy:Array<String>;
@@ -37,7 +33,7 @@ class CopyState extends MusicBeatState {
 			FlxG.stage.application.window.alert(
 			"Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
 			"Notice!");
-            filesToCopy = lime.utils.Assets.list();
+            filesToCopy = LimeAssets.list();
             // removes unwanted paths
             var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
             var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
@@ -87,40 +83,39 @@ class CopyState extends MusicBeatState {
 			var directory = Path.directory(file);
 		    if(!FileSystem.exists(directory))
 					SUtil.mkDirs(directory);
-            try{
-                if(OpenflAssets.getBytes(file).length == 0 && (Path.extension(file) == 'txt' || Path.extension(file) == 'lua' || Path.extension(file) == 'json' || Path.extension(file) == 'hx' || Path.extension(file) == 'xml'))
-                    SUtil.saveContent(Path.withoutDirectory(file), Path.extension(file), Std.string(CoolUtil.listFromString(OpenflAssets.getText('${getFileLibrary(file)}$file')).join('')))
+            try {
+                if(getFileBytes(getFile(file)).length == 0 && (Path.extension(file) == 'txt' || Path.extension(file) == 'lua' || Path.extension(file) == 'json' || Path.extension(file) == 'hx' || Path.extension(file) == 'xml'))
+                    SUtil.saveContent(Path.withoutDirectory(file), Path.extension(file), Std.string(CoolUtil.listFromString(LimeAssets.getText(getFile(file))).join('')), false);
+                    
                 else
-                    File.saveBytes(file, getFileBytes('${getFileLibrary(file)}$file'));
+                    File.saveBytes(file, getFileBytes(getFile(file)));
             }catch(e:Dynamic){
                 --loopTimes;
                 ++failedFiles;
-                failedFilesStr += '$file\n';
+                failedFilesStr += '${getFile(file)}($e)\n';
             }
 		}
 	}
 
-    public static function getFileBytes(file:String):Bytes {
+    public static function getFileBytes(file:String):ByteArray {
 		switch(Path.extension(file)) {
 			case 'otf' | 'ttf':
-				return cast OpenflAssets.getFont(file);
-            case 'txt' | 'hx' | 'lua' | 'xml' | 'json':
-				return cast OpenflAssets.getText(file);
+				return cast LimeAssets.getAsset(file, FONT, false);
 			default:
 				return OpenflAssets.getBytes(file);
 		}
 	}
-	public static function getFileLibrary(file:String):String {
+	public static function getFile(file:String):String {
 		for(index in 1...8)
 			if(file.contains('/week$index/'))
-				return 'week_assets:';
+				return 'week_assets:$file';
 		if(file.contains('videos'))
-			return 'videos:';
+			return 'videos:$file';
 		else if(file.contains('songs'))
-			return 'songs:';
+			return 'songs:$file';
 		else if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
-			return 'shared:';
+			return 'shared:$file';
 		else
-			trace('no library to return'); return '';
+			return file;
 	}
 }
