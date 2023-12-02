@@ -27,6 +27,7 @@ class CopyState extends MusicBeatState {
     var failedFiles:Int = 0;
     var failedFilesStr:String = '';
     var shouldCopy:Bool = false;
+    
     override function create() {
         if(!SUtil.filesExists()){
             shouldCopy = true;
@@ -60,7 +61,8 @@ class CopyState extends MusicBeatState {
             copyLoop.start();
             #if (target.threaded) }); #end
         } else
-            MusicBeatState.switchState(new TitleState());
+            MusicBeatState.switchState(new TitleState()); trace('going back to titlestate');
+
         super.create();
     }
 
@@ -85,10 +87,15 @@ class CopyState extends MusicBeatState {
 					SUtil.mkDirs(directory);
             try {
                 if(getFileBytes(getFile(file)).length == 0 && (Path.extension(file) == 'txt' || Path.extension(file) == 'lua' || Path.extension(file) == 'json' || Path.extension(file) == 'hx' || Path.extension(file) == 'xml'))
-                    SUtil.saveContent(Path.withoutDirectory(file), Path.extension(file), Std.string(CoolUtil.listFromString(LimeAssets.getText(getFile(file))).join('')), false);
-                    
+                    saveContent(file, CoolUtil.listFromString(LimeAssets.getText(getFile(file))).join(''));
                 else
-                    File.saveBytes(file, getFileBytes(getFile(file)));
+                    if(LimeAssets.exists(getFile(file)))
+                        File.saveBytes(file, getFileBytes(getFile(file)));
+                    else {
+                        --loopTimes;
+                        ++failedFiles;
+                        failedFilesStr += getFile(file) + "(File Dosen't exist)\n";
+                    }
             }catch(e:Dynamic){
                 --loopTimes;
                 ++failedFiles;
@@ -109,13 +116,21 @@ class CopyState extends MusicBeatState {
 		for(index in 1...8)
 			if(file.contains('/week$index/'))
 				return 'week_assets:$file';
-		if(file.contains('videos'))
+		if(file.contains('/videos/'))
 			return 'videos:$file';
-		else if(file.contains('songs'))
+		else if(file.contains('/songs/'))
 			return 'songs:$file';
-		else if(!MainMenuState.psychEngineVersion.contains('7.2')) // for versions with preload
+		else if(file.contains('/shared/'))
 			return 'shared:$file';
 		else
 			return file;
 	}
+
+    public static function saveContent(file:String = 'assets/file.txt', fileData:String = 'doing this while fortnite servers rape me mentally') {
+        var directory = Path.directory(file);
+        var fileName = Path.withoutDirectory(file);
+        if (!FileSystem.exists(directory))
+            SUtil.mkDirs(directory);
+        File.saveContent(Path.join([directory, fileName]), fileData);
+    }
 }
