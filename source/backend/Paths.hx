@@ -9,12 +9,11 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import openfl.display.BitmapData;
 import openfl.display3D.textures.RectangleTexture;
-import openfl.utils.AssetType;
+import lime.utils.AssetType;
 import openfl.utils.Assets;
 import openfl.system.System;
 import openfl.geom.Rectangle;
 import openfl.media.Sound;
-import lime.utils.Assets;
 import haxe.Json;
 
 class Paths
