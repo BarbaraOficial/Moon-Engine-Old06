@@ -9,7 +9,7 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import openfl.display.BitmapData;
 import openfl.display3D.textures.RectangleTexture;
-import lime.utils.AssetType;
+import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import openfl.system.System;
 import openfl.geom.Rectangle;
