@@ -1169,7 +1169,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public var scoreSeparator:String = " | "
+	public var scoreSeparator:String = " | ";
 
 	// fun fact: Dynamic Functions can be overriden by just doing this
 	// `updateScore = function(miss:Bool = false) { ... }
@@ -3064,7 +3064,7 @@ class PlayState extends MusicBeatState
 	}
 
 	function opponentNoteHit(note:Note):Void
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 		{
 			if (Paths.formatToSongPath(SONG.song) != 'tutorial')
 				camZooming = true;
@@ -3137,7 +3137,7 @@ class PlayState extends MusicBeatState
 				if (!note.isSustainNote)
 					invalidateNote(note);
 				return;
-=======
+=======*/
 	{
 		var result:Dynamic = callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 		if(result != FunkinLua.Function_Stop && result != FunkinLua.Function_StopHScript && result != FunkinLua.Function_StopAll) callOnHScript('opponentNoteHit', [note]);
@@ -3217,7 +3217,7 @@ class PlayState extends MusicBeatState
 			{
 				char = gf;
 				animCheck = 'cheer';
->>>>>>> upstream/experimental
+//>>>>>>> upstream/experimental
 			}
 	
 			if (!note.isSustainNote)
