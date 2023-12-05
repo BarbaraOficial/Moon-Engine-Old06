@@ -1480,7 +1480,7 @@ class FunkinLua {
 		});
 
 		#if FLX_PITCH
-		set(lua, "getSoundPitch", function(tag:String) {
+		set("getSoundPitch", function(tag:String) {
 			if(tag != null && tag.length > 0 && game.modchartSounds.exists(tag)) {
 				return game.modchartSounds.get(tag).pitch;
 			}
