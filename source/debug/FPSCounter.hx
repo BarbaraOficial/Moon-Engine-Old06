@@ -34,7 +34,7 @@ class FPSCounter extends TextField
 		selectable = false;
 		mouseEnabled = false;
 		#if mobile
-                defaultTextFormat = new TextFormat('_sans', Std.int(14 * Ma>
+                defaultTextFormat = new TextFormat('_sans', Std.int(14 * Math.min(Lib.current.stage.stageWidth / FlxG.width, Lib.current.stage.stageHeight / FlxG.height)), color);
                 #else
                 defaultTextFormat = new TextFormat('_sans', 14, color);
                 #end
