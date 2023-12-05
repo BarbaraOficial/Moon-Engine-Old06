@@ -35,7 +35,7 @@ import psychlua.HScript;
 import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
 
-import tjson.TJSON as Json;
+import haxe.Json;
 
 class FunkinLua {
 	public static var Function_Stop:Dynamic = "##PSYCHLUA_FUNCTIONSTOP";
@@ -143,7 +143,7 @@ class FunkinLua {
 		// Gameplay settings
 		set('healthGainMult', game.healthGain);
 		set('healthLossMult', game.healthLoss);
-		set('playbackRate', game.playbackRate);
+		#if FLX_PITCH set('playbackRate', game.playbackRate); #end
 		set('guitarHeroSustains', game.guitarHeroSustains);
 		set('instakillOnMiss', game.instakillOnMiss);
 		set('botPlay', game.cpuControlled);
@@ -1478,7 +1478,9 @@ class FunkinLua {
 				}
 			}
 		});
-		set("getSoundPitch", function(tag:String) {
+
+		#if FLX_PITCH
+		set(lua, "getSoundPitch", function(tag:String) {
 			if(tag != null && tag.length > 0 && game.modchartSounds.exists(tag)) {
 				return game.modchartSounds.get(tag).pitch;
 			}
@@ -1495,6 +1497,7 @@ class FunkinLua {
 				}
 			}
 		});
+		#end
 
 		// mod settings
 		addLocalCallback("getModSetting", function(saveTag:String, ?modName:String = null) {

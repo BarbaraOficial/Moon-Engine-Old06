@@ -10,8 +10,7 @@ import openfl.net.FileReference;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.net.FileFilter;
-import tjson.TJSON as Json;
-
+import haxe.Json;
 import objects.MenuCharacter;
 
 class MenuCharacterEditorState extends MusicBeatState

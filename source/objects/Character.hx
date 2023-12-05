@@ -2,12 +2,18 @@ package objects;
 
 import animateatlas.AtlasFrameMaker;
 
+import backend.animation.PsychAnimationController;
+
 import flixel.util.FlxSort;
 
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
+<<<<<<< HEAD
 import tjson.TJSON as Json;
 import haxe.format.JsonParser;
+=======
+import haxe.Json;
+>>>>>>> upstream/experimental
 
 import backend.Song;
 import backend.Section;
@@ -39,6 +45,11 @@ typedef AnimArray = {
 
 class Character extends FlxSprite
 {
+	/**
+	 * In case a character is missing, it will use this on its place
+	**/
+	public static final DEFAULT_CHARACTER:String = 'bf';
+
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 
@@ -71,10 +82,11 @@ class Character extends FlxSprite
 	public var originalFlipX:Bool = false;
 	public var healthColorArray:Array<Int> = [255, 0, 0];
 
-	public static var DEFAULT_CHARACTER:String = 'bf'; //In case a character is missing, it will use BF on its place
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
 	{
 		super(x, y);
+
+		animation = new PsychAnimationController(this);
 
 		animOffsets = new Map<String, Array<Dynamic>>();
 		curCharacter = character;
@@ -218,7 +230,8 @@ class Character extends FlxSprite
 		{
 			if(heyTimer > 0)
 			{
-				heyTimer -= elapsed * PlayState.instance.playbackRate;
+				var rate:Float = (PlayState.instance != null ? PlayState.instance.playbackRate : 1.0);
+				heyTimer -= elapsed * rate;
 				if(heyTimer <= 0)
 				{
 					if(specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
@@ -260,7 +273,7 @@ class Character extends FlxSprite
 			else if(isPlayer)
 				holdTimer = 0;
 
-			if (!isPlayer && holdTimer >= Conductor.stepCrochet * (0.0011 / (FlxG.sound.music != null ? FlxG.sound.music.pitch : 1)) * singDuration)
+			if (!isPlayer && holdTimer >= Conductor.stepCrochet * (0.0011 #if FLX_PITCH / (FlxG.sound.music != null ? FlxG.sound.music.pitch : 1) #end) * singDuration)
 			{
 				dance();
 				holdTimer = 0;

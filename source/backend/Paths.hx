@@ -7,7 +7,6 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-
 import openfl.display.BitmapData;
 import openfl.display3D.textures.RectangleTexture;
 import openfl.utils.AssetType;
@@ -15,7 +14,8 @@ import openfl.utils.Assets;
 import openfl.system.System;
 import openfl.geom.Rectangle;
 import openfl.media.Sound;
-import tjson.TJSON as Json;
+import lime.utils.Assets;
+import haxe.Json;
 
 class Paths
 {

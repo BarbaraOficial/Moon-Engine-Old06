@@ -1,7 +1,7 @@
 package backend;
 
-import tjson.TJSON as Json;
-import openfl.utils.Assets;
+import haxe.Json;
+import lime.utils.Assets;
 
 import backend.Section;
 

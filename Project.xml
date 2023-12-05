@@ -86,14 +86,20 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="flixel-addons" />
+	<haxelib name="tjson" />
 
 	<!--Psych stuff needed-->
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
+<<<<<<< HEAD
 	<haxelib name="discord_rpc" if="desktop" unless="hl"/>
 	<haxelib name="flxanimate" unless="web"/>
 	<haxelib name="tjson"/>
+=======
+	<haxelib name="discord_rpc" if="desktop"/>
+	<haxelib name="flxanimate"/>
+>>>>>>> upstream/experimental
 
 	<!-- Mobile and Android Specific-->
 	<haxelib name="extension-androidtools" if="android" />

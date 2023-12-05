@@ -32,10 +32,15 @@
     },
     {
       "name": "hxcpp",
+<<<<<<< HEAD
       "type": "git",
       "dir": null,
       "ref": "master",
       "url": "https://github.com/HaxeFoundation/hxcpp"
+=======
+      "type": "haxelib",
+      "version": null
+>>>>>>> upstream/experimental
     },
     {
       "name": "hxCodec",
