@@ -10,13 +10,8 @@ import flixel.ui.FlxButton;
 import openfl.net.FileReference;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
-<<<<<<< HEAD
-import openfl.net.FileFilter;
-import tjson.TJSON as Json;
-=======
-import flash.net.FileFilter;
+import openfl.net.FileFilter
 import haxe.Json;
->>>>>>> upstream/experimental
 import lime.system.Clipboard;
 
 import objects.TypedAlphabet;

@@ -8,12 +8,7 @@ import flixel.util.FlxSort;
 
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
-<<<<<<< HEAD
-import tjson.TJSON as Json;
-import haxe.format.JsonParser;
-=======
 import haxe.Json;
->>>>>>> upstream/experimental
 
 import backend.Song;
 import backend.Section;

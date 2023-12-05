@@ -23,6 +23,7 @@ import openfl.utils.Assets;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
+import openfl.geom.Rectangle;
 import openfl.net.FileReference;
 
 import backend.Song;
@@ -1291,7 +1292,7 @@ class ChartingState extends MusicBeatState
 		blockPressWhileTypingOnStepper.push(voicesVolume);
 
 		#if FLX_PITCH
-		sliderRate = new FlxUISlider(this, 'playbackSpeed', 120, 120, 0.5, 3, 150, null, 5, FlxColor.WHITE, FlxColor.BLACK);
+		sliderRate = new FlxUISlider(this, 'playbackSpeed', 120, 120, 0.5, 3, 150, #if !hl null #else 0 #end, 5, FlxColor.WHITE, FlxColor.BLACK);
 		sliderRate.nameLabel.text = 'Playback Rate';
 		tab_group_chart.add(sliderRate);
 		#end
