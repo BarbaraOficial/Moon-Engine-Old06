@@ -140,7 +140,6 @@
 
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
-<<<<<<< HEAD
 
 	<haxedef name='no-deprecation-warnings' />
 
@@ -165,18 +164,7 @@
 			<!--Dependency--> 
 			<dependency name="Metal.framework" if="${lime &lt; 8.0.0}" />
 		</section>
-	
-=======
-	
-	<!--Used for Izzy Engine's crash handler-->
-	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
-	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
-	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
-	
-	<!--Disable deprecated warnings-->
-	<haxedef name='no-deprecation-warnings' />
 
->>>>>>> upstream/experimental
 	<!--Macro fixes-->
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
