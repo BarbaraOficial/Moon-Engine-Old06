@@ -91,13 +91,16 @@
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
-	<haxelib name="discord_rpc" if="desktop" unless="hl"/>
+	<haxelib name="hxdiscord_rpc" if="cpp" unless="hl"/>
 	<haxelib name="flxanimate" unless="web"/>
 	<haxelib name="tjson"/>
 
 	<!-- Mobile and Android Specific-->
 	<haxelib name="extension-androidtools" if="android" />
 	<haxelib name="extension-orientation" if="mobile" />
+
+	<!-- Disable Discord IO Thread -->
+	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="hxdiscord_rpc" />
 
 	<!-- Enables a terminal log prompt on debug builds -->
 	<haxelib name="hxcpp-debug-server" if="debug"/>
@@ -137,6 +140,7 @@
 
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+<<<<<<< HEAD
 
 	<haxedef name='no-deprecation-warnings' />
 
@@ -162,6 +166,17 @@
 			<dependency name="Metal.framework" if="${lime &lt; 8.0.0}" />
 		</section>
 	
+=======
+	
+	<!--Used for Izzy Engine's crash handler-->
+	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+	
+	<!--Disable deprecated warnings-->
+	<haxedef name='no-deprecation-warnings' />
+
+>>>>>>> upstream/experimental
 	<!--Macro fixes-->
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />

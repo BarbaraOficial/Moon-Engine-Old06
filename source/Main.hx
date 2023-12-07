@@ -148,7 +148,7 @@ class Main extends Sprite
 		#end
 
 		#if (desktop && !hl)
-		DiscordClient.start();
+		DiscordClient.prepare();
 		#end
 
 		// shader coords fix
