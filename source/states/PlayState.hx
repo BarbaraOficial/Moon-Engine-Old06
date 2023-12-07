@@ -488,10 +488,8 @@ class PlayState extends MusicBeatState
 		add(comboGroup);
 		noteGroup = new FlxTypedGroup<FlxBasic>();
 		add(noteGroup);
-
 		uiGroup = new FlxSpriteGroup();
-                strumLineNotes = new FlxTypedGroup<StrumNote>();
-		comboGroup = new FlxSpriteGroup();
+                add(uiGroup);
 
 		Conductor.songPosition = -5000 / Conductor.songPosition;
 		var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
@@ -3075,80 +3073,6 @@ class PlayState extends MusicBeatState
 	}
 
 	function opponentNoteHit(note:Note):Void
-/*<<<<<<< HEAD
-		{
-			if (Paths.formatToSongPath(SONG.song) != 'tutorial')
-				camZooming = true;
-	
-			if(note.noteType == 'Hey!' && dad.animOffsets.exists('hey')) {
-				dad.playAnim('hey', true);
-				dad.specialAnim = true;
-				dad.heyTimer = 0.6;
-			} else if(!note.noAnimation) {
-				var altAnim:String = note.animSuffix;
-	
-				if (SONG.notes[curSection] != null)
-				{
-					if (SONG.notes[curSection].altAnim && !SONG.notes[curSection].gfSection) {
-						altAnim = '-alt';
-					}
-				}
-	
-				var char:Character = dad;
-				var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + altAnim;
-				if(note.gfNote) {
-					char = gf;
-				}
-	
-				if(char != null)
-				{
-					char.playAnim(animToPlay, true);
-					char.holdTimer = 0;
-				}
-			}
-	
-			if (SONG.needsVoices)
-				vocals.volume = 1;
-	
-			strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
-			note.hitByOpponent = true;
-	
-			var result:Dynamic = callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
-			if(result != FunkinLua.Function_Stop && result != FunkinLua.Function_StopHScript && result != FunkinLua.Function_StopAll) callOnHScript('opponentNoteHit', [note]);
-	
-			if (!note.isSustainNote)
-				invalidateNote(note);
-		}
-	
-		public function goodNoteHit(note:Note):Void
-		{
-			if(note.wasGoodHit) return;
-			if(cpuControlled && (note.ignoreNote || note.hitCausesMiss)) return;
-	
-			note.wasGoodHit = true;
-			if (ClientPrefs.data.hitsoundVolume > 0 && !note.hitsoundDisabled)
-				FlxG.sound.play(Paths.sound(note.hitsound), ClientPrefs.data.hitsoundVolume);
-	
-			if(note.hitCausesMiss) {
-				noteMiss(note);
-				if(!note.noteSplashData.disabled && !note.isSustainNote)
-					spawnNoteSplashOnNote(note);
-	
-				if(!note.noMissAnimation)
-				{
-					switch(note.noteType) {
-						case 'Hurt Note': //Hurt note
-							if(boyfriend.animation.getByName('hurt') != null) {
-								boyfriend.playAnim('hurt', true);
-								boyfriend.specialAnim = true;
-							}
-					}
-				}
-	
-				if (!note.isSustainNote)
-					invalidateNote(note);
-				return;
-=======*/
 	{
 		var result:Dynamic = callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 		if(result != FunkinLua.Function_Stop && result != FunkinLua.Function_StopHScript && result != FunkinLua.Function_StopAll) callOnHScript('opponentNoteHit', [note]);
@@ -3228,7 +3152,6 @@ class PlayState extends MusicBeatState
 			{
 				char = gf;
 				animCheck = 'cheer';
-//>>>>>>> upstream/experimental
 			}
 	
 			if (!note.isSustainNote)
