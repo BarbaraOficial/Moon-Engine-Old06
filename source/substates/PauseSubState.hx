@@ -266,8 +266,7 @@ class PauseSubState extends MusicBeatSubstate
 				case "Restart Song":
 					restartSong();
 				case 'Chart Editor':
-					MusicBeatState.switchState(new states.editors.ChartingState());
-					PlayState.chartingMode = true;
+					PlayState.openChartEditor();
 				case "Leave Charting Mode":
 					restartSong();
 					PlayState.chartingMode = false;
