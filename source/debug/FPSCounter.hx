@@ -1,10 +1,11 @@
 package debug;
 
-import flixel.FlxG;
+import haxe.Timer;
+import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import openfl.system.System;
 import openfl.Lib;
+import openfl.system.System;
 
 /**
 	The FPS class provides an easy-to-use monitor to display
@@ -20,8 +21,10 @@ class FPSCounter extends TextField
 	/**
 		The current memory usage (WARNING: this is NOT your total program memory usage, rather it shows the garbage collector memory)
 	**/
-	public var memoryMegas(get, never):Float;
+	public var memoryMegas:Float = 0;
 
+	@:noCompletion private var cacheCount:Int;
+	@:noCompletion private var currentTime:Float;
 	@:noCompletion private var times:Array<Float>;
 
 	public function new(x:Float = 10, y:Float = 10, color:Int = 0x000000)
@@ -43,38 +46,45 @@ class FPSCounter extends TextField
 		multiline = true;
 		text = "FPS: ";
 
+		cacheCount = 0;
+		currentTime = 0;
 		times = [];
 	}
 
 	var deltaTimeout:Float = 0.0;
 
 	// Event Handlers
+	@:noCompletion
 	private override function __enterFrame(deltaTime:Float):Void
 	{
 		if (deltaTimeout > 1000) {
 			deltaTimeout = 0.0;
 			return;
 		}
-
-		var now:Float = haxe.Timer.stamp();
-		times.push(now);
-		while (times[0] < now - 1000)
+		currentTime += deltaTime;
+		times.push(currentTime);
+		while (times[0] < currentTime - 1000)
 			times.shift();
 
-		currentFPS = currentFPS < FlxG.drawFramerate ? times.length : FlxG.drawFramerate;		
-		updateText();
+		var currentCount = times.length;
+		currentFPS = Math.round((currentCount + cacheCount) / 2);
+		if (currentFPS > ClientPrefs.data.framerate) currentFPS = ClientPrefs.data.framerate;
+
+		if (currentCount != cacheCount)
+		{
+			text = 'FPS: ${currentFPS}';
+
+			memoryMegas = cast(System.totalMemory, UInt);
+			text += '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
+
+			textColor = 0xFFFFFFFF;
+			if (currentFPS <= ClientPrefs.data.framerate / 2)
+				textColor = 0xFFFF0000;
+
+			text += "\n";
+		}
+
+		cacheCount = currentCount;
 		deltaTimeout += deltaTime;
 	}
-
-	public dynamic function updateText():Void { // so people can override it in hscript
-		text = 'FPS: ${currentFPS}'
-		+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
-
-		textColor = 0xFFFFFFFF;
-		if (currentFPS < FlxG.drawFramerate * 0.5)
-			textColor = 0xFFFF0000;
-	}
-
-	inline function get_memoryMegas():Float
-		return cast(System.totalMemory, UInt);
 }
