@@ -858,7 +858,7 @@ class ModItem extends FlxSpriteGroup
 			{
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 				var errorMsg = 'An error occurred: $e';
-				#if (desktop || mobile)
+				#if (windows || mobile)
 				lime.app.Application.current.window.alert(errorMsg, errorTitle);
 				#end
 				trace('$errorTitle - $errorMsg');

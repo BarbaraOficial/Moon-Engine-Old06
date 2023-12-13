@@ -120,8 +120,8 @@ class CopyState extends MusicBeatState {
 			return 'videos:$file';
 		else if(file.contains('/songs/'))
 			return 'songs:$file';
-		else if(file.contains('/shared/'))
-			return 'shared:$file';
+		/*else if(file.contains('/shared/'))
+			return 'shared:$file';*/
 		else
 			return file;
 	}
