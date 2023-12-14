@@ -129,6 +129,8 @@ class CopyState extends MusicBeatState {
     public static function saveContent(file:String = 'assets/file.txt', fileData:String = 'doing this while fortnite servers rape me mentally') {
         var directory = Path.directory(file);
         var fileName = Path.withoutDirectory(file);
+        if(fileData == null)
+            fileData = '';
         if (!FileSystem.exists(directory))
             SUtil.mkDirs(directory);
         File.saveContent(Path.join([directory, fileName]), fileData);
