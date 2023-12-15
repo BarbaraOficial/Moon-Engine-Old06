@@ -80,10 +80,8 @@
     },
     {
       "name": "extension-androidtools",
-      "type": "git",
-      "dir": null,
-      "ref": "main",
-      "url": "https://github.com/mcagabe19-stuff/extension-androidtools.git"
+      "type": "haxelib",
+      "version": null
     },
     {
       "name": "extension-orientation",
