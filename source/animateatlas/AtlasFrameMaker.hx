@@ -1,6 +1,5 @@
 package animateatlas;
 import openfl.geom.Rectangle;
-import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import openfl.Assets;
 import haxe.Json;

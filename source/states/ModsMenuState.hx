@@ -2,7 +2,6 @@ package states;
 
 import backend.WeekData;
 
-import flixel.math.FlxPoint;
 import flixel.ui.FlxButton;
 import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
