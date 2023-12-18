@@ -11,13 +11,13 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
+import flixel.math.FlxPoint;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxSave;
 import flixel.input.keyboard.FlxKey;
 import flixel.animation.FlxAnimationController;
-import lime.utils.Assets;
-import openfl.utils.Assets as OpenFlAssets;
+import openfl.utils.Assets;
 import openfl.events.KeyboardEvent;
 import haxe.Json;
 
@@ -35,13 +35,9 @@ import substates.GameOverSubstate;
 #if !flash 
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
-#end
-
-#if VIDEOS_ALLOWED 
-#if (hxCodec >= "3.0.0") import hxcodec.flixel.FlxVideo as VideoHandler;
-#elseif (hxCodec >= "2.6.1") import hxcodec.VideoHandler as VideoHandler;
-#elseif (hxCodec == "2.6.0") import VideoHandler;
-#else import vlc.MP4Handler as VideoHandler; #end
+import openfl.filters.BitmapFilter;
+import openfl.display.Shader;
+import shaders.CustomShaders;
 #end
 
 import objects.Note.EventNote;
@@ -78,7 +74,7 @@ import tea.SScript;
 **/
 class PlayState extends MusicBeatState
 {
-	public static var STRUM_X = 42;
+	public static var STRUM_X = 48.5;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
 	public static var ratingStuff:Array<Dynamic> = [
@@ -114,6 +110,14 @@ class PlayState extends MusicBeatState
 	public var modchartSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
 	public var modchartTexts:Map<String, FlxText> = new Map<String, FlxText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
+	#end
+
+	#if !flash
+	public var shader_chromatic_abberation:ChromaticAberrationEffect;
+	public var shaderUpdates:Array<Float->Void> = [];
+	public var camGameShaders:Array<ShaderEffect> = [];
+	public var camHUDShaders:Array<ShaderEffect> = [];
+	public var camOtherShaders:Array<ShaderEffect> = [];
 	#end
 
 	public var BF_X:Float = 770;
@@ -174,7 +178,7 @@ class PlayState extends MusicBeatState
 	private var curSong:String = "";
 
 	public var gfSpeed:Int = 1;
-	public var health(default, set):Float = 1;
+	public var health:Float = 1;
 	public var combo:Int = 0;
 
 	public var healthBar:Bar;
@@ -207,6 +211,7 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
+	public var luaVpadCam:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
 	public var songScore:Int = 0;
@@ -235,7 +240,7 @@ class PlayState extends MusicBeatState
 	public var opponentCameraOffset:Array<Float> = null;
 	public var girlfriendCameraOffset:Array<Float> = null;
 
-	#if desktop
+	#if (desktop && !hl)
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
 	var detailsText:String = "";
@@ -264,6 +269,10 @@ class PlayState extends MusicBeatState
 	// Callbacks for stages
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
+
+	#if VIDEOS_ALLOWED public var videoSprites:Array<VideoSpriteManager> = []; #end
+
+	public var luaVirtualPad:FlxVirtualPad;
 
 	override public function create()
 	{
@@ -301,14 +310,18 @@ class PlayState extends MusicBeatState
 		camGame = initPsychCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
+		luaVpadCam = new FlxCamera();
+		luaVpadCam.bgColor.alpha = 0;
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
 
+		//FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+		FlxG.cameras.add(luaVpadCam, false);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
-		CustomFadeTransition.nextCamera = camOther;
+				CustomFadeTransition.nextCamera = camOther;
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -319,7 +332,7 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
 
-		#if desktop
+		#if (desktop && !hl)
 		storyDifficultyText = Difficulty.getString();
 
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
@@ -467,7 +480,7 @@ class PlayState extends MusicBeatState
 		noteGroup = new FlxTypedGroup<FlxBasic>();
 		add(noteGroup);
 		uiGroup = new FlxSpriteGroup();
-		add(uiGroup);
+                add(uiGroup);
 
 		Conductor.songPosition = -5000 / Conductor.songPosition;
 		var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
@@ -498,6 +511,7 @@ class PlayState extends MusicBeatState
 		}
 
 		var splash:NoteSplash = new NoteSplash(100, 100);
+		splash.setupNoteSplash(100, 100);
 		grpNoteSplashes.add(splash);
 		splash.alpha = 0.000001; //cant make it invisible or it won't allow precaching
 
@@ -567,6 +581,44 @@ class PlayState extends MusicBeatState
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
+
+		var buttonLeftColor:Array<FlxColor>;
+		var buttonDownColor:Array<FlxColor>;
+		var buttonUpColor:Array<FlxColor>;
+		var buttonRightColor:Array<FlxColor>;
+		if (ClientPrefs.data.dynamicColors){
+			buttonLeftColor = ClientPrefs.data.arrowRGB[0];
+			buttonDownColor = ClientPrefs.data.arrowRGB[1];
+			buttonUpColor = ClientPrefs.data.arrowRGB[2];
+			buttonRightColor = ClientPrefs.data.arrowRGB[3];
+		} else{
+			buttonLeftColor = ClientPrefs.defaultData.arrowRGB[0];
+			buttonDownColor = ClientPrefs.defaultData.arrowRGB[1];
+			buttonUpColor = ClientPrefs.defaultData.arrowRGB[2];
+			buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
+		}
+		addMobileControls(false);
+		if (ClientPrefs.data.dynamicColors){
+		switch(MobileControls.getMode())
+		{
+			//VPAD
+			case 0 | 1 | 2:
+			mobileControls.virtualPad.buttonLeft.color =  buttonLeftColor[0];
+			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
+			mobileControls.virtualPad.buttonUp.color =  buttonUpColor[0];
+			mobileControls.virtualPad.buttonRight.color =  buttonRightColor[0];
+			//DUO VPAD
+			case 3:
+			mobileControls.virtualPad.buttonLeft.color =  buttonLeftColor[0];
+			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
+			mobileControls.virtualPad.buttonUp.color =  buttonUpColor[0];
+			mobileControls.virtualPad.buttonRight.color =  buttonRightColor[0];
+			mobileControls.virtualPad.buttonLeft2.color =  buttonLeftColor[0];
+			mobileControls.virtualPad.buttonDown2.color =  buttonDownColor[0];
+			mobileControls.virtualPad.buttonUp2.color =  buttonUpColor[0];
+			mobileControls.virtualPad.buttonRight2.color =  buttonRightColor[0];
+		}
+	}
 
 		startingSong = true;
 		
@@ -642,6 +694,11 @@ class PlayState extends MusicBeatState
 					Paths.music(key);
 			}
 		}
+
+		#if (!android)
+		addVirtualPad(NONE, P);
+       		addVirtualPadCamera(false);
+		#end
 
 		super.create();
 		Paths.clearUnusedMemory();
@@ -748,69 +805,69 @@ class PlayState extends MusicBeatState
 	}
 
 	function startCharacterScripts(name:String)
-	{
-		// Lua
-		#if LUA_ALLOWED
-		var doPush:Bool = false;
-		var luaFile:String = 'characters/' + name + '.lua';
-		#if MODS_ALLOWED
-		var replacePath:String = Paths.modFolders(luaFile);
-		if(FileSystem.exists(replacePath))
 		{
-			luaFile = replacePath;
-			doPush = true;
-		}
-		else
-		{
-			luaFile = Paths.getSharedPath(luaFile);
-			if(FileSystem.exists(luaFile))
-				doPush = true;
-		}
-		#else
-		luaFile = Paths.getSharedPath(luaFile);
-		if(Assets.exists(luaFile)) doPush = true;
-		#end
-
-		if(doPush)
-		{
-			for (script in luaArray)
+			// Lua
+			#if LUA_ALLOWED
+			var doPush:Bool = false;
+			var luaFile:String = 'characters/' + name + '.lua';
+			#if MODS_ALLOWED
+			var replacePath:String = Paths.modFolders(luaFile);
+			if(FileSystem.exists(replacePath))
 			{
-				if(script.scriptName == luaFile)
-				{
-					doPush = false;
-					break;
-				}
-			}
-			if(doPush) new FunkinLua(luaFile);
-		}
-		#end
-
-		// HScript
-		#if HSCRIPT_ALLOWED
-		var doPush:Bool = false;
-		var scriptFile:String = 'characters/' + name + '.hx';
-		var replacePath:String = Paths.modFolders(scriptFile);
-		if(FileSystem.exists(replacePath))
-		{
-			scriptFile = replacePath;
-			doPush = true;
-		}
-		else
-		{
-			scriptFile = Paths.getSharedPath(scriptFile);
-			if(FileSystem.exists(scriptFile))
+				luaFile = replacePath;
 				doPush = true;
+			}
+			else
+			{
+				luaFile = Paths.getSharedPath(luaFile);
+				if(FileSystem.exists(luaFile))
+					doPush = true;
+			}
+			#else
+			luaFile = Paths.getSharedPath(luaFile);
+			if(Assets.exists(luaFile)) doPush = true;
+			#end
+	
+			if(doPush)
+			{
+				for (script in luaArray)
+				{
+					if(script.scriptName == luaFile)
+					{
+						doPush = false;
+						break;
+					}
+				}
+				if(doPush) new FunkinLua(luaFile);
+			}
+			#end
+	
+			// HScript
+			#if HSCRIPT_ALLOWED
+			var doPush:Bool = false;
+			var scriptFile:String = 'characters/' + name + '.hx';
+			var replacePath:String = Paths.modFolders(scriptFile);
+			if(FileSystem.exists(replacePath))
+			{
+				scriptFile = replacePath;
+				doPush = true;
+			}
+			else
+			{
+				scriptFile = Paths.getSharedPath(scriptFile);
+				if(FileSystem.exists(scriptFile))
+					doPush = true;
+			}
+			
+			if(doPush)
+			{
+				if(SScript.global.exists(scriptFile))
+					doPush = false;
+	
+				if(doPush) initHScript(scriptFile);
+			}
+			#end
 		}
-		
-		if(doPush)
-		{
-			if(SScript.global.exists(scriptFile))
-				doPush = false;
-
-			if(doPush) initHScript(scriptFile);
-		}
-		#end
-	}
 
 	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
 		#if LUA_ALLOWED
@@ -831,48 +888,39 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String)
+	#if VIDEOS_ALLOWED
+	public function startVideo(name:String):VideoManager
 	{
-		#if VIDEOS_ALLOWED
 		inCutscene = true;
 
 		var filepath:String = Paths.video(name);
 		#if sys
 		if(!FileSystem.exists(filepath))
 		#else
-		if(!OpenFlAssets.exists(filepath))
+		if(!Assets.exists(filepath))
 		#end
 		{
 			FlxG.log.warn('Couldnt find video file: ' + name);
 			startAndEnd();
-			return;
+			return null;
 		}
 
-		var video:VideoHandler = new VideoHandler();
-			#if (hxCodec >= "3.0.0")
-			// Recent versions
-			video.play(filepath);
-			video.onEndReached.add(function()
-			{
-				video.dispose();
+		var video:VideoManager = new VideoManager();
+			video.startVideo(filepath);
+			video.setFinishCallBack(function(){
 				startAndEnd();
-				return;
-			}, true);
-			#else
-			// Older versions
-			video.playVideo(filepath);
-			video.finishCallback = function()
-			{
-				startAndEnd();
-				return;
-			}
-			#end
+				return null;
+			});
+		return video;
+	}
 		#else
+        //because it returns a VideoManager which dosen't exists on unsupported platforms so it results in a error during compile.
+		public function startVideo(ignoreThisThing:String){
 		FlxG.log.warn('Platform not supported!');
 		startAndEnd();
-		return;
-		#end
+		return null;
 	}
+	#end
 
 	function startAndEnd()
 	{
@@ -946,6 +994,7 @@ class PlayState extends MusicBeatState
 
 	public function startCountdown()
 	{
+		mobileControls.visible = true;
 		if(startedCountdown) {
 			callOnScripts('onStartCountdown');
 			return false;
@@ -1092,7 +1141,6 @@ class PlayState extends MusicBeatState
 				daNote.visible = false;
 				daNote.ignoreNote = true;
 
-				daNote.kill();
 				unspawnNotes.remove(daNote);
 				daNote.destroy();
 			}
@@ -1112,6 +1160,8 @@ class PlayState extends MusicBeatState
 			--i;
 		}
 	}
+
+	public var scoreSeparator:String = " | ";
 
 	// fun fact: Dynamic Functions can be overriden by just doing this
 	// `updateScore = function(miss:Bool = false) { ... }
@@ -1232,7 +1282,7 @@ class PlayState extends MusicBeatState
 		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 
-		#if desktop
+		#if (desktop && !hl)
 		// Updating Discord Rich Presence (with Time Left)
 		if(autoUpdateRPC) DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength);
 		#end
@@ -1285,10 +1335,11 @@ class PlayState extends MusicBeatState
 
 		var file:String = Paths.json(songName + '/events');
 		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file)) {
+		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file))
 		#else
-		if (OpenFlAssets.exists(file)) {
+		if (Assets.exists(file))
 		#end
+		{
 			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
 			for (event in eventsData) //Event Notes
 				for (i in 0...event[1].length)
@@ -1463,6 +1514,121 @@ class PlayState extends MusicBeatState
 		callOnScripts('onEventPushed', [subEvent.event, subEvent.value1 != null ? subEvent.value1 : '', subEvent.value2 != null ? subEvent.value2 : '', subEvent.strumTime]);
 	}
 
+    #if !flash
+   public function addShaderToCamera(cam:String,effect:Dynamic){//STOLE FROM ANDROMEDA
+
+
+
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud':
+					camHUDShaders.push(effect);
+					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+					for(i in camHUDShaders){
+					  newCamEffects.push(new ShaderFilter(i.shader));
+					}
+					camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other':
+					camOtherShaders.push(effect);
+					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+					for(i in camOtherShaders){
+					  newCamEffects.push(new ShaderFilter(i.shader));
+					}
+					camOther.setFilters(newCamEffects);
+			case 'camgame' | 'game':
+					camGameShaders.push(effect);
+					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+					for(i in camGameShaders){
+					  newCamEffects.push(new ShaderFilter(i.shader));
+					}
+					camGame.setFilters(newCamEffects);
+			default:
+				#if LUA_ALLOWED
+				if(modchartSprites.exists(cam)) {
+					Reflect.setProperty(modchartSprites.get(cam),"shader",effect.shader);
+				} else if(modchartTexts.exists(cam)) {
+					Reflect.setProperty(modchartTexts.get(cam),"shader",effect.shader);
+				} else {
+					#end
+					var OBJ = Reflect.getProperty(PlayState.instance,cam);
+					Reflect.setProperty(OBJ,"shader", effect.shader);
+				#if LUA_ALLOWED
+				}
+				#end
+
+
+
+		}
+
+
+
+
+  }
+
+  public function removeShaderFromCamera(cam:String,effect:ShaderEffect){
+
+
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud': 
+    camHUDShaders.remove(effect);
+    var newCamEffects:Array<BitmapFilter>=[];
+    for(i in camHUDShaders){
+      newCamEffects.push(new ShaderFilter(i.shader));
+    }
+    camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other': 
+					camOtherShaders.remove(effect);
+					var newCamEffects:Array<BitmapFilter>=[];
+					for(i in camOtherShaders){
+					  newCamEffects.push(new ShaderFilter(i.shader));
+					}
+					camOther.setFilters(newCamEffects);
+			default:
+				#if LUA_ALLOWED
+				if(modchartSprites.exists(cam)) {
+					Reflect.setProperty(modchartSprites.get(cam),"shader",null);
+				} else if(modchartTexts.exists(cam)) {
+					Reflect.setProperty(modchartTexts.get(cam),"shader",null);
+				} else {
+					#end
+					var OBJ = Reflect.getProperty(PlayState.instance,cam);
+					Reflect.setProperty(OBJ,"shader", null);
+				#if LUA_ALLOWED
+				}
+				#end
+
+		}
+
+
+  }
+
+
+
+  public function clearShaderFromCamera(cam:String){
+
+
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud': 
+				camHUDShaders = [];
+				var newCamEffects:Array<BitmapFilter>=[];
+				camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other': 
+				camOtherShaders = [];
+				var newCamEffects:Array<BitmapFilter>=[];
+				camOther.setFilters(newCamEffects);
+			case 'camgame' | 'game': 
+				camGameShaders = [];
+				var newCamEffects:Array<BitmapFilter>=[];
+				camGame.setFilters(newCamEffects);
+			default: 
+				camGameShaders = [];
+				var newCamEffects:Array<BitmapFilter>=[];
+				camGame.setFilters(newCamEffects);
+		}
+
+
+}
+        #end
+
 	public var skipArrowStartTween:Bool = false; //for lua
 	private function generateStaticArrows(player:Int):Void
 	{
@@ -1561,7 +1727,17 @@ class PlayState extends MusicBeatState
 			for (timer in modchartTimers) timer.active = true;
 			#end
 
+			#if VIDEOS_ALLOWED
+			if(videoSprites.length > 0){
+			for(daVideoSprite in 0...videoSprites.length)
+				if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null) // prevents null function pointer when pausing after the video is finished
+				videoSprites[daVideoSprite].resume();
+			}
+			#end
+
 			paused = false;
+			mobileControls.visible = true;
+			#if !android virtualPad.visible = true; #end
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
@@ -1571,26 +1747,31 @@ class PlayState extends MusicBeatState
 
 	override public function onFocus():Void
 	{
+		callOnScripts('onFocus');
 		if (health > 0 && !paused) resetRPC(Conductor.songPosition > 0.0);
+
 		super.onFocus();
+		callOnScripts('onFocusPost');
 	}
 
-	override public function onFocusLost():Void
+        override public function onFocusLost():Void
 	{
-		#if desktop
+		callOnScripts('onFocusLost');
+		#if (desktop && !hl)
 		if (health > 0 && !paused && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 		#end
 
 		super.onFocusLost();
+		callOnScripts('onFocusLostPost');
 	}
 
 	// Updating Discord Rich Presence.
 	public var autoUpdateRPC:Bool = true; //performance setting for custom RPC things
 	function resetRPC(?showTime:Bool = false)
 	{
-		#if desktop
+		#if (desktop && !hl)
 		if(!autoUpdateRPC) return;
-
+		
 		if (showTime)
 			DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength - Conductor.songPosition - ClientPrefs.data.noteOffset);
 		else
@@ -1619,12 +1800,17 @@ class PlayState extends MusicBeatState
 	public var canReset:Bool = true;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
-	var freezeCamera:Bool = false;
 
 	override public function update(elapsed:Float)
 	{
-		if(!inCutscene && !paused && !freezeCamera) {
-			FlxG.camera.followLerp = 0.04 * cameraSpeed * playbackRate;
+		/*if (FlxG.keys.justPressed.NINE)
+		{
+			iconP1.swapOldIcon();
+		}*/
+		callOnScripts('onUpdate', [elapsed]);
+		FlxG.camera.followLerp = 0;
+		if(!inCutscene && !paused) {
+			FlxG.camera.followLerp = FlxMath.bound(elapsed * 2.4 * cameraSpeed * playbackRate / (FlxG.updateFramerate / 60), 0, 1);
 			if(!startingSong && !endingSong && boyfriend.animation.curAnim != null && boyfriend.animation.curAnim.name.startsWith('idle')) {
 				boyfriendIdleTime += elapsed;
 				if(boyfriendIdleTime >= 0.15) { // Kind of a mercy thing for making the achievement easier to get as it's apparently frustrating to some playerss
@@ -1634,8 +1820,6 @@ class PlayState extends MusicBeatState
 				boyfriendIdleTime = 0;
 			}
 		}
-		else FlxG.camera.followLerp = 0;
-		callOnScripts('onUpdate', [elapsed]);
 
 		super.update(elapsed);
 
@@ -1647,7 +1831,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if (controls.PAUSE && startedCountdown && canPause)
+		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end #if (!android) || virtualPad.buttonP.justPressed #end && startedCountdown && canPause)
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != FunkinLua.Function_Stop) {
@@ -1658,14 +1842,14 @@ class PlayState extends MusicBeatState
 		if(!endingSong && !inCutscene)
 		{
 			if (controls.justPressed('debug_1'))
-				openChartEditor();
+			openChartEditor();
 			else if (controls.justPressed('debug_2'))
 				openCharacterEditor();
 		}
 
 		if (healthBar.bounds.max != null && health > healthBar.bounds.max)
 			health = healthBar.bounds.max;
-
+		
 		updateIcons(elapsed);
 		
 		if (startedCountdown && !paused)
@@ -1787,6 +1971,15 @@ class PlayState extends MusicBeatState
 			checkEventNote();
 		}
 
+		#if VIDEOS_ALLOWED
+		if(videoSprites.length > 0){
+		for(daVideoSprite in videoSprites){
+			if(!daVideoSprite.bitmap.isDisplaying)
+				videoSprites.remove(daVideoSprite);
+		}
+	}
+		#end
+
 		#if debug
 		if(!endingSong && !startingSong) {
 			if (FlxG.keys.justPressed.ONE) {
@@ -1803,8 +1996,13 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraX', camFollow.x);
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
+		#if !flash
+                for (i in shaderUpdates){
+			i(elapsed);
+		}
+        #end
 		callOnScripts('onUpdatePost', [elapsed]);
-	}
+    }
 
 	public dynamic function updateIcons(elapsed:Float)
 	{
@@ -1825,7 +2023,7 @@ class PlayState extends MusicBeatState
 	var iconsAnimations:Bool = true;
 	function set_health(value:Float):Float
 	{
-		if(!iconsAnimations || healthBar == null || !healthBar.enabled || healthBar.valueFunction == null)
+			if(!iconsAnimations || healthBar == null || !healthBar.enabled || healthBar.valueFunction == null)
 		{
 			health = value;
 			return health;
@@ -1846,8 +2044,19 @@ class PlayState extends MusicBeatState
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
 		persistentDraw = true;
+		mobileControls.visible = false;
+		#if !android virtualPad.visible = false; #end
 		paused = true;
 
+		#if VIDEOS_ALLOWED
+		if(videoSprites.length > 0){
+			for(daVideoSprite in 0...videoSprites.length){
+				if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null) // prevents null function pointer when pausing after the video is finished
+				videoSprites[daVideoSprite].pause();
+			}
+		}
+		#end
+		
 		if(FlxG.sound.music != null) {
 			FlxG.sound.music.pause();
 			vocals.pause();
@@ -1863,12 +2072,12 @@ class PlayState extends MusicBeatState
 		}
 		openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-		#if desktop
-		if(autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
+		#if (desktop && !hl)
+		DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 		#end
 	}
 
-	function openChartEditor()
+	public function openChartEditor()
 	{
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
@@ -1876,7 +2085,7 @@ class PlayState extends MusicBeatState
 		cancelMusicFadeTween();
 		chartingMode = true;
 
-		#if desktop
+		#if (desktop && !hl)
 		DiscordClient.changePresence("Chart Editor", null, null, true);
 		DiscordClient.resetClientID();
 		#end
@@ -1890,7 +2099,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		paused = true;
 		cancelMusicFadeTween();
-		#if desktop DiscordClient.resetClientID(); #end
+		#if (desktop && !hl) DiscordClient.resetClientID(); #end
 		MusicBeatState.switchState(new CharacterEditorState(SONG.player2));
 	}
 
@@ -1919,12 +2128,25 @@ class PlayState extends MusicBeatState
 					timer.active = true;
 				}
 				#end
+				#if VIDEOS_ALLOWED
+				//i assume it's better removing the thing on gameover
+				if(videoSprites.length > 0){
+				for(daVideoSprite in 0...videoSprites.length){
+				#if (hxCodec < "3.0.0")
+				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
+				#end
+				videoSprites[daVideoSprite].destroy();
+				}
+				for(i in videoSprites)
+					videoSprites.remove(i);
+				}
+				#end
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollow.x, camFollow.y));
 
 				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-				#if desktop
-				// Game Over doesn't get his its variable because it's only used here
+				#if (desktop && !hl)
+				// Game Over doesn't get his own variable because it's only used here
 				if(autoUpdateRPC) DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 				#end
 				isDead = true;
@@ -2269,6 +2491,8 @@ class PlayState extends MusicBeatState
 	public var transitioning = false;
 	public function endSong()
 	{
+		mobileControls.visible = false;
+		#if !android virtualPad.visible = false; #end
 		//Should kill you if you tried to cheat
 		if(!startingSong) {
 			notes.forEach(function(daNote:Note) {
@@ -2300,7 +2524,7 @@ class PlayState extends MusicBeatState
 
 		#if ACHIEVEMENTS_ALLOWED
 		var weekNoMiss:String = WeekData.getWeekFileName() + '_nomiss';
-		checkForAchievement([weekNoMiss, 'ur_bad', 'ur_good', 'hype', 'two_keys', 'toastie', 'debugger']);
+		checkForAchievement([weekNoMiss, 'ur_bad', 'ur_good', 'hype', 'two_keys', 'toastier', 'debugger']);
 		#end
 
 		var ret:Dynamic = callOnScripts('onEndSong', null, true);
@@ -2330,7 +2554,7 @@ class PlayState extends MusicBeatState
 				{
 					Mods.loadTopMod();
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
-					#if desktop DiscordClient.resetClientID(); #end
+					#if (desktop && !hl) DiscordClient.resetClientID(); #end
 
 					cancelMusicFadeTween();
 					if(FlxTransitionableState.skipNextTransIn) {
@@ -2370,7 +2594,7 @@ class PlayState extends MusicBeatState
 			{
 				trace('WENT BACK TO FREEPLAY??');
 				Mods.loadTopMod();
-				#if desktop DiscordClient.resetClientID(); #end
+				#if (desktop && !hl) DiscordClient.resetClientID(); #end
 
 				cancelMusicFadeTween();
 				if(FlxTransitionableState.skipNextTransIn) {
@@ -2930,32 +3154,32 @@ class PlayState extends MusicBeatState
 			if(!note.isSustainNote) invalidateNote(note);
 			return;
 		}
-
-		if(!note.noAnimation) {
-			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))];
-
-			var char:Character = boyfriend;
-			var animCheck:String = 'hey';
-			if(note.gfNote)
-			{
-				char = gf;
-				animCheck = 'cheer';
-			}
-			
-			if(char != null)
-			{
-				char.playAnim(animToPlay + note.animSuffix, true);
-				char.holdTimer = 0;
+	
+			if(!note.noAnimation) {
+				var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))];
+	
+				var char:Character = boyfriend;
+				var animCheck:String = 'hey';
+				if(note.gfNote)
+				{
+					char = gf;
+					animCheck = 'cheer';
+				}
 				
-				if(note.noteType == 'Hey!') {
-					if(char.animOffsets.exists(animCheck)) {
-						char.playAnim(animCheck, true);
-						char.specialAnim = true;
-						char.heyTimer = 0.6;
+				if(char != null)
+				{
+					char.playAnim(animToPlay + note.animSuffix, true);
+					char.holdTimer = 0;
+					
+					if(note.noteType == 'Hey!') {
+						if(char.animOffsets.exists(animCheck)) {
+							char.playAnim(animCheck, true);
+							char.specialAnim = true;
+							char.heyTimer = 0.6;
+						}
 					}
 				}
 			}
-		}
 
 		if(!cpuControlled)
 		{
@@ -2977,7 +3201,6 @@ class PlayState extends MusicBeatState
 	}
 
 	public function invalidateNote(note:Note):Void {
-		note.kill();
 		notes.remove(note, true);
 		note.destroy();
 	}
@@ -3016,6 +3239,21 @@ class PlayState extends MusicBeatState
 
 		while (hscriptArray.length > 0)
 			hscriptArray.pop();
+		#end
+
+		#if VIDEOS_ALLOWED
+		if(videoSprites.length > 0){
+			for(daVideoSprite in 0...videoSprites.length){
+			if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null){
+			#if (hxCodec < "3.0.0")
+			videoSprites[daVideoSprite].bitmap.onEndReached();
+			#end
+			videoSprites[daVideoSprite].destroy();
+			}
+		}
+			for(i in videoSprites)
+				videoSprites.remove(i);
+			}
 		#end
 
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
@@ -3140,7 +3378,7 @@ class PlayState extends MusicBeatState
 		if(FileSystem.exists(luaToLoad))
 		#elseif sys
 		var luaToLoad:String = Paths.getSharedPath(luaFile);
-		if(OpenFlAssets.exists(luaToLoad))
+		if(Assets.exists(luaToLoad))
 		#end
 		{
 			for (script in luaArray)
@@ -3247,7 +3485,7 @@ class PlayState extends MusicBeatState
 				arr.push(script);
 				continue;
 			}
-
+			
 			if(exclusions.contains(script.scriptName))
 				continue;
 
@@ -3433,7 +3671,7 @@ class PlayState extends MusicBeatState
 					case 'two_keys':
 						unlock = (!usedPractice && keysPressed.length <= 2);
 
-					case 'toastie':
+					case 'toastier':
 						unlock = (!ClientPrefs.data.cacheOnGPU && !ClientPrefs.data.shaders && ClientPrefs.data.lowQuality && !ClientPrefs.data.antialiasing);
 
 					case 'debugger':
@@ -3486,29 +3724,29 @@ class PlayState extends MusicBeatState
 
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'shaders/'))
 		{
-			var frag:String = folder + name + '.frag';
-			var vert:String = folder + name + '.vert';
-			var found:Bool = false;
-			if(FileSystem.exists(frag))
-			{
-				frag = File.getContent(frag);
-				found = true;
-			}
-			else frag = null;
+				var frag:String = folder + name + '.frag';
+				var vert:String = folder + name + '.vert';
+				var found:Bool = false;
+				if(FileSystem.exists(frag))
+				{
+					frag = File.getContent(frag);
+					found = true;
+				}
+				else frag = null;
 
-			if(FileSystem.exists(vert))
-			{
-				vert = File.getContent(vert);
-				found = true;
-			}
-			else vert = null;
+				if(FileSystem.exists(vert))
+				{
+					vert = File.getContent(vert);
+					found = true;
+				}
+				else vert = null;
 
-			if(found)
-			{
-				runtimeShaders.set(name, [frag, vert]);
-				//trace('Found shader $name!');
-				return true;
-			}
+				if(found)
+				{
+					runtimeShaders.set(name, [frag, vert]);
+					//trace('Found shader $name!');
+					return true;
+				}
 		}
 		addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
 		#else
@@ -3517,4 +3755,41 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
+	public function addLuaVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
+		{
+			luaVirtualPad = new FlxVirtualPad(DPad, Action);
+			luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
+			add(luaVirtualPad);
+		}
+	
+	public function removeLuaVirtualPad()
+		{
+			if (luaVirtualPad != null)
+				remove(luaVirtualPad);
+		}
+	public function addLuaPadCamera()
+		{
+			if (luaVirtualPad != null)
+				luaVirtualPad.cameras = [luaVpadCam];
+		}
+	public function luaVpadJustPressed(button:String):Bool{
+		if (luaVirtualPad == null)
+			return false;
+
+		return luaVirtualPad.checkButtonPressByString(button, "justPressed");
+	}
+
+	public function luaVpadPressed(button:String):Bool{
+		if (luaVirtualPad == null)
+			return false;
+
+		return luaVirtualPad.checkButtonPressByString(button, "pressed");
+	}
+
+	public function luaVpadJustReleased(button:String):Bool{
+		if (luaVirtualPad == null)
+			return false;
+	
+		return luaVirtualPad.checkButtonPressByString(button, "JustReleased");
+	}
 }

@@ -91,6 +91,8 @@ class MusicBeatState extends FlxUIState
 		}
 	}
 
+	var _psychCameraInitialized:Bool = false;
+
 	override function create() {
 		// FlxDPadModes (for Mobile Controls)
 		dpadMode = new Map<String, FlxDPadMode>();
@@ -112,9 +114,7 @@ class MusicBeatState extends FlxUIState
 		actionMode.set('A_B_C_X_Y_Z', A_B_C_X_Y_Z);
 		actionMode.set('A_B_C_D_V_X_Y_Z', A_B_C_D_V_X_Y_Z);
 		instance = this;
-	var _psychCameraInitialized:Bool = false;
 
-	override function create() {
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
 
