@@ -1753,7 +1753,6 @@ class FunkinLua {
 				return;
 			}
 			PlayState.instance.addTextToDebug(text, color);
-			trace(text);
 		}
 		#end
 	}
