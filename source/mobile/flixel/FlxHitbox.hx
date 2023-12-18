@@ -13,12 +13,23 @@ import mobile.flixel.FlxButton;
  */
 class FlxHitbox extends FlxSpriteGroup
 {
+	final offsetFir:Int = (ClientPrefs.data.hitbox2 ? Std.int(FlxG.height / 4) * 3 : 0);
+	final offsetSec:Int = (ClientPrefs.data.hitbox2 ? 0 : Std.int(FlxG.height / 4));
+
 	public var buttonLeft:FlxButton = new FlxButton(0, 0);
 	public var buttonDown:FlxButton = new FlxButton(0, 0);
 	public var buttonUp:FlxButton = new FlxButton(0, 0);
 	public var buttonRight:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra1:FlxButton = new FlxButton(0, 0);
+
+	public var buttonsMap:Map<FlxMobileControlsID, FlxButton>;
+	public var buttons:Array<FlxMobileControlsID> = [
+		FlxMobileControlsID.hitboxUP,
+		FlxMobileControlsID.hitboxDOWN,
+		FlxMobileControlsID.hitboxLEFT,
+		FlxMobileControlsID.hitboxRIGHT
+	];
 
 	/**
 	 * Create the zone.
@@ -27,42 +38,47 @@ class FlxHitbox extends FlxSpriteGroup
 	public function new(mode:Modes)
 	{
 		super();
-		final offsetFir:Int = (ClientPrefs.data.hitbox2 ? Std.int(FlxG.height / 4) * 3 : 0);
-		final offsetSec:Int = (ClientPrefs.data.hitbox2 ? 0 : Std.int(FlxG.height / 4));
-		var buttonLeftColor:Array<FlxColor>;
-		var buttonDownColor:Array<FlxColor>;
-		var buttonUpColor:Array<FlxColor>;
-		var buttonRightColor:Array<FlxColor>;
-		if (ClientPrefs.data.dynamicColors){
-			buttonLeftColor = ClientPrefs.data.arrowRGB[0];
-			buttonDownColor = ClientPrefs.data.arrowRGB[1];
-			buttonUpColor = ClientPrefs.data.arrowRGB[2];
-			buttonRightColor = ClientPrefs.data.arrowRGB[3];
-		} else{
-			buttonLeftColor = ClientPrefs.defaultData.arrowRGB[0];
-			buttonDownColor = ClientPrefs.defaultData.arrowRGB[1];
-			buttonUpColor = ClientPrefs.defaultData.arrowRGB[2];
-			buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
-		}
+		buttonsMap = new Map<FlxMobileControlsID, FlxButton>();
+		buttonsMap.set(FlxMobileControlsID.hitboxUP, buttonUp);
+		buttonsMap.set(FlxMobileControlsID.hitboxRIGHT, buttonRight);
+		buttonsMap.set(FlxMobileControlsID.hitboxLEFT, buttonLeft);
+		buttonsMap.set(FlxMobileControlsID.hitboxDOWN, buttonDown);
+
+		buttonsMap.set(FlxMobileControlsID.noteUP, buttonUp);
+		buttonsMap.set(FlxMobileControlsID.noteRIGHT, buttonRight);
+		buttonsMap.set(FlxMobileControlsID.noteLEFT, buttonLeft);
+		buttonsMap.set(FlxMobileControlsID.noteDOWN, buttonDown);		
+
+		var buttonsColors:Array<FlxColor> = [];
+		var data:Dynamic;
+		if(ClientPrefs.data.dynamicColors)
+			data = ClientPrefs.data;
+		else
+			data = ClientPrefs.defaultData;
+
+		buttonsColors.push(data.arrowRGB[0][0]);
+		buttonsColors.push(data.arrowRGB[1][0]);
+		buttonsColors.push(data.arrowRGB[2][0]);
+		buttonsColors.push(data.arrowRGB[3][0]);
 
 		switch (mode)
 		{
 			case DEFAULT:
-				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, buttonLeftColor[0]));
-				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, buttonDownColor[0]));
-				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, buttonUpColor[0]));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, buttonRightColor[0]));
+				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[0]));
+				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[1]));
+				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[2]));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[3]));
 			case SINGLE:
-				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonLeftColor[0]));
-				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonDownColor[0]));
-				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonUpColor[0]));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonRightColor[0]));
+				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[0]));
+				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[1]));
+				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[2]));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[3]));
 				add(buttonExtra = createHint(0, offsetFir, FlxG.width, Std.int(FlxG.height / 4), 0xFF0066FF));
 			case DOUBLE:
-				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonLeftColor[0]));
-				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonDownColor[0]));
-				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonUpColor[0]));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonRightColor[0]));
+				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[0]));
+				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[1]));
+				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[2]));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[3]));
 				add(buttonExtra = createHint(Std.int(FlxG.width / 2), offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0xFF0066FF));
 				add(buttonExtra1 = createHint(0, offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0x00FFF7));
 			
@@ -162,93 +178,120 @@ class FlxHitbox extends FlxSpriteGroup
 	}
 
 	/**
-	* Checks if the hitbox is pressed, if yes returns true.
+	* Check to see if at least one button from an array of buttons is pressed.
+	*
+	* @param	buttonsArray 	An array of buttos names
+	* @return	Whether at least one of the buttons passed in is pressed.
 	*/
-	public function mobileControlsPressed(buttonID:FlxMobileControlsID):Bool
-	{
-		switch (buttonID)
-		{
-			case FlxMobileControlsID.hitboxLEFT:
-				return buttonLeft.pressed;
-			case FlxMobileControlsID.hitboxUP:
-				return buttonUp.pressed;
-			case FlxMobileControlsID.hitboxRIGHT:
-				return buttonRight.pressed;
-			case FlxMobileControlsID.hitboxDOWN:
-				return buttonDown.pressed;
-			case FlxMobileControlsID.noteLEFT:
-				return buttonLeft.pressed;
-			case FlxMobileControlsID.noteUP:
-				return buttonUp.pressed;
-			case FlxMobileControlsID.noteRIGHT:
-				return buttonRight.pressed;
-			case FlxMobileControlsID.noteDOWN:
-				return buttonDown.pressed;
-			case FlxMobileControlsID.NONE:
-				return false;
-			default:
-				return false;
-		}
+	public inline function anyPressed(buttonsArray:Array<FlxMobileControlsID>):Bool {
+		return checkButtonArrayState(buttonsArray, PRESSED);
 	}
-
-		/**
-		* Checks if the hitbox is justPressed, if yes returns true.
-		*/
-	public function mobileControlsJustPressed(buttonID:FlxMobileControlsID):Bool
-	{
-		switch (buttonID)
-		{
-		case FlxMobileControlsID.hitboxLEFT:
-			return buttonLeft.justPressed;
-		case FlxMobileControlsID.hitboxUP:
-			return buttonUp.justPressed;
-		case FlxMobileControlsID.hitboxRIGHT:
-			return buttonRight.justPressed;
-		case FlxMobileControlsID.hitboxDOWN:
-			return buttonDown.justPressed;
-		case FlxMobileControlsID.noteLEFT:
-			return buttonLeft.justPressed;
-		case FlxMobileControlsID.noteUP:
-			return buttonUp.justPressed;
-		case FlxMobileControlsID.noteRIGHT:
-			return buttonRight.justPressed;
-		case FlxMobileControlsID.noteDOWN:
-			return buttonDown.justPressed;
-		case FlxMobileControlsID.NONE:
-			return false;
-		default:
-			return false;
-		}
+	
+	/**
+	* Check to see if at least one button from an array of buttons was just pressed.
+	*
+	* @param	buttonsArray 	An array of buttons names
+	* @return	Whether at least one of the buttons passed was just pressed.
+	*/
+	public inline function anyJustPressed(buttonsArray:Array<FlxMobileControlsID>):Bool {
+		return checkButtonArrayState(buttonsArray, JUST_PRESSED);
+	}
+	
+	/**
+	* Check to see if at least one button from an array of buttons was just released.
+	*
+	* @param	buttonsArray 	An array of button names
+	* @return	Whether at least one of the buttons passed was just released.
+	*/
+	public inline function anyJustReleased(buttonsArray:Array<FlxMobileControlsID>):Bool {
+		return checkButtonArrayState(buttonsArray, JUST_RELEASED);
 	}
 
 	/**
-	* Checks if the hitbox is justReleased, if yes returns true.
-	*/
-	public function mobileControlsJustReleased(buttonID:FlxMobileControlsID):Bool
-	{
-		switch (buttonID)
+	 * Check the status of a single button
+	 *
+	 * @param	Button		button to be checked.
+	 * @param	state		The button state to check for.
+	 * @return	Whether the provided key has the specified status.
+	 */
+	 public function checkStatus(button:FlxMobileControlsID, state:ButtonsStates):Bool {
+		
+		if (button == FlxMobileControlsID.ANY)
 		{
-			case FlxMobileControlsID.hitboxLEFT:
-				return buttonLeft.justReleased;
-			case FlxMobileControlsID.hitboxUP:
-				return buttonUp.justReleased;
-			case FlxMobileControlsID.hitboxRIGHT:
-				return buttonRight.justReleased;
-			case FlxMobileControlsID.hitboxDOWN:
-		 		return buttonDown.justReleased;
-			case FlxMobileControlsID.noteLEFT:
-				return buttonLeft.justReleased;
-			case FlxMobileControlsID.noteUP:
-				return buttonUp.justReleased;
-			case FlxMobileControlsID.noteRIGHT:
-				return buttonRight.justReleased;
-			case FlxMobileControlsID.noteDOWN:
-				return buttonDown.justReleased;
-			case FlxMobileControlsID.NONE:
-				return false;
-			default:
-				return false;
+			for(each in buttons){
+				return switch (state) {
+					case PRESSED: buttonsMap.get(each).pressed;
+					case JUST_PRESSED: buttonsMap.get(each).justPressed;
+					case JUST_RELEASED: buttonsMap.get(each).justReleased;
+				}
+			}
 		}
+		
+		// it might be a weird way for doing this but that's the only way i got in mind
+		if (button == FlxMobileControlsID.NONE)
+			{
+				var used:Int = 0;
+				for(each in buttons){
+					switch (state) {
+						case PRESSED:
+							if(buttonsMap.get(each).pressed)
+								++used;
+						case JUST_PRESSED:
+							if(buttonsMap.get(each).justPressed)
+								++used;
+						case JUST_RELEASED:
+							if(buttonsMap.get(each).justReleased)
+								++used;
+					}
+				}
+				if(used == 0)
+					return true;
+				else
+					return false;
+			}
+		
+		if (buttonsMap.exists(button))
+		{
+			return CheckStatus(button, state);
+		}
+		
+		#if debug
+		throw 'Invalid button code: $button.';
+		#end
+		return false;
+	}
+
+	/**
+	* Helper function to check the status of an array of buttons
+	*
+	* @param	Buttons	An array of keys as Strings
+	* @param	state		The key state to check for
+	* @return	Whether at least one of the keys has the specified status
+	*/
+	function checkButtonArrayState(Buttons:Array<FlxMobileControlsID>, state:ButtonsStates):Bool {
+		if (Buttons == null)
+			{
+				return false;
+			}
+	
+			for (button in Buttons)
+			{
+				if (checkStatus(button, state))
+					return true;
+			}
+	
+			return false;
+		}
+
+	public function CheckStatus(button:FlxMobileControlsID, state:ButtonsStates){
+		return getButton(button).hasState(state);
+	}
+
+	function getButton(button:FlxMobileControlsID) {
+		if(buttonsMap.exists(button))
+			return buttonsMap.get(button);
+		else
+			return null;
 	}
 }
 enum Modes

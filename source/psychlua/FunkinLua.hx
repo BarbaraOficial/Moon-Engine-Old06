@@ -215,44 +215,6 @@ class FunkinLua {
 			return 'null';
 		}
         set('mobileControlsMode', getMobileControlsAsString());
-		//LUA VPAD
-		set("addVirtualPad", function(directionButton:String, actionButton:String){
-			if(game.luaVirtualPad == null)
-				game.addLuaVirtualPad(MusicBeatState.dpadMode.get(directionButton), MusicBeatState.actionMode.get(actionButton));
-			else
-				luaTrace('addVirtualPad: VPAD already exists.');
-		});
-
-		set("addVirtualPadCamera", function(){
-			if(game.luaVirtualPad != null)
-				game.addLuaPadCamera();
-			else
-				luaTrace("addVirtualPadCamera: VPAD doesn't exists.");
-		});
-		set("virtualPadJustPressed", function(button:String){
-			if(game.luaVirtualPad != null)
-				game.luaVpadJustPressed(button)
-			else
-				luaTrace("virtualPadJustPressed: VPAD doesn't exists.");
-		});
-		set("virtualPadPressed", function(button:String){
-			if(game.luaVirtualPad != null)
-				game.luaVpadPressed(button)
-			else
-				luaTrace("virtualPadPressed: VPAD doesn't exists.");
-		});
-		set("virtualPadJustReleased", function(button:String){
-			if(game.luaVirtualPad != null)
-				game.luaVpadJustReleased(button)
-			else
-				luaTrace("virtualPadJustReleased: VPAD doesn't exists.");
-		});
-		set("removeVirtualPad", function(){
-			if(game.luaVirtualPad != null)
-				game.removeLuaVirtualPad();
-			else
-				luaTrace("rmoveVirtualPad: VPAD doesn't exists.");
-		});
 
 		for (name => func in customFunctions)
 		{

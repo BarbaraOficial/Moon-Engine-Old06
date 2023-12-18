@@ -211,7 +211,6 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
-	public var luaVpadCam:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
 	public var songScore:Int = 0;
@@ -310,15 +309,11 @@ class PlayState extends MusicBeatState
 		camGame = initPsychCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
-		luaVpadCam = new FlxCamera();
-		luaVpadCam.bgColor.alpha = 0;
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
-
 		//FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
-		FlxG.cameras.add(luaVpadCam, false);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 				CustomFadeTransition.nextCamera = camOther;
@@ -3753,41 +3748,4 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
-	public function addLuaVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
-		{
-			luaVirtualPad = new FlxVirtualPad(DPad, Action);
-			luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
-			add(luaVirtualPad);
-		}
-	
-	public function removeLuaVirtualPad()
-		{
-			if (luaVirtualPad != null)
-				remove(luaVirtualPad);
-		}
-	public function addLuaPadCamera()
-		{
-			if (luaVirtualPad != null)
-				luaVirtualPad.cameras = [luaVpadCam];
-		}
-	public function luaVpadJustPressed(button:String):Bool{
-		if (luaVirtualPad == null)
-			return false;
-
-		return luaVirtualPad.checkButtonPressByString(button, "justPressed");
-	}
-
-	public function luaVpadPressed(button:String):Bool{
-		if (luaVirtualPad == null)
-			return false;
-
-		return luaVirtualPad.checkButtonPressByString(button, "pressed");
-	}
-
-	public function luaVpadJustReleased(button:String):Bool{
-		if (luaVirtualPad == null)
-			return false;
-	
-		return luaVirtualPad.checkButtonPressByString(button, "JustReleased");
-	}
 }

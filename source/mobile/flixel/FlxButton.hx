@@ -8,6 +8,8 @@ import flixel.input.FlxPointer;
 import flixel.input.IFlxInput;
 import flixel.input.touch.FlxTouch;
 import flixel.math.FlxPoint;
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
+
 
 /**
  * A simple button class that calls a function when clicked by the touch.
@@ -301,6 +303,14 @@ class FlxTypedButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 		}
 	}
 
+	public function hasState(state:ButtonsStates):Bool {
+		return switch (state) {
+			case JUST_RELEASED: justReleased;
+			case PRESSED: pressed;
+			case JUST_PRESSED: justPressed;
+		}
+	}
+
 	#if FLX_DEBUG
 	/**
 	 * Helper function to draw the debug graphic for the label as well.
@@ -579,4 +589,9 @@ private class FlxButtonEvent implements IFlxDestroyable
 			sound.play(true);
 		#end
 	}
+}
+enum ButtonsStates{
+	PRESSED;
+	JUST_PRESSED;
+	JUST_RELEASED;
 }
