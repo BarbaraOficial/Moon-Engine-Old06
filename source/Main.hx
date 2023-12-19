@@ -59,7 +59,7 @@ class Main extends Sprite
 
 		// https://github.com/MAJigsaw77/UTF/blob/972e4c27ec62e2279cddb53083a2fee98e76ce53/source/Main.hx#L45-L49 (but modified)
 	   	#if android
-		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
+		Sys.setCwd(Path.addTrailingSlash(Context.getObbDir()));
 		#elseif ios
 		Sys.setCwd(LimeSystem.applicationStorageDirectory);
 		#end
@@ -80,7 +80,7 @@ class Main extends Sprite
 		untyped __global__.__hxcpp_set_critical_error_handler(SUtil.onError);
 		#elseif hl
 		@:privateAccess
-		Api.setErrorHandler(SUtil.onCriticalError);
+		Api.setErrorHandler(SUtil.onError);
 		#end
 
 		if (stage != null)
