@@ -227,7 +227,7 @@ class FlxHitbox extends FlxSpriteGroup
 			}
 		}
 		
-		// it might be a weird way for doing this but that's the only way i got in mind
+		/* it might be a weird way for doing this but that's the only way i got in mind
 		if (button == FlxMobileControlsID.NONE)
 			{
 				var used:Int = 0;
@@ -248,8 +248,11 @@ class FlxHitbox extends FlxSpriteGroup
 					return true;
 				else
 					return false;
-			}
+			}*/
+		if (button == FlxMobileControlsID.NONE)
+			return false;
 		
+
 		if (buttonsMap.exists(button))
 		{
 			return CheckStatus(button, state);
@@ -268,7 +271,7 @@ class FlxHitbox extends FlxSpriteGroup
 	* @param	state		The key state to check for
 	* @return	Whether at least one of the keys has the specified status
 	*/
-	function checkButtonArrayState(Buttons:Array<FlxMobileControlsID>, state:ButtonsStates):Bool {
+	public function checkButtonArrayState(Buttons:Array<FlxMobileControlsID>, state:ButtonsStates):Bool {
 		if (Buttons == null)
 			{
 				return false;
@@ -287,11 +290,8 @@ class FlxHitbox extends FlxSpriteGroup
 		return getButton(button).hasState(state);
 	}
 
-	function getButton(button:FlxMobileControlsID) {
-		if(buttonsMap.exists(button))
-			return buttonsMap.get(button);
-		else
-			return null;
+	public function getButton(button:FlxMobileControlsID) {
+		return buttonsMap.get(button);
 	}
 }
 enum Modes

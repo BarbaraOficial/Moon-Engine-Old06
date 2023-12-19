@@ -347,7 +347,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 			}
 		}
 		
-		// it might be a weird way for doing this but that's the only way i got in mind
+		/* it might be a weird way for doing this but that's the only way i got in mind
 		if (button == FlxMobileControlsID.NONE)
 		{
 			var used:Int = 0;
@@ -368,7 +368,9 @@ class FlxVirtualPad extends FlxSpriteGroup
 				return true;
 			else
 				return false;
-		}
+		}*/
+		if(button == FlxMobileControlsID.NONE)
+			return false;
 		
 		if (buttonsMap.exists(button))
 		{
@@ -389,7 +391,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 	* @return	Whether at least one of the keys has the specified status
 	*/
 	public function checkButtonArrayState(Buttons:Array<FlxMobileControlsID>, state:ButtonsStates):Bool {
-		if (Buttons == null)
+		if (Buttons == null || Buttons == [])
 			{
 				return false;
 			}
@@ -408,10 +410,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 	}
 
 	public function getButton(button:FlxMobileControlsID) {
-		if(buttonsMap.exists(button))
-			return buttonsMap.get(button);
-		else
-			return null;
+		return buttonsMap.get(button);
 	}
 }
 
