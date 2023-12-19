@@ -112,7 +112,7 @@ class ResetScoreSubState extends MusicBeatSubstate
                         controls.isInSubstate = false;
 			close();
 		}
-		if (MusicBeatSubstate.virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
+		if (virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
 		addVirtualPad(LEFT_RIGHT, A_B);
 		addVirtualPadCamera(false);
 		}

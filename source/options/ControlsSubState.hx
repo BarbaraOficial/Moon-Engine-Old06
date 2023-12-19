@@ -336,7 +336,7 @@ class ControlsSubState extends MusicBeatSubstate
 		{
 			var altNum:Int = curAlt ? 1 : 0;
 			var curOption:Array<Dynamic> = options[curOptions[curSelected]];
-			if(MusicBeatSubstate.virtualPad.buttonB.pressed || controls.BACK || FlxG.gamepads.anyPressed(B))
+			if(virtualPad.buttonB.pressed || controls.BACK || FlxG.gamepads.anyPressed(B))
 			{
 				holdingEsc += elapsed;
 				if(holdingEsc > 0.5)
@@ -345,7 +345,7 @@ class ControlsSubState extends MusicBeatSubstate
 					closeBinding();
 				}
 			}
-			else if (MusicBeatSubstate.virtualPad.buttonC.pressed || FlxG.keys.pressed.BACKSPACE || FlxG.gamepads.anyPressed(BACK))
+			else if (virtualPad.buttonC.pressed || FlxG.keys.pressed.BACKSPACE || FlxG.gamepads.anyPressed(BACK))
 			{
 				holdingEsc += elapsed;
 				if(holdingEsc > 0.5)

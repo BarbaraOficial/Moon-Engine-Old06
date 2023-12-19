@@ -161,16 +161,16 @@ class EditorPlaySubState extends MusicBeatSubstate
 		#end
 
 		addMobileControls(false);
-		MusicBeatSubstate.mobileControls.visible = true;
+		mobileControls.visible = true;
 
 		RecalculateRating();
 	}
 
 	override function update(elapsed:Float)
 	{
-		if(#if !android MusicBeatSubstate.virtualPad.buttonP.justPressed || #end FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end)
+		if(#if !android virtualPad.buttonP.justPressed || #end FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end)
 		{
-			MusicBeatSubstate.mobileControls.visible = false;
+			mobileControls.visible = false;
 			endSong();
 			super.update(elapsed);
 			return;

@@ -577,44 +577,31 @@ class PlayState extends MusicBeatState
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
 
-		var buttonLeftColor:Array<FlxColor>;
-		var buttonDownColor:Array<FlxColor>;
-		var buttonUpColor:Array<FlxColor>;
-		var buttonRightColor:Array<FlxColor>;
-		if (ClientPrefs.data.dynamicColors){
-			buttonLeftColor = ClientPrefs.data.arrowRGB[0];
-			buttonDownColor = ClientPrefs.data.arrowRGB[1];
-			buttonUpColor = ClientPrefs.data.arrowRGB[2];
-			buttonRightColor = ClientPrefs.data.arrowRGB[3];
-		} else{
-			buttonLeftColor = ClientPrefs.defaultData.arrowRGB[0];
-			buttonDownColor = ClientPrefs.defaultData.arrowRGB[1];
-			buttonUpColor = ClientPrefs.defaultData.arrowRGB[2];
-			buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
-		}
-		addMobileControls(false);
-		if (ClientPrefs.data.dynamicColors){
-		switch(MobileControls.getMode())
-		{
-			//VPAD
-			case 0 | 1 | 2:
-			mobileControls.virtualPad.buttonLeft.color =  buttonLeftColor[0];
-			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
-			mobileControls.virtualPad.buttonUp.color =  buttonUpColor[0];
-			mobileControls.virtualPad.buttonRight.color =  buttonRightColor[0];
-			//DUO VPAD
-			case 3:
-			mobileControls.virtualPad.buttonLeft.color =  buttonLeftColor[0];
-			mobileControls.virtualPad.buttonDown.color =  buttonDownColor[0];
-			mobileControls.virtualPad.buttonUp.color =  buttonUpColor[0];
-			mobileControls.virtualPad.buttonRight.color =  buttonRightColor[0];
-			mobileControls.virtualPad.buttonLeft2.color =  buttonLeftColor[0];
-			mobileControls.virtualPad.buttonDown2.color =  buttonDownColor[0];
-			mobileControls.virtualPad.buttonUp2.color =  buttonUpColor[0];
-			mobileControls.virtualPad.buttonRight2.color =  buttonRightColor[0];
-		}
-	}
+		var buttonsColors:Array<FlxColor> = [];
+		var data:Dynamic;
+		if(ClientPrefs.data.dynamicColors)
+			data = ClientPrefs.data;
+		else
+			data = ClientPrefs.defaultData;
 
+		buttonsColors.push(data.arrowRGB[0][0]);
+		buttonsColors.push(data.arrowRGB[1][0]);
+		buttonsColors.push(data.arrowRGB[2][0]);
+		buttonsColors.push(data.arrowRGB[3][0]);
+		addMobileControls(false);
+
+		if(MobileControls.getMode() == 0 || MobileControls.getMode() == 1 || MobileControls.getMode() == 2 || MobileControls.getMode() == 3) {
+			mobileControls.virtualPad.buttonLeft.color =  buttonsColors[0];
+			mobileControls.virtualPad.buttonDown.color =  buttonsColors[1];
+			mobileControls.virtualPad.buttonUp.color =  buttonsColors[2];
+			mobileControls.virtualPad.buttonRight.color =  buttonsColors[3];
+		}
+		if(MobileControls.getMode() == 3) {
+			mobileControls.virtualPad.buttonLeft2.color = buttonsColors[0];
+			mobileControls.virtualPad.buttonDown2.color = buttonsColors[1];
+			mobileControls.virtualPad.buttonUp2.color = buttonsColors[2];
+			mobileControls.virtualPad.buttonRight2.color = buttonsColors[3];
+		}
 		startingSong = true;
 
 		#if LUA_ALLOWED

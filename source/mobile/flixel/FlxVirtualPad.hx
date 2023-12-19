@@ -388,8 +388,8 @@ class FlxVirtualPad extends FlxSpriteGroup
 	* @param	state		The key state to check for
 	* @return	Whether at least one of the keys has the specified status
 	*/
-	function checkButtonArrayState(Buttons:Array<FlxMobileControlsID>, state:ButtonsStates):Bool {
-		if (Buttons == null || Buttons == [])
+	public function checkButtonArrayState(Buttons:Array<FlxMobileControlsID>, state:ButtonsStates):Bool {
+		if (Buttons == null)
 			{
 				return false;
 			}
@@ -407,7 +407,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 		return getButton(button).hasState(state);
 	}
 
-	function getButton(button:FlxMobileControlsID) {
+	public function getButton(button:FlxMobileControlsID) {
 		if(buttonsMap.exists(button))
 			return buttonsMap.get(button);
 		else

@@ -4,8 +4,11 @@ import flixel.FlxSubState;
 
 class MusicBeatSubstate extends FlxSubState
 {
+	public static var instance:MusicBeatSubstate;
+
 	public function new()
 	{
+		instance = this;
 		controls.isInSubstate = true;
 		super();
 	}
@@ -25,8 +28,8 @@ class MusicBeatSubstate extends FlxSubState
 	inline function get_controls():Controls
 		return Controls.instance;
 
-	public static var virtualPad:FlxVirtualPad;
-	public static var mobileControls:MobileControls;
+	public var virtualPad:FlxVirtualPad;
+	public var mobileControls:MobileControls;
 
 	public function addMobileControls(DefaultDrawTarget:Bool = true):Void
 		{

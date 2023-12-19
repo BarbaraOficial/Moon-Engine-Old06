@@ -10,7 +10,7 @@ import openfl.utils.Assets;
 class MobileControlsSubState extends MusicBeatSubstate
 {
 	public var controlsItems:Array<String> = ['Pad-Right', 'Pad-Left', 'Pad-Custom', 'Pad-Duo', 'Hitbox', 'Keyboard', 'Pad-Extras'];
-	var virtualPad:FlxVirtualPad;
+	var virtualPadd:FlxVirtualPad;
 	var virtualPadExtra:FlxVirtualPadExtra;
 	var hitbox:FlxHitbox;
 	var upPozition:FlxText;
@@ -97,14 +97,14 @@ class MobileControlsSubState extends MusicBeatSubstate
 				virtualPadExtra.buttonExtra1.x = FlxG.width - 132;
 				virtualPadExtra.buttonExtra1.y = FlxG.height - 135;
 			} else {
-				virtualPad.buttonUp.x = FlxG.width - 258;
-				virtualPad.buttonUp.y = FlxG.height - 408;
-				virtualPad.buttonDown.x = FlxG.width - 258;
-				virtualPad.buttonDown.y = FlxG.height - 201;
-				virtualPad.buttonRight.x = FlxG.width - 132;
-				virtualPad.buttonRight.y = FlxG.height - 309;
-				virtualPad.buttonLeft.x = FlxG.width - 384;
-				virtualPad.buttonLeft.y = FlxG.height - 309;
+				virtualPadd.buttonUp.x = FlxG.width - 258;
+				virtualPadd.buttonUp.y = FlxG.height - 408;
+				virtualPadd.buttonDown.x = FlxG.width - 258;
+				virtualPadd.buttonDown.y = FlxG.height - 201;
+				virtualPadd.buttonRight.x = FlxG.width - 132;
+				virtualPadd.buttonRight.y = FlxG.height - 309;
+				virtualPadd.buttonLeft.x = FlxG.width - 384;
+				virtualPadd.buttonLeft.y = FlxG.height - 309;
 			}
 		}
 	});
@@ -125,7 +125,7 @@ class MobileControlsSubState extends MusicBeatSubstate
 		padMap.set("TWO", DOUBLE);
 	
 		virtualPad = new FlxVirtualPad(NONE, NONE);
-		virtualPad.visible = false;
+		virtualPadd.visible = false;
 		add(virtualPad);
 
 
@@ -248,17 +248,17 @@ class MobileControlsSubState extends MusicBeatSubstate
 				}
 				else
 				{
-					if (virtualPad.buttonUp.justPressed)
-						moveButton(touch, virtualPad.buttonUp);
+					if (virtualPadd.buttonUp.justPressed)
+						moveButton(touch, virtualPadd.buttonUp);
 
-					if (virtualPad.buttonDown.justPressed)
-						moveButton(touch, virtualPad.buttonDown);
+					if (virtualPadd.buttonDown.justPressed)
+						moveButton(touch, virtualPadd.buttonDown);
 
-					if (virtualPad.buttonRight.justPressed)
-						moveButton(touch, virtualPad.buttonRight);
+					if (virtualPadd.buttonRight.justPressed)
+						moveButton(touch, virtualPadd.buttonRight);
 
-					if (virtualPad.buttonLeft.justPressed)
-						moveButton(touch, virtualPad.buttonLeft);
+					if (virtualPadd.buttonLeft.justPressed)
+						moveButton(touch, virtualPadd.buttonLeft);
 				}
 			}
 			if (controlsItems[Math.floor(curSelected)] == 'Pad-Extras')
@@ -286,17 +286,17 @@ class MobileControlsSubState extends MusicBeatSubstate
 
 		if (virtualPad != null)
 		{
-			if (virtualPad.buttonUp != null)
-				upPozition.text = 'Button Up X:' + virtualPad.buttonUp.x + ' Y:' + virtualPad.buttonUp.y;
+			if (virtualPadd.buttonUp != null)
+				upPozition.text = 'Button Up X:' + virtualPadd.buttonUp.x + ' Y:' + virtualPadd.buttonUp.y;
 
-			if (virtualPad.buttonDown != null)
-				downPozition.text = 'Button Down X:' + virtualPad.buttonDown.x + ' Y:' + virtualPad.buttonDown.y;
+			if (virtualPadd.buttonDown != null)
+				downPozition.text = 'Button Down X:' + virtualPadd.buttonDown.x + ' Y:' + virtualPadd.buttonDown.y;
 
-			if (virtualPad.buttonLeft != null)
-				leftPozition.text = 'Button Left X:' + virtualPad.buttonLeft.x + ' Y:' + virtualPad.buttonLeft.y;
+			if (virtualPadd.buttonLeft != null)
+				leftPozition.text = 'Button Left X:' + virtualPadd.buttonLeft.x + ' Y:' + virtualPadd.buttonLeft.y;
 
-			if (virtualPad.buttonRight != null)
-				rightPozition.text = 'Button Right X:' + virtualPad.buttonRight.x + ' Y:' + virtualPad.buttonRight.y;
+			if (virtualPadd.buttonRight != null)
+				rightPozition.text = 'Button Right X:' + virtualPadd.buttonRight.x + ' Y:' + virtualPadd.buttonRight.y;
 
 			if (virtualPadExtra != null)
 				{
@@ -327,67 +327,67 @@ function changeSelection(change:Int = 0):Void
 				hitbox.visible = false;
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
-				virtualPad.destroy();
+				virtualPadd.destroy();
 				virtualPad = new FlxVirtualPad(RIGHT_FULL, NONE);
-				virtualPad.alpha = ClientPrefs.data.controlsAlpha;
+				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
 				add(virtualPad);
-				virtualPad.buttonLeft.color =  buttonLeftColor[0];
-				virtualPad.buttonDown.color =  buttonDownColor[0];
-				virtualPad.buttonUp.color =  buttonUpColor[0];
-				virtualPad.buttonRight.color =  buttonRightColor[0];
+				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
+				virtualPadd.buttonDown.color =  buttonDownColor[0];
+				virtualPadd.buttonUp.color =  buttonUpColor[0];
+				virtualPadd.buttonRight.color =  buttonRightColor[0];
 			case 'Pad-Left':
 				hitbox.visible = false;
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
-				virtualPad.destroy();
+				virtualPadd.destroy();
 				virtualPad = new FlxVirtualPad(LEFT_FULL, NONE);
-				virtualPad.alpha = ClientPrefs.data.controlsAlpha;
+				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
 				add(virtualPad);
-				virtualPad.buttonLeft.color =  buttonLeftColor[0];
-				virtualPad.buttonDown.color =  buttonDownColor[0];
-				virtualPad.buttonUp.color =  buttonUpColor[0];
-				virtualPad.buttonRight.color =  buttonRightColor[0];
+				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
+				virtualPadd.buttonDown.color =  buttonDownColor[0];
+				virtualPadd.buttonUp.color =  buttonUpColor[0];
+				virtualPadd.buttonRight.color =  buttonRightColor[0];
 			case 'Pad-Custom':
 				hitbox.visible = false;
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
-				virtualPad.destroy();
+				virtualPadd.destroy();
 				virtualPad = MobileControls.getCustomMode(new FlxVirtualPad(RIGHT_FULL, NONE));
-				virtualPad.alpha = ClientPrefs.data.controlsAlpha;
+				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
 				add(virtualPad);
-				virtualPad.buttonLeft.color =  buttonLeftColor[0];
-				virtualPad.buttonDown.color =  buttonDownColor[0];
-				virtualPad.buttonUp.color =  buttonUpColor[0];
-				virtualPad.buttonRight.color =  buttonRightColor[0];
+				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
+				virtualPadd.buttonDown.color =  buttonDownColor[0];
+				virtualPadd.buttonUp.color =  buttonUpColor[0];
+				virtualPadd.buttonRight.color =  buttonRightColor[0];
 			case 'Pad-Duo':
 				hitbox.visible = false;
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
-				virtualPad.destroy();
+				virtualPadd.destroy();
 				virtualPad = new FlxVirtualPad(BOTH, NONE);
-				virtualPad.alpha = ClientPrefs.data.controlsAlpha;
+				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
 				add(virtualPad);
-				virtualPad.buttonLeft.color =  buttonLeftColor[0];
-				virtualPad.buttonDown.color =  buttonDownColor[0];
-				virtualPad.buttonUp.color =  buttonUpColor[0];
-				virtualPad.buttonRight.color =  buttonRightColor[0];
-				virtualPad.buttonLeft2.color =  buttonLeftColor[0];
-				virtualPad.buttonDown2.color =  buttonDownColor[0];
-				virtualPad.buttonUp2.color =  buttonUpColor[0];
-				virtualPad.buttonRight2.color =  buttonRightColor[0];
+				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
+				virtualPadd.buttonDown.color =  buttonDownColor[0];
+				virtualPadd.buttonUp.color =  buttonUpColor[0];
+				virtualPadd.buttonRight.color =  buttonRightColor[0];
+				virtualPadd.buttonLeft2.color =  buttonLeftColor[0];
+				virtualPadd.buttonDown2.color =  buttonDownColor[0];
+				virtualPadd.buttonUp2.color =  buttonUpColor[0];
+				virtualPadd.buttonRight2.color =  buttonRightColor[0];
 			case 'Pad-Extras':
 				hitbox.visible = false;
-				virtualPad.visible = false; // idfk it looks better like this
+				virtualPadd.visible = false; // idfk it looks better like this
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
 			case 'Hitbox':
 				hitbox.visible = true;
-				virtualPad.visible = false;
+				virtualPadd.visible = false;
 				virtualPadExtra.visible = false;
 				hitbox.alpha = ClientPrefs.data.controlsAlpha;
 			case 'Keyboard':
 				hitbox.visible = false;
-				virtualPad.visible = false;
+				virtualPadd.visible = false;
 				virtualPadExtra.visible = false;
 		}
 

@@ -9,7 +9,8 @@ import flixel.system.macros.FlxMacroUtil;
     *
     * @author Karim Akra (UTFan) & Lily(mcagabe19)
     */
-    enum abstract FlxMobileControlsID(Int) from Int to Int
+    @:enum
+    abstract FlxMobileControlsID(Int) from Int to Int
     {
     public static var fromStringMap(default, null):Map<String, FlxMobileControlsID> = FlxMacroUtil.buildMap("mobile.flixel.id.FlxMobileControlsID");
     public static var toStringMap(default, null):Map<FlxMobileControlsID, String> = FlxMacroUtil.buildMap("mobile.flixel.id.FlxMobileControlsID", true);

@@ -216,13 +216,13 @@ class Controls
 		return false;
 	}
 	public var isInSubstate:Bool = false; // don't worry about this it becomes true and false on it's own in MusicBeatSubstate
-	public var requested(get, default):Dynamic; // is set to MusicBeatState or MusicBeatSubstate when the constructor is called
-	public var gameplayRequest(get, default):Dynamic; // for PlayState and EditorPlayState (hitbox and virtualPad)
+	public var requested(get, never):Dynamic; // is set to MusicBeatState or MusicBeatSubstate when the constructor is called
+	public var gameplayRequest(get, never):Dynamic; // for PlayState and EditorPlayState (hitbox and virtualPad)
 
 	private function virtualPadPressed(keys:Array<FlxMobileControlsID>):Bool{
-		if (keys != null && requested.virtualPad != null){
+		if (keys != null && requested != null){
 			for (key in keys){
-				if (requested.virtualPad.anyPressed(key) == true){
+				if (requested.anyPressed(key) == true){
 					controllerMode = true; // !!DO NOT DISABLE THIS IF YOU DONT WANT TO KILL THE INPUT FOR MOBILE!!
 					return true;
 				}
@@ -232,9 +232,9 @@ class Controls
 	}
 
 	private function virtualPadJustPressed(keys:Array<FlxMobileControlsID>):Bool{
-		if (keys != null && requested.virtualPad != null){
+		if (keys != null && requested != null){
 			for (key in keys){
-				if (requested.virtualPad.anyJustPressed(key) == true){
+				if (requested.anyJustPressed(key) == true){
 					controllerMode = true;
 					return true;
 				}
@@ -244,9 +244,9 @@ class Controls
 	}
 
 	private function virtualPadJustReleased(keys:Array<FlxMobileControlsID>):Bool{
-		if (keys != null && requested.virtualPad != null){
+		if (keys != null && requested != null){
 			for (key in keys){
-				if (requested.virtualPad.anyJustReleased(key) == true){
+				if (requested.anyJustReleased(key) == true){
 					controllerMode = true;
 					return true;
 				}
@@ -257,7 +257,7 @@ class Controls
 
 	// these functions are used for playstate controls, just ignore them and use the controls.justPressed() instead
 	private function mobileCPressed(keys:Array<FlxMobileControlsID>):Bool{
-		if(keys != null && requested.mobileControls != null && gameplayRequest != null){
+		if(keys != null && gameplayRequest != null){
 			for(key in keys){
 				if(gameplayRequest.anyPressed(key) == true){
 					controllerMode = true;
@@ -269,7 +269,7 @@ class Controls
 	}
 
 	private function mobileCJustPressed(keys:Array<FlxMobileControlsID>):Bool{
-		if(keys != null && requested.mobileControls != null && gameplayRequest != null){
+		if(keys != null && gameplayRequest != null){
 			for(key in keys){
 				if(gameplayRequest.anyJustPressed(key) == true){
 					controllerMode = true;
@@ -281,7 +281,7 @@ class Controls
 	}
 
 	private function mobileCJustReleased(keys:Array<FlxMobileControlsID>):Bool{
-		if(keys != null && requested.mobileControls != null && gameplayRequest != null){
+		if(keys != null && gameplayRequest != null){
 			for(key in keys){
 				if(gameplayRequest.anyJustReleased(key) == true){
 					controllerMode = true;
@@ -295,9 +295,9 @@ class Controls
 	@:noCompletion
 	private function get_requested():Dynamic{
 		if(isInSubstate)
-			return MusicBeatSubstate;
+			return MusicBeatSubstate.instance.virtualPad;
 		else
-			return MusicBeatState.instance;
+			return MusicBeatState.instance.virtualPad;
 	}
 
 	@:noCompletion
@@ -305,19 +305,16 @@ class Controls
 		switch(MobileControls.getMode()){
 			case 0 | 1 | 2 | 3:
 				if(isInSubstate)
-					return MusicBeatSubstate.mobileControls.virtualPad;
+					return MusicBeatSubstate.instance.mobileControls.virtualPad;
 				else
 					return MusicBeatState.instance.mobileControls.virtualPad;
 			case 4:
 				if(isInSubstate)
-					return MusicBeatSubstate.mobileControls.hitbox;
+					return MusicBeatSubstate.instance.mobileControls.hitbox;
 				else
 					return MusicBeatState.instance.mobileControls.hitbox;
 			default:
-				if(isInSubstate)
-					return MusicBeatSubstate.mobileControls.virtualPad;
-				else
-					return MusicBeatState.instance.mobileControls.virtualPad;
+				return null;
 		}
 	}
 

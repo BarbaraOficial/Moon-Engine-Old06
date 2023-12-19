@@ -47,6 +47,6 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		if (curOption.getValue() != mafaka)
 			mafaka = curOption.getValue();
 
-		MusicBeatSubstate.virtualPad.alpha = mafaka;
+		virtualPad.alpha = mafaka;
 	}
 }

@@ -186,8 +186,8 @@ class NotesSubState extends MusicBeatSubstate
 		_lastControllerMode = controls.controllerMode;
 
         addVirtualPad(NONE, B_C);
-		MusicBeatSubstate.virtualPad.buttonC.x = 0;
-		MusicBeatSubstate.virtualPad.buttonC.y = FlxG.height - 135;
+		virtualPad.buttonC.x = 0;
+		virtualPad.buttonC.y = FlxG.height - 135;
 	}
 
 	function updateTip()
@@ -494,7 +494,7 @@ class NotesSubState extends MusicBeatSubstate
 				}
 			} 
 		}
-		else if(MusicBeatSubstate.virtualPad.buttonC.justPressed || controls.RESET && hexTypeNum < 0)
+		else if(virtualPad.buttonC.justPressed || controls.RESET && hexTypeNum < 0)
 		{
 			if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER))
 			{

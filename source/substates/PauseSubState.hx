@@ -328,20 +328,20 @@ class PauseSubState extends MusicBeatSubstate
 			}
 		}
         if (controls.BACK) close();
-		if (MusicBeatSubstate.virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
+		if (virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
 			if (PlayState.chartingMode)
 				{
 					addVirtualPad(LEFT_FULL, A);
-					MusicBeatSubstate.virtualPad.buttonLeft.color = 0xFFC24B99;
-					MusicBeatSubstate.virtualPad.buttonDown.color = 0xFF00FFFF;
-					MusicBeatSubstate.virtualPad.buttonUp.color = 0xFF12FA05;
-					MusicBeatSubstate.virtualPad.buttonRight.color = 0xFFF9393F; 
+					virtualPad.buttonLeft.color = 0xFFC24B99;
+					virtualPad.buttonDown.color = 0xFF00FFFF;
+					virtualPad.buttonUp.color = 0xFF12FA05;
+					virtualPad.buttonRight.color = 0xFFF9393F; 
 				}
 				else
 				{
 					addVirtualPad(UP_DOWN, A);
-					MusicBeatSubstate.virtualPad.buttonDown.color = 0xFF00FFFF;
-					MusicBeatSubstate.virtualPad.buttonUp.color = 0xFF12FA05;
+					virtualPad.buttonDown.color = 0xFF00FFFF;
+					virtualPad.buttonUp.color = 0xFF12FA05;
 				}
 				addVirtualPadCamera(false);
 		}
