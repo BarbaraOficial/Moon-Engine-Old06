@@ -90,6 +90,9 @@ class HScript extends SScript
 		set('VideoSpriteManager', backend.VideoSpriteManager);
 		set('VideoManager', backend.VideoManager);
 		#end
+		#if flxanimate
+		set('FlxAnimate', FlxAnimate);
+		#end
 
 		// Functions & Variables
 		set('setVar', function(name:String, value:Dynamic) PlayState.instance.variables.set);
@@ -168,12 +171,12 @@ class HScript extends SScript
 		set('Function_StopHScript', FunkinLua.Function_StopHScript);
 		set('Function_StopAll', FunkinLua.Function_StopAll);
 		
-		set('add', function(obj:FlxBasic) PlayState.instance.add);
-		set('addBehindGF', function(obj:FlxBasic) PlayState.instance.addBehindGF);
-		set('addBehindDad', function(obj:FlxBasic) PlayState.instance.addBehindDad);
-		set('addBehindBF', function(obj:FlxBasic) PlayState.instance.addBehindBF);
-		set('insert', function(pos:Int, obj:FlxBasic) PlayState.instance.insert);
-		set('remove', function(obj:FlxBasic, splice:Bool = false) PlayState.instance.remove);
+		set('add', function(obj:FlxBasic) PlayState.instance.add(obj));
+		set('addBehindGF', function(obj:FlxBasic) PlayState.instance.addBehindGF(obj));
+		set('addBehindDad', function(obj:FlxBasic) PlayState.instance.addBehindDad(obj));
+		set('addBehindBF', function(obj:FlxBasic) PlayState.instance.addBehindBF(obj));
+		set('insert', function(pos:Int, obj:FlxBasic) PlayState.instance.insert(pos, obj));
+		set('remove', function(obj:FlxBasic, ?splice:Bool = false) PlayState.instance.remove(obj, splice));
 
 		if(varsToBring != null) {
 			for (key in Reflect.fields(varsToBring)) {

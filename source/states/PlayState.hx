@@ -1829,8 +1829,9 @@ class PlayState extends MusicBeatState
 
 		if (healthBar.bounds.max != null && health > healthBar.bounds.max)
 			health = healthBar.bounds.max;
-		
-		updateIcons(elapsed);
+
+		updateIconsScale(elapsed);
+		updateIconsPosition();
 
 		if (startedCountdown && !paused)
 			Conductor.songPosition += FlxG.elapsed * 1000 * playbackRate;
@@ -1984,7 +1985,9 @@ class PlayState extends MusicBeatState
 		callOnScripts('onUpdatePost', [elapsed]);
     }
 
-	public dynamic function updateIcons(elapsed:Float) {
+	// Health icon updaters
+	public dynamic function updateIconsScale(elapsed:Float)
+	{
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, FlxMath.bound(1 - (elapsed * 9 * playbackRate), 0, 1));
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
@@ -1992,15 +1995,17 @@ class PlayState extends MusicBeatState
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, FlxMath.bound(1 - (elapsed * 9 * playbackRate), 0, 1));
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
+	}
 
+	public dynamic function updateIconsPosition()
+	{
 		var iconOffset:Int = 26;
 		iconP1.x = healthBar.barCenter + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
 		iconP2.x = healthBar.barCenter - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
 	}
 
-	// You can alter how icon animations work here
 	var iconsAnimations:Bool = true;
-	function set_health(value:Float):Float
+	function set_health(value:Float):Float // You can alter how icon animations work here
 	{
 			if(!iconsAnimations || healthBar == null || !healthBar.enabled || healthBar.valueFunction == null)
 		{
