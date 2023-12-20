@@ -903,7 +903,7 @@ class CharacterEditorState extends MusicBeatState
 				virtualPad.buttonJustPressed(FlxMobileInputID.UP),
 				virtualPad.buttonJustPressed(FlxMobileInputID.DOWN)
 			];
-			moveKeysP = [
+			moveKeys = [
 				virtualPad.buttonPressed(FlxMobileInputID.LEFT),
 				virtualPad.buttonPressed(FlxMobileInputID.RIGHT),
 				virtualPad.buttonPressed(FlxMobileInputID.UP),
