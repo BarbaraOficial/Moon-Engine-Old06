@@ -153,7 +153,7 @@ class CharacterEditorState extends MusicBeatState
 		updateHealthBar();
 		character.finishAnimation();
 
-		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+		addVirtualPad(LEFT_FULL, CHARACTER_EDITOR);
 		addVirtualPadCamera(false);
 
 		if(ClientPrefs.data.cacheOnGPU) Paths.clearUnusedMemory();
@@ -165,7 +165,6 @@ class CharacterEditorState extends MusicBeatState
 	{
 		var str:String;
 		if (ClientPrefs.data.controlsAlpha >= 0.1) {
-			controls.mobileBinds.clear();
 			str = "CAMERA
 			\nX/Y - Camera Zoom In/Out
 			\nZ - Reset Camera Zoom
@@ -176,7 +175,7 @@ class CharacterEditorState extends MusicBeatState
 			\nArrow Buttons - Move Offset
 			\n
 			\nOTHER
-			\nB - Toggle Silhouettes
+			\nS - Toggle Silhouettes
 			\nHold C - Move Offsets 10x faster and Camera 4x faster";
 		} else {
 		str = "CAMERA
@@ -857,7 +856,7 @@ class CharacterEditorState extends MusicBeatState
 			shiftMult = 4;
 			shiftMultBig = 10;
 		}
-		if(FlxG.keys.pressed.CONTROL || (virtualPad != null && virtualPad.buttonPressed(C))) ctrlMult = 0.25;
+		if(FlxG.keys.pressed.CONTROL || virtualPad.buttonPressed(C)) ctrlMult = 0.25;
 
 		// CAMERA CONTROLS
 		if (FlxG.keys.pressed.J) FlxG.camera.scroll.x -= elapsed * 500 * shiftMult * ctrlMult;
@@ -866,12 +865,12 @@ class CharacterEditorState extends MusicBeatState
 		if (FlxG.keys.pressed.I) FlxG.camera.scroll.y -= elapsed * 500 * shiftMult * ctrlMult;
 
 		var lastZoom = FlxG.camera.zoom;
-		if(FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL || (virtualPad != null && virtualPad.buttonJustPressed(Z))) FlxG.camera.zoom = 1;
-		else if ((FlxG.keys.pressed.E || (virtualPad != null && virtualPad.buttonJustPressed(X))) && FlxG.camera.zoom < 3) {
+		if(FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL || virtualPad.buttonJustPressed(Z)) FlxG.camera.zoom = 1;
+		else if ((FlxG.keys.pressed.E || virtualPad.buttonJustPressed(X)) && FlxG.camera.zoom < 3) {
 			FlxG.camera.zoom += elapsed * FlxG.camera.zoom * shiftMult * ctrlMult;
 			if(FlxG.camera.zoom > 3) FlxG.camera.zoom = 3;
 		}
-		else if ((FlxG.keys.pressed.Q || (virtualPad != null && virtualPad.buttonJustPressed(Y))) && FlxG.camera.zoom > 0.1) {
+		else if ((FlxG.keys.pressed.Q || virtualPad.buttonJustPressed(Y)) && FlxG.camera.zoom > 0.1) {
 			FlxG.camera.zoom -= elapsed * FlxG.camera.zoom * shiftMult * ctrlMult;
 			if(FlxG.camera.zoom < 0.1) FlxG.camera.zoom = 0.1;
 		}
@@ -882,8 +881,8 @@ class CharacterEditorState extends MusicBeatState
 		var changedAnim:Bool = false;
 		if(anims.length > 1)
 		{
-			if((FlxG.keys.justPressed.W  || (virtualPad != null && virtualPad.buttonJustPressed(V)))&& (changedAnim = true)) curAnim--;
-			else if((FlxG.keys.justPressed.S || (virtualPad != null && virtualPad.buttonJustPressed(D))) && (changedAnim = true)) curAnim++;
+			if((FlxG.keys.justPressed.W  || virtualPad.buttonJustPressed(V)) && (changedAnim = true)) curAnim--;
+			else if((FlxG.keys.justPressed.S || virtualPad.buttonJustPressed(D)) && (changedAnim = true)) curAnim++;
 
 			if(changedAnim)
 			{
@@ -983,7 +982,7 @@ class CharacterEditorState extends MusicBeatState
 				changedOffset = true;
 			}
 		}
-		if(virtualPad != null && virtualPad.buttonJustPressed(A)){
+		if(virtualPad.buttonJustPressed(A)){
 			undoOffsets = [character.offset.x, character.offset.y];
 			character.offset.x = copiedOffset[0];
 			character.offset.y = copiedOffset[1];
@@ -1051,7 +1050,7 @@ class CharacterEditorState extends MusicBeatState
 		frameAdvanceText.color = clr;
 
 		// OTHER CONTROLS
-		if(FlxG.keys.justPressed.F12 || (virtualPad != null && virtualPad.buttonJustPressed(B)))
+		if(FlxG.keys.justPressed.F12 || virtualPad.buttonJustPressed(S))
 			silhouettes.visible = !silhouettes.visible;
 
 		if(FlxG.keys.justPressed.F1 || (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
@@ -1059,9 +1058,8 @@ class CharacterEditorState extends MusicBeatState
 			helpBg.visible = !helpBg.visible;
 			helpTexts.visible = helpBg.visible;
 		}
-		else if(FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justReleased.BACK #end)
+		else if(FlxG.keys.justPressed.ESCAPE || virtualPad.buttonJustPressed(FlxMobileInputID.B))
 		{
-			controls.mobileBinds = ClientPrefs.mobileBinds;
 			FlxG.mouse.visible = false;
 			if(!_goToPlayState)
 			{
