@@ -856,7 +856,7 @@ class CharacterEditorState extends MusicBeatState
 			shiftMult = 4;
 			shiftMultBig = 10;
 		}
-		if(FlxG.keys.pressed.CONTROL || virtualPad.buttonPressed(C)) ctrlMult = 0.25;
+		if(FlxG.keys.pressed.CONTROL || virtualPad.buttonC.pressed) ctrlMult = 0.25;
 
 		// CAMERA CONTROLS
 		if (FlxG.keys.pressed.J) FlxG.camera.scroll.x -= elapsed * 500 * shiftMult * ctrlMult;
@@ -866,11 +866,11 @@ class CharacterEditorState extends MusicBeatState
 
 		var lastZoom = FlxG.camera.zoom;
 		if(FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL || virtualPad.buttonJustPressed(Z)) FlxG.camera.zoom = 1;
-		else if ((FlxG.keys.pressed.E || virtualPad.buttonJustPressed(X)) && FlxG.camera.zoom < 3) {
+		else if ((FlxG.keys.pressed.E || virtualPad.buttonX.pressed) && FlxG.camera.zoom < 3) {
 			FlxG.camera.zoom += elapsed * FlxG.camera.zoom * shiftMult * ctrlMult;
 			if(FlxG.camera.zoom > 3) FlxG.camera.zoom = 3;
 		}
-		else if ((FlxG.keys.pressed.Q || virtualPad.buttonJustPressed(Y)) && FlxG.camera.zoom > 0.1) {
+		else if ((FlxG.keys.pressed.Q || virtualPad.buttonY.pressed) && FlxG.camera.zoom > 0.1) {
 			FlxG.camera.zoom -= elapsed * FlxG.camera.zoom * shiftMult * ctrlMult;
 			if(FlxG.camera.zoom < 0.1) FlxG.camera.zoom = 0.1;
 		}
@@ -904,10 +904,10 @@ class CharacterEditorState extends MusicBeatState
 				virtualPad.buttonJustPressed(FlxMobileInputID.DOWN)
 			];
 			moveKeys = [
-				virtualPad.buttonPressed(FlxMobileInputID.LEFT),
-				virtualPad.buttonPressed(FlxMobileInputID.RIGHT),
-				virtualPad.buttonPressed(FlxMobileInputID.UP),
-				virtualPad.buttonPressed(FlxMobileInputID.DOWN)
+				virtualPad.buttonLeft.pressed,
+				virtualPad.buttonRight.pressed,
+				virtualPad.buttonUp.pressed,
+				virtualPad.buttonDown.pressed
 			];
 		} else {
 			moveKeysP = [
