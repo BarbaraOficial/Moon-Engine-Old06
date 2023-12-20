@@ -55,6 +55,7 @@ class FlxVirtualPadExtra extends FlxSpriteGroup
 		button.moves = false;
 		button.scrollFactor.set();
 		button.color = Color;
+		button.antialiasing = ClientPrefs.data.antialiasing;
 		#if FLX_DEBUG
 		button.ignoreDrawDebug = true;
 		#end

@@ -122,6 +122,7 @@ class FlxHitbox extends FlxSpriteGroup
 		hint.moves = false;
 		hint.scrollFactor.set();
 		hint.alpha = 0.00001;
+		hint.antialiasing = ClientPrefs.data.antialiasing;
 		hint.onDown.callback = function()
 		{
 			if (hintTween != null)
