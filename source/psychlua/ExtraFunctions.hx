@@ -17,111 +17,92 @@ class ExtraFunctions
 		{
 		// Keyboard & Gamepads
 		funk.set("keyboardJustPressed", function(name:String)
-		{
-			switch(name.toUpperCase()){
-				case 'SPACE':
-				if (ClientPrefs.data.controlsAlpha >= 0.1) {
-					if (MobileControls.instance.virtualPadExtra == null)
-						return false;
-					else
-						return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed || Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
-				} else {
-						return Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
+			{
+				switch(name.toUpperCase()){
+					case 'SPACE':
+					if (ClientPrefs.data.controlsAlpha >= 0.1) {
+						if (MobileControls.instance.virtualPadExtra == null)
+							return false;
+						else
+							return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed || Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
+					} else {
+							return Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
+					}
+					default:
+						return Reflect.getProperty(FlxG.keys.justPressed, name.toUpperCase());
 				}
-				default:
-					return Reflect.getProperty(FlxG.keys.justPressed, name.toUpperCase());
-			}
-		});
-		funk.set("keyboardPressed", function(name:String)
-		{
-			switch(name.toUpperCase()){
-				case 'SPACE':
-				if (ClientPrefs.data.controlsAlpha >= 0.1) {
-					if (MobileControls.instance.virtualPadExtra != null)
-						return false;
-					else
-						return MobileControls.instance.virtualPadExtra.buttonExtra.pressed || Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
-				} else {
-						return Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
+			});
+			funk.set("keyboardPressed", function(name:String)
+			{
+				switch(name.toUpperCase()){
+					case 'SPACE':
+					if (ClientPrefs.data.controlsAlpha >= 0.1) {
+						if (MobileControls.instance.virtualPadExtra != null)
+							return false;
+						else
+							return MobileControls.instance.virtualPadExtra.buttonExtra.pressed || Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
+					} else {
+							return Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
+					}
+					default:
+						return Reflect.getProperty(FlxG.keys.pressed, name.toUpperCase());
 				}
-				default:
-					return Reflect.getProperty(FlxG.keys.pressed, name.toUpperCase());
-			}
-		});
-		funk.set("keyboardReleased", function(name:String)
-		{
-			switch(name.toUpperCase()){
-				case 'SPACE':
-				if (ClientPrefs.data.controlsAlpha >= 0.1) {
-					if (MobileControls.instance.virtualPadExtra != null)
-						return false;
-					else
-						return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased || Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
-				} else {
-						return Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
+			});
+			funk.set("keyboardReleased", function(name:String)
+			{
+				switch(name.toUpperCase()){
+					case 'SPACE':
+					if (ClientPrefs.data.controlsAlpha >= 0.1) {
+						if (MobileControls.instance.virtualPadExtra != null)
+							return false;
+						else
+							return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased || Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
+					} else {
+							return Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
+					}
+					default:
+						return Reflect.getProperty(FlxG.keys.justReleased, name.toUpperCase());
 				}
-				default:
-					return Reflect.getProperty(FlxG.keys.justReleased, name.toUpperCase());
-			}
-		});
-
-		funk.set("anyGamepadJustPressed", function(name:String)
-		{
-			return FlxG.gamepads.anyJustPressed(name.toUpperCase());
-		});
-		funk.set("anyGamepadPressed", function(name:String)
-		{
-			return FlxG.gamepads.anyPressed(name.toUpperCase());
-		});
-		funk.set("anyGamepadReleased", function(name:String)
-		{
-			return FlxG.gamepads.anyJustReleased(name.toUpperCase());
-		});
+			});
+	
+			funk.set("anyGamepadJustPressed", function(name:String) return FlxG.gamepads.anyJustPressed(name.toUpperCase()));
+			funk.set("anyGamepadPressed", function(name:String) return FlxG.gamepads.anyPressed(name.toUpperCase()););
+			funk.set("anyGamepadReleased", function(name:String) return FlxG.gamepads.anyJustReleased(name.toUpperCase()););
 
 		funk.set("gamepadAnalogX", function(id:Int, ?leftStick:Bool = true)
 		{
 			var controller = FlxG.gamepads.getByID(id);
-			if (controller == null)
-			{
-				return 0.0;
-			}
+			if (controller == null) return 0.0;
+
 			return controller.getXAxis(leftStick ? LEFT_ANALOG_STICK : RIGHT_ANALOG_STICK);
 		});
 		funk.set("gamepadAnalogY", function(id:Int, ?leftStick:Bool = true)
 		{
 			var controller = FlxG.gamepads.getByID(id);
-			if (controller == null)
-			{
-				return 0.0;
-			}
+			if (controller == null) return 0.0;
+
 			return controller.getYAxis(leftStick ? LEFT_ANALOG_STICK : RIGHT_ANALOG_STICK);
 		});
 		funk.set("gamepadJustPressed", function(id:Int, name:String)
 		{
 			var controller = FlxG.gamepads.getByID(id);
-			if (controller == null)
-			{
-				return false;
-			}
-			return Reflect.getProperty(controller.justPressed, name.toUpperCase()) == true;
+			if (controller == null) return false;
+
+			return Reflect.getProperty(controller.justPressed, name) == true;
 		});
 		funk.set("gamepadPressed", function(id:Int, name:String)
 		{
 			var controller = FlxG.gamepads.getByID(id);
-			if (controller == null)
-			{
-				return false;
-			}
-			return Reflect.getProperty(controller.pressed, name.toUpperCase()) == true;
+			if (controller == null) return false;
+
+			return Reflect.getProperty(controller.pressed, name) == true;
 		});
 		funk.set("gamepadReleased", function(id:Int, name:String)
 		{
 			var controller = FlxG.gamepads.getByID(id);
-			if (controller == null)
-			{
-				return false;
-			}
-			return Reflect.getProperty(controller.justReleased, name.toUpperCase()) == true;
+			if (controller == null) return false;
+
+			return Reflect.getProperty(controller.justReleased, name) == true;
 		});
 
 		funk.set("keyJustPressed", function(name:String = '') {
