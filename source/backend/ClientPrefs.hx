@@ -126,23 +126,23 @@ class ClientPrefs {
 		'pause'			=> [START],
 		'reset'			=> [BACK]
 	];
-	public static var mobileBinds:Map<String, Array<FlxMobileControlsID>> = [
-		'note_up'		=> [noteUP, UP2],
-		'note_left'		=> [noteLEFT, LEFT2],
-		'note_down'		=> [noteDOWN, DOWN2],
-		'note_right'	=> [noteRIGHT, RIGHT2],
+	public static var mobileBinds:Map<String, Array<FlxMobileInputID>> = [
+		'note_up'		=> [FlxMobileInputID.noteUP, FlxMobileInputID.UP2],
+		'note_left'		=> [FlxMobileInputID.noteLEFT, FlxMobileInputID.LEFT2],
+		'note_down'		=> [FlxMobileInputID.noteDOWN, FlxMobileInputID.DOWN2],
+		'note_right'	=> [FlxMobileInputID.noteRIGHT, FlxMobileInputID.RIGHT2],
 
-		'ui_up'			=> [UP, noteUP],
-		'ui_left'		=> [LEFT, noteLEFT],
-		'ui_down'		=> [DOWN, noteDOWN],
-		'ui_right'		=> [RIGHT, noteRIGHT],
+		'ui_up'			=> [FlxMobileInputID.UP, FlxMobileInputID.noteUP],
+		'ui_left'		=> [FlxMobileInputID.LEFT, FlxMobileInputID.noteLEFT],
+		'ui_down'		=> [FlxMobileInputID.DOWN, FlxMobileInputID.noteDOWN],
+		'ui_right'		=> [FlxMobileInputID.RIGHT, FlxMobileInputID.noteRIGHT],
 
-		'accept'		=> [A],
-		'back'			=> [B],
-		'pause'			=> [NONE],
-		'reset'			=> [NONE]
+		'accept'		=> [FlxMobileInputID.A],
+		'back'			=> [FlxMobileInputID.B],
+		'pause'			=> [FlxMobileInputID.NONE],
+		'reset'			=> [FlxMobileInputID.NONE]
 	];
-	public static var defaultPads:Map<String, Array<FlxMobileControlsID>> = null;
+	public static var defaultPads:Map<String, Array<FlxMobileInputID>> = null;
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
 	public static var defaultButtons:Map<String, Array<FlxGamepadInputID>> = null;
 
@@ -165,7 +165,7 @@ class ClientPrefs {
 		var gamepadBind:Array<FlxGamepadInputID> = gamepadBinds.get(key);
 		while(keyBind != null && keyBind.contains(NONE)) keyBind.remove(NONE);
 		while(gamepadBind != null && gamepadBind.contains(NONE)) gamepadBind.remove(NONE);
-		var mobileBind:Array<FlxMobileControlsID> = mobileBinds.get(key);
+		var mobileBind:Array<FlxMobileInputID> = mobileBinds.get(key);
 		while(mobileBind != null && mobileBind.contains(NONE)) mobileBind.remove(NONE);
 	}
 
@@ -253,7 +253,7 @@ class ClientPrefs {
 					if(gamepadBinds.exists(control)) gamepadBinds.set(control, keys);
 			}
 			if(save.data.mobile != null) {
-					var loadedControls:Map<String, Array<FlxMobileControlsID>> = save.data.mobile;
+					var loadedControls:Map<String, Array<FlxMobileInputID>> = save.data.mobile;
 					for (control => keys in loadedControls)
 						if(mobileBinds.exists(control)) mobileBinds.set(control, keys);
 			}

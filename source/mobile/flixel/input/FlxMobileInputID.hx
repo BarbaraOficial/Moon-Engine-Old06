@@ -1,4 +1,4 @@
-package mobile.flixel.id;
+package mobile.flixel.input;
 import flixel.system.macros.FlxMacroUtil;
 
     /**
@@ -9,15 +9,15 @@ import flixel.system.macros.FlxMacroUtil;
     *
     * @author Karim Akra (UTFan) & Lily(mcagabe19)
     */
-    @:enum
-    abstract FlxMobileControlsID(Int) from Int to Int
+    @:enum 
+    abstract FlxMobileInputID(Int) from Int to Int
     {
-    public static var fromStringMap(default, null):Map<String, FlxMobileControlsID> = FlxMacroUtil.buildMap("mobile.flixel.id.FlxMobileControlsID");
-    public static var toStringMap(default, null):Map<FlxMobileControlsID, String> = FlxMacroUtil.buildMap("mobile.flixel.id.FlxMobileControlsID", true);
+    public static var fromStringMap(default, null):Map<String, FlxMobileInputID> = FlxMacroUtil.buildMap("mobile.flixel.input.FlxMobileInputID");
+    public static var toStringMap(default, null):Map<FlxMobileInputID, String> = FlxMacroUtil.buildMap("mobile.flixel.input.FlxMobileInputID", true);
     // Nothing & Anything
     var ANY = -2;
     var NONE = -1;
-    // VPad Action Buttons
+    // Buttons
     var A = 1;
     var B = 2;
     var C = 3;
@@ -31,7 +31,7 @@ import flixel.system.macros.FlxMacroUtil;
     var X = 11;
     var Y = 12;
     var Z = 13;
-    // VPad DPad Buttons
+    // VPAD Buttons
     var UP = 14;
     var UP2 = 15;
     var DOWN = 16;
@@ -40,12 +40,12 @@ import flixel.system.macros.FlxMacroUtil;
     var LEFT2 = 19;
     var RIGHT = 20;
     var RIGHT2 = 21;
-    // Hitbox Buttons
+    // HITBOX Hints
     var hitboxUP = 22;
     var hitboxDOWN = 23;
     var hitboxLEFT = 24;
     var hitboxRIGHT = 25;
-    // PlayState Controls
+    // PlayState x Controls Releated
     var noteUP = 26;
     var noteDOWN = 27;
     var noteLEFT = 28;

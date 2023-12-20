@@ -19,7 +19,7 @@ import mobile.MobileControlsSubState;
 import mobile.flixel.FlxHitbox;
 import mobile.flixel.FlxVirtualPad;
 import mobile.flixel.FlxVirtualPadExtra;
-import mobile.flixel.id.FlxMobileControlsID;
+import mobile.flixel.input.FlxMobileInputID;
 
 #if sys
 import sys.*;

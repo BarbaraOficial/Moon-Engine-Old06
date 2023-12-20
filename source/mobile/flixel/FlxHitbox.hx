@@ -23,12 +23,12 @@ class FlxHitbox extends FlxSpriteGroup
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra1:FlxButton = new FlxButton(0, 0);
 
-	public var buttonsMap:Map<FlxMobileControlsID, FlxButton>;
-	public var buttons:Array<FlxMobileControlsID> = [
-		FlxMobileControlsID.hitboxUP,
-		FlxMobileControlsID.hitboxDOWN,
-		FlxMobileControlsID.hitboxLEFT,
-		FlxMobileControlsID.hitboxRIGHT
+	public var buttonsMap:Map<FlxMobileInputID, FlxButton> = new Map<FlxMobileInputID, FlxButton>();
+	public var buttons:Array<FlxMobileInputID> = [
+		FlxMobileInputID.hitboxUP,
+		FlxMobileInputID.hitboxDOWN,
+		FlxMobileInputID.hitboxLEFT,
+		FlxMobileInputID.hitboxRIGHT
 	];
 
 	/**
@@ -38,16 +38,6 @@ class FlxHitbox extends FlxSpriteGroup
 	public function new(mode:Modes)
 	{
 		super();
-		buttonsMap = new Map<FlxMobileControlsID, FlxButton>();
-		buttonsMap.set(FlxMobileControlsID.hitboxUP, buttonUp);
-		buttonsMap.set(FlxMobileControlsID.hitboxRIGHT, buttonRight);
-		buttonsMap.set(FlxMobileControlsID.hitboxLEFT, buttonLeft);
-		buttonsMap.set(FlxMobileControlsID.hitboxDOWN, buttonDown);
-
-		buttonsMap.set(FlxMobileControlsID.noteUP, buttonUp);
-		buttonsMap.set(FlxMobileControlsID.noteRIGHT, buttonRight);
-		buttonsMap.set(FlxMobileControlsID.noteLEFT, buttonLeft);
-		buttonsMap.set(FlxMobileControlsID.noteDOWN, buttonDown);		
 
 		var buttonsColors:Array<FlxColor> = [];
 		var data:Dynamic;
@@ -178,22 +168,52 @@ class FlxHitbox extends FlxSpriteGroup
 	}
 
 	/**
+	* Check to see if the button was pressed.
+	*
+	* @param	button 	A button ID
+	* @return	Whether at least one of the buttons passed was pressed.
+	*/
+	public inline function buttonPressed(button:FlxMobileInputID):Bool {
+		return checkStatus(button, PRESSED);
+	}
+
+	/**
+	* Check to see if the button was just pressed.
+	*
+	* @param	button 	A button ID
+	* @return	Whether at least one of the buttons passed was just pressed.
+	*/
+	public inline function buttonJustPressed(button:FlxMobileInputID):Bool {
+		return checkStatus(button, JUST_PRESSED);
+	}
+	
+	/**
+	* Check to see if the button was just released.
+	*
+	* @param	button 	A button ID
+	* @return	Whether at least one of the buttons passed was just released.
+	*/
+	public inline function buttonJustReleased(button:FlxMobileInputID):Bool {
+		return checkStatus(button, JUST_RELEASED);
+	}
+
+	/**
 	* Check to see if at least one button from an array of buttons is pressed.
 	*
 	* @param	buttonsArray 	An array of buttos names
 	* @return	Whether at least one of the buttons passed in is pressed.
 	*/
-	public inline function anyPressed(buttonsArray:Array<FlxMobileControlsID>):Bool {
+	public inline function anyPressed(buttonsArray:Array<FlxMobileInputID>):Bool {
 		return checkButtonArrayState(buttonsArray, PRESSED);
 	}
-	
+
 	/**
 	* Check to see if at least one button from an array of buttons was just pressed.
 	*
 	* @param	buttonsArray 	An array of buttons names
 	* @return	Whether at least one of the buttons passed was just pressed.
 	*/
-	public inline function anyJustPressed(buttonsArray:Array<FlxMobileControlsID>):Bool {
+	public inline function anyJustPressed(buttonsArray:Array<FlxMobileInputID>):Bool {
 		return checkButtonArrayState(buttonsArray, JUST_PRESSED);
 	}
 	
@@ -203,7 +223,7 @@ class FlxHitbox extends FlxSpriteGroup
 	* @param	buttonsArray 	An array of button names
 	* @return	Whether at least one of the buttons passed was just released.
 	*/
-	public inline function anyJustReleased(buttonsArray:Array<FlxMobileControlsID>):Bool {
+	public inline function anyJustReleased(buttonsArray:Array<FlxMobileInputID>):Bool {
 		return checkButtonArrayState(buttonsArray, JUST_RELEASED);
 	}
 
@@ -214,84 +234,56 @@ class FlxHitbox extends FlxSpriteGroup
 	 * @param	state		The button state to check for.
 	 * @return	Whether the provided key has the specified status.
 	 */
-	 public function checkStatus(button:FlxMobileControlsID, state:ButtonsStates):Bool {
-		
-		if (button == FlxMobileControlsID.ANY)
-		{
-			for(each in buttons){
-				return switch (state) {
-					case PRESSED: buttonsMap.get(each).pressed;
-					case JUST_PRESSED: buttonsMap.get(each).justPressed;
-					case JUST_RELEASED: buttonsMap.get(each).justReleased;
-				}
-			}
-		}
-		
-		/* it might be a weird way for doing this but that's the only way i got in mind
-		if (button == FlxMobileControlsID.NONE)
-			{
-				var used:Int = 0;
+	 public function checkStatus(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
+		switch(button){
+			case FlxMobileInputID.ANY:
 				for(each in buttons){
-					switch (state) {
-						case PRESSED:
-							if(buttonsMap.get(each).pressed)
-								++used;
-						case JUST_PRESSED:
-							if(buttonsMap.get(each).justPressed)
-								++used;
-						case JUST_RELEASED:
-							if(buttonsMap.get(each).justReleased)
-								++used;
-					}
+					checkStatusUnsafe(each, state);
 				}
-				if(used == 0)
-					return true;
-				else
-					return false;
-			}*/
-		if (button == FlxMobileControlsID.NONE)
-			return false;
-		
-
-		if (buttonsMap.exists(button))
-		{
-			return CheckStatus(button, state);
+			case FlxMobileInputID.NONE:
+				return false;
+	
+			default:
+				if(this.buttonsMap.exists(button))
+					return checkStatusUnsafe(button, state);
 		}
-		
-		#if debug
-		throw 'Invalid button code: $button.';
-		#end
 		return false;
 	}
 
 	/**
 	* Helper function to check the status of an array of buttons
 	*
-	* @param	Buttons	An array of keys as Strings
-	* @param	state		The key state to check for
-	* @return	Whether at least one of the keys has the specified status
+	* @param	Buttons	An array of buttons as Strings
+	* @param	state		The button state to check for
+	* @return	Whether at least one of the buttons has the specified status
 	*/
-	public function checkButtonArrayState(Buttons:Array<FlxMobileControlsID>, state:ButtonsStates):Bool {
-		if (Buttons == null)
-			{
-				return false;
-			}
-	
-			for (button in Buttons)
-			{
-				if (checkStatus(button, state))
-					return true;
-			}
-	
+	function checkButtonArrayState(Buttons:Array<FlxMobileInputID>, state:ButtonsStates = JUST_PRESSED):Bool {
+		if(Buttons == null)
 			return false;
-		}
+	
+		for(button in Buttons)
+			if(checkStatus(button, state))
+				return true;
 
-	public function CheckStatus(button:FlxMobileControlsID, state:ButtonsStates){
-		return getButton(button).hasState(state);
+		return false;
 	}
 
-	public function getButton(button:FlxMobileControlsID) {
-		return buttonsMap.get(button);
+	public function checkStatusUnsafe(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
+		return this.buttonsMap.get(button).hasState(state);
+	}
+
+	function updateMap() {
+		buttonsMap.clear();
+
+		buttonsMap.set(FlxMobileInputID.hitboxUP, buttonUp);
+		buttonsMap.set(FlxMobileInputID.hitboxRIGHT, buttonRight);
+		buttonsMap.set(FlxMobileInputID.hitboxLEFT, buttonLeft);
+		buttonsMap.set(FlxMobileInputID.hitboxDOWN, buttonDown);
+
+		buttonsMap.set(FlxMobileInputID.noteUP, buttonUp);
+		buttonsMap.set(FlxMobileInputID.noteRIGHT, buttonRight);
+		buttonsMap.set(FlxMobileInputID.noteLEFT, buttonLeft);
+		buttonsMap.set(FlxMobileInputID.noteDOWN, buttonDown);		
 	}
 }
 enum Modes
