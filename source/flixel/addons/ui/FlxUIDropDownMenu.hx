@@ -481,7 +481,7 @@ class FlxUIDropDownMenu extends FlxUIGroup implements IFlxUIWidget implements IF
 			}
 		}
 
-			if (FlxG.mouse.justPressed && !FlxG.mouse.overlaps(this))
+			if (FlxG.mouse.justPressed && !FlxG.mouse.overlaps(this,camera))
 			{
 				showList(false);
 			}
