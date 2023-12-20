@@ -46,7 +46,6 @@ class CreditsState extends MusicBeatState
 			[''],
 			['Mobile Special Thanks'],
 			['MAJigsaw77',				'jigsaw',			'Author of Mobile Controls, New FlxRuntimeShader and Storage Stuff',							'https://github.com/MAJigsaw77',               '898989'],
-			['Hiho2950',				'github',			'Optimized Notes and BotPlay',							'https://github.com/Hiho2950',               'FFFFFF'],
 			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',							 'https://ko-fi.com/shadowmario',		 '444444'],
