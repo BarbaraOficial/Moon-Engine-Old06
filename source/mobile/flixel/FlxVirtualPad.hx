@@ -410,6 +410,9 @@ class FlxVirtualPad extends FlxSpriteGroup
 		buttonsMap.set(FlxMobileInputID.C, buttonC);
 		buttonsMap.set(FlxMobileInputID.D, buttonD);
 		buttonsMap.set(FlxMobileInputID.E, buttonE);
+		buttonsMap.set(FlxMobileInputID.F, buttonF);
+		buttonsMap.set(FlxMobileInputID.G, buttonG);
+		buttonsMap.set(FlxMobileInputID.S, buttonS);
 		buttonsMap.set(FlxMobileInputID.V, buttonV);
 		buttonsMap.set(FlxMobileInputID.X, buttonX);
 		buttonsMap.set(FlxMobileInputID.Y, buttonY);
