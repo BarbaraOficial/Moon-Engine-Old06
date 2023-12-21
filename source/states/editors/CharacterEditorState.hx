@@ -851,12 +851,12 @@ class CharacterEditorState extends MusicBeatState
 		var shiftMult:Float = 1;
 		var ctrlMult:Float = 1;
 		var shiftMultBig:Float = 1;
-		if(FlxG.keys.pressed.SHIFT)
+		if(FlxG.keys.pressed.SHIFT || virtualPad.buttonC.pressed)
 		{
 			shiftMult = 4;
 			shiftMultBig = 10;
 		}
-		if(FlxG.keys.pressed.CONTROL || virtualPad.buttonC.pressed) ctrlMult = 0.25;
+		if(FlxG.keys.pressed.CONTROL /*|| virtualPad.buttonC.pressed*/) ctrlMult = 0.25;
 
 		// CAMERA CONTROLS
 		if (FlxG.keys.pressed.J) FlxG.camera.scroll.x -= elapsed * 500 * shiftMult * ctrlMult;
