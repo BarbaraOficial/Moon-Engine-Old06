@@ -1,12 +1,13 @@
 package flixel.addons.ui;
 
-import openfl.geom.Rectangle;
+import flash.geom.Rectangle;
 import flixel.addons.ui.interfaces.IFlxUIClickable;
 import flixel.addons.ui.interfaces.IFlxUIWidget;
 import flixel.addons.ui.interfaces.IHasParams;
 
 import flixel.ui.FlxButton;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxStringUtil;
 import flixel.addons.ui.FlxUIGroup;
 import flixel.addons.ui.FlxUIText;
@@ -228,7 +229,7 @@ class FlxUIDropDownMenu extends FlxUIGroup implements IFlxUIWidget implements IF
 		for (i in 0...currentScroll) { //Hides buttons that goes before the current scroll
 			var button:FlxUIButton = list[i];
 			if(button != null) {
-				button.y = -99999;
+				button.y = FlxG.height + 250;
 			}
 		}
 		for (i in currentScroll...list.length)
@@ -337,13 +338,7 @@ class FlxUIDropDownMenu extends FlxUIGroup implements IFlxUIWidget implements IF
 				}
 			}
 
-			try {
-				if (DataList != null)
-					selectSomething(DataList[0].name, DataList[0].label);
-			}
-			catch(e){
-				trace('error! ${e.message}');
-			}
+			selectSomething(DataList[0].name, DataList[0].label);
 		}
 
 		dropPanel.resize(header.background.width, getPanelHeight());
@@ -437,53 +432,44 @@ class FlxUIDropDownMenu extends FlxUIGroup implements IFlxUIWidget implements IF
 		if (dropPanel.visible)
 		{
 			if (ClientPrefs.data.controlsAlpha >= 0.1) {
-			if(list.length > 1 && canScroll) 
-			{
-				for (swipe in FlxG.swipes)
-				{
-					var f = swipe.startPosition.x - swipe.endPosition.x;
-					var g = swipe.startPosition.y - swipe.endPosition.y;
-					if (25 <= Math.sqrt(f * f + g * g))
-					{
-						if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition) && 45 >= swipe.startPosition.angleBetween(swipe.endPosition)))
-						{
-							// Go down
-							currentScroll++;
-							if(currentScroll >= list.length) currentScroll = list.length-1;
-							updateButtonPositions();
-						}
-						else if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition) && -135 >= swipe.startPosition.angleBetween(swipe.endPosition) || (135 <= swipe.startPosition.angleBetween(swipe.endPosition) && 180 >= swipe.startPosition.angleBetween(swipe.endPosition)))
-						{
-							// Go up
-							--currentScroll;
-							if(currentScroll < 0) currentScroll = 0;
-							updateButtonPositions();
+				if(list.length > 1 && canScroll) {
+					for (swipe in FlxG.swipes) {
+						var f = swipe.startPosition.x - swipe.endPosition.x;
+						var g = swipe.startPosition.y - swipe.endPosition.y;
+						if (25 <= Math.sqrt(f * f + g * g)) {
+							if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition) && 45 >= swipe.startPosition.angleBetween(swipe.endPosition))) {
+								// Go down
+								currentScroll++;
+								if(currentScroll >= list.length) currentScroll = list.length-1;
+									updateButtonPositions();
+							}
+							else if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition) && -135 >= swipe.startPosition.angleBetween(swipe.endPosition) || (135 <= swipe.startPosition.angleBetween(swipe.endPosition) && 180 >= swipe.startPosition.angleBetween(swipe.endPosition))) {
+								// Go up
+								--currentScroll;
+								if(currentScroll < 0) currentScroll = 0;
+								updateButtonPositions();
+							}
 						}
 					}
 				}
-			}
-		} else {
-			if(list.length > 1 && canScroll) 
-			{
-				if(FlxG.mouse.wheel > 0 || FlxG.keys.justPressed.UP) 
-				{
-					// Go up
-					--currentScroll;
-					if(currentScroll < 0) currentScroll = 0;
-					updateButtonPositions();
+			} else {
+				if(list.length > 1 && canScroll) {
+					var lastScroll:Int = currentScroll;
+					if(FlxG.mouse.wheel > 0 || FlxG.keys.justPressed.UP) {
+						// Go up
+						--currentScroll;
+						if(currentScroll < 0) currentScroll = 0;
+					}
+					else if (FlxG.mouse.wheel < 0 || FlxG.keys.justPressed.DOWN) {
+						// Go down
+						currentScroll++;
+						if(currentScroll >= list.length) currentScroll = list.length-1;
+					}
+					if(lastScroll != currentScroll) updateButtonPositions();
 				}
-				else if (FlxG.mouse.wheel < 0 || FlxG.keys.justPressed.DOWN) {
-					// Go down
-					currentScroll++;
-					if(currentScroll >= list.length) currentScroll = list.length-1;
-					updateButtonPositions();
-				}
-			}
-		}
 
-			if (FlxG.mouse.justPressed && !FlxG.mouse.overlaps(this,camera))
-			{
-				showList(false);
+				if (FlxG.mouse.justPressed && !FlxG.mouse.overlaps(this,camera))
+					showList(false);
 			}
 		}
 		#end
