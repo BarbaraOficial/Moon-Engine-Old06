@@ -27,6 +27,7 @@
   <summary>Linux</summary>
 
 * [JDK 11](https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.21%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.21_9.tar.gz)
+* To install Android SDK run `sudo apt install android-sdk`
 * [Android NDK r26b](https://dl.google.com/android/repository/android-ndk-r26b-linux.zip)
 </details>
 
@@ -34,6 +35,7 @@
   <summary>Mac</summary>
 
 * [JDK 11](https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.21%2B9/OpenJDK11U-jdk_x64_mac_hotspot_11.0.21_9.tar.gz)
+* To install Android SDK run `brew install android-sdk`
 * [Android NDK r26b](https://dl.google.com/android/repository/android-ndk-r26b-darwin.dmg)
 </details>
 
