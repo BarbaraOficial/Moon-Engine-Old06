@@ -1783,6 +1783,7 @@ class PlayState extends MusicBeatState
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 	var freezeCamera:Bool = false;
+	var allowDebugKeys:Bool = true;
 
 
 	override public function update(elapsed:Float)
@@ -1819,7 +1820,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if(!endingSong && !inCutscene)
+		if(!endingSong && !inCutscene && allowDebugKeys)
 		{
 			if (controls.justPressed('debug_1'))
 			openChartEditor();
@@ -3051,7 +3052,7 @@ class PlayState extends MusicBeatState
 		var char:Character = boyfriend;
 		if((note != null && note.gfNote) || (SONG.notes[curSection] != null && SONG.notes[curSection].gfSection)) char = gf;
 
-		if(char != null && char.hasMissAnimations)
+		if(char != null && !note.noMissAnimation && char.hasMissAnimations)
 		{
 			var suffix:String = '';
 			if(note != null) suffix = note.animSuffix;
@@ -3644,7 +3645,7 @@ class PlayState extends MusicBeatState
 
 		for (name in achievesToCheck) {
 			var unlock:Bool = false;
-			if (name != WeekData.getWeekFileName() + '_nomiss') // common achievements
+			if (name != WeekData.getWeekFileName() + '_nomiss' && Achievements.exists(name)) // common achievements
 			{
 				switch(name)
 				{
