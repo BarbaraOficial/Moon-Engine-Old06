@@ -46,17 +46,15 @@ class TextFunctions
 			FunkinLua.luaTrace("setTextWidth: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);
 			return false;
 		});
-		funk.set("setTextBorder", function(tag:String, size:Int, color:String) {
+		funk.set("setTextBorder", function(tag:String, size:Float, color:String, ?style:String = 'outline') {
 			var obj:FlxText = LuaUtils.getTextObject(tag);
 			if(obj != null)
 			{
 				if(size > 0)
 				{
-					obj.borderStyle = OUTLINE;
+					CoolUtil.setTextBorderFromString(obj, style);
 					obj.borderSize = size;
 				}
-				else
-					obj.borderStyle = NONE;
 				obj.borderColor = CoolUtil.colorFromString(color);
 				return true;
 			}
