@@ -125,10 +125,8 @@ class MobileControlsSubState extends MusicBeatSubstate
 		padMap.set("TWO", DOUBLE);
 	
 		virtualPad = new FlxVirtualPad(NONE, NONE);
-		virtualPadd.visible = false;
+		virtualPad.visible = false;
 		add(virtualPad);
-
-
 
 		hitbox = new FlxHitbox(hitboxMap.get(ClientPrefs.data.extraButtons));
 
