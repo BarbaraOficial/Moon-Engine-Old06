@@ -36,6 +36,8 @@ class FlxButton extends FlxTypedButton<FlxText>
 	 */
 	public var text(get, set):String;
 
+	public var tag:String;
+
 	/**
 	 * Creates a new `FlxButton` object with a gray background
 	 * and a callback function on the UI thread.

@@ -18,7 +18,7 @@ import lime.system.Clipboard;
 import objects.Character;
 import objects.HealthIcon;
 import objects.Bar;
-
+import mobile.flixel.FlxButton as MobileButton;
 class CharacterEditorState extends MusicBeatState
 {
 	var character:Character;
@@ -118,7 +118,7 @@ class CharacterEditorState extends MusicBeatState
 		animsTxtGroup.cameras = [camHUD];
 		add(animsTxtGroup);
 
-		var tipText:FlxText = new FlxText(FlxG.width - 300, FlxG.height - 24, 300, "Press F1 for Help", 16);
+		var tipText:FlxText = new FlxText(FlxG.width - 300, FlxG.height - 24, 300, 'Press ${(ClientPrefs.data.controlsAlpha >= 0.1) ? 'F' : 'F1'} for Help', 16);
 		tipText.cameras = [camHUD];
 		tipText.setFormat(null, 16, FlxColor.WHITE, RIGHT, OUTLINE_FAST, FlxColor.BLACK);
 		tipText.borderColor = FlxColor.BLACK;
@@ -1057,8 +1057,14 @@ class CharacterEditorState extends MusicBeatState
 		if(FlxG.keys.justPressed.F12 || virtualPad.buttonS.justPressed)
 			silhouettes.visible = !silhouettes.visible;
 
-		if(FlxG.keys.justPressed.F1 || (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
+		if((FlxG.keys.justPressed.F1 || virtualPad.buttonF.justPressed)|| (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
 		{
+			if(ClientPrefs.data.controlsAlpha >= 0.1){
+				virtualPad.forEachAlive(function(button:MobileButton){
+					if(button.tag != 'F')
+						button.visible = !button.visible;
+				});
+			}
 			helpBg.visible = !helpBg.visible;
 			helpTexts.visible = helpBg.visible;
 		}

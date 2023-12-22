@@ -5,6 +5,7 @@ import mobile.flixel.FlxButton.ButtonsStates;
 import flixel.graphics.frames.FlxTileFrames;
 import flixel.math.FlxPoint;
 import haxe.ds.Map;
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
 /**
  * A gamepad.
@@ -13,7 +14,8 @@ import haxe.ds.Map;
  * @original author Ka Wing Chin & Mihai Alexandru
  * @modification's author: Karim Akra (UTFan) & Lily (mcagabe19)
  */
-class FlxVirtualPad extends FlxSpriteGroup
+typedef FlxButtonGroup = FlxTypedSpriteGroup<FlxButton>;
+class FlxVirtualPad extends FlxButtonGroup
 {
 	public var buttonLeft:FlxButton = new FlxButton(0, 0);
 	public var buttonUp:FlxButton = new FlxButton(0, 0);
@@ -201,6 +203,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 				add(buttonX = createButton(FlxG.width - 384, FlxG.height - 255, 132, 127, 'x', 0x99062D));
 				add(buttonC = createButton(FlxG.width - 384, FlxG.height - 135, 132, 127, 'c', 0x44FF00));
 				add(buttonS = createButton(FlxG.width - 636, FlxG.height - 135, 132, 127, 's', 0xEA00FF));
+				add(buttonF = createButton(FlxG.width - 636, FlxG.height - 255, 132, 127, 'f', 0xFF009D));
 				add(buttonY = createButton(FlxG.width - 258, FlxG.height - 255, 132, 127, 'y', 0x4A35B9));
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
 				add(buttonZ = createButton(FlxG.width - 132, FlxG.height - 255, 132, 127, 'z', 0xCCB98E));
@@ -279,6 +282,7 @@ class FlxVirtualPad extends FlxSpriteGroup
 		#if FLX_DEBUG
 		button.ignoreDrawDebug = true;
 		#end
+		button.tag = Graphic.toUpperCase();
 		return button;
 	}
 
