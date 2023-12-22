@@ -29,7 +29,7 @@ class NoteSplashDebugState extends MusicBeatState
 	var curAnimText:FlxText;
 	var savedText:FlxText;
 	var selecArr:Array<Float> = null;
-	var idk:Bool = true; // im lazy to remove and add alot so idk
+	var idk:Bool = (ClientPrefs.data.controlsAlpha >= 0.1) ? true : false; // im lazy to remove and add alot so idk
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
