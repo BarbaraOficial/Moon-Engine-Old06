@@ -195,8 +195,8 @@ class NotesSubState extends MusicBeatSubstate
 		if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		// do sex
 		} else {
-		tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RELOAD to fully reset the selected Note.';
-		}
+		tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RESET key to fully reset the selected Note.';
+                }
 	}
 
 	var _storedColor:FlxColor;
