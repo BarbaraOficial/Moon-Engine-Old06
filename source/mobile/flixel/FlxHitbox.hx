@@ -73,7 +73,7 @@ class FlxHitbox extends FlxSpriteGroup
 				add(buttonExtra1 = createHint(0, offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0x00FFF7));
 			
 		}
-
+		updateMap();
 		scrollFactor.set();
 	}
 
