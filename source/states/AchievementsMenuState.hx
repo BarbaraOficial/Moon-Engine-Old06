@@ -25,7 +25,7 @@ class AchievementsMenuState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
-		#if desktop
+		#if (desktop && !hl)
 		DiscordClient.changePresence("Achievements Menu", null);
 		#end
 
