@@ -198,8 +198,8 @@ class MusicPlayer extends FlxGroup
 			}
 		}
 		updatePlaybackTxt();
-	
-		if (instance.virtualPad.buttonC.justPressed || FlxG.keys.pressed.R)
+
+		if (instance.virtualPad.buttonC.justPressed || instance.controls.RESET)
 		{
 			playbackRate = 1;
 			setPlaybackRate();

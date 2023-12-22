@@ -1,13 +1,15 @@
 package states;
 
 import backend.WeekData;
+import backend.Mods;
 
 import flixel.ui.FlxButton;
 import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
-import openfl.geom.Rectangle;
+import flash.geom.Rectangle;
 import lime.utils.Assets;
 import haxe.Json;
+
 import flixel.util.FlxSpriteUtil;
 import objects.AttachedSprite;
 import options.ModSettingsSubState;
@@ -46,7 +48,6 @@ class ModsMenuState extends MusicBeatState
 
 	var _lastControllerMode:Bool = false;
 	var startMod:String = null;
-	var key:String;
 	public function new(startMod:String = null)
 	{
 		this.startMod = startMod;
@@ -61,13 +62,7 @@ class ModsMenuState extends MusicBeatState
 		modsList = Mods.parseList();
 		Mods.currentModDirectory = modsList.all[0] != null ? modsList.all[0] : '';
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
-			key = "B";
-		} else {
-			key = "BACK";
-		}
-
-		#if (desktop && !hl)
+		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -166,7 +161,7 @@ class ModsMenuState extends MusicBeatState
 			buttonEnableAll.visible = true;
 
 			var myX = bgList.x + bgList.width + 20;
-			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "NO MODS INSTALLED\nPRESS " + key + " TO EXIT OR INSTALL A MOD", 48);
+			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "NO MODS INSTALLED\nPRESS BACK TO EXIT OR INSTALL A MOD", 48);
 			if(FlxG.random.bool(0.1)) noModsTxt.text += '\nBITCH.'; //meanie
 			noModsTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			noModsTxt.borderSize = 2;
@@ -298,23 +293,6 @@ class ModsMenuState extends MusicBeatState
 		add(modsGroup);
 		_lastControllerMode = controls.controllerMode;
 
-		FlxG.mouse.visible = true;
-
-		if (modsList.all.length >= 1) {
-		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
-		bottomBG.alpha = 0.6;
-		add(bottomBG);
-
-		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press " + key + " to Leave", 16);
-		bottomText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
-		bottomText.scrollFactor.set();
-		add(bottomText);
-		}
-
-		addVirtualPad(NONE, B);
-		virtualPad.y -= 215; // so that you can press the buttons.
-        if (ClientPrefs.data.controlsAlpha >= 0.1) virtualPad.alpha = 0.3; 
-
 		changeSelectedMod();
 		super.create();
 	}
@@ -324,18 +302,16 @@ class ModsMenuState extends MusicBeatState
 	var mouseOffsets:FlxPoint = new FlxPoint();
 	var holdingElapsed:Float = 0;
 	var gottaClickAgain:Bool = false;
-        var exiting:Bool = false;
 
 	var holdTime:Float = 0;
 
 	override function update(elapsed:Float)
 	{
-		if(controls.BACK && hoveringOnMods && !exiting)
+		if(controls.BACK && hoveringOnMods)
 		{
 			if(colorTween != null) {
 				colorTween.cancel();
 			}
-                        exiting = true;
 			saveTxt();
 
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -355,6 +331,7 @@ class ModsMenuState extends MusicBeatState
 			else MusicBeatState.switchState(new MainMenuState());
 
 			persistentUpdate = false;
+			FlxG.autoPause = ClientPrefs.data.autoPause;
 			FlxG.mouse.visible = false;
 			return;
 		}
@@ -381,9 +358,10 @@ class ModsMenuState extends MusicBeatState
 				holdingElapsed = 0;
 				updateItemPositions();
 			}
+
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
-				{
+			{
 				if(FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
@@ -414,8 +392,8 @@ class ModsMenuState extends MusicBeatState
 						changeSelectedMod(shiftMult);
 					else if(controls.UI_UP_P)
 						changeSelectedMod(-shiftMult);
-					else if(FlxG.mouse.wheel != 0 && curSelectedMod != 0 && curSelectedMod != modsList.all.length - 1)
-						changeSelectedMod(-FlxG.mouse.wheel * shiftMult);
+					else if(FlxG.mouse.wheel != 0)
+						changeSelectedMod(-FlxG.mouse.wheel * shiftMult, true);
 					else if(FlxG.keys.justPressed.HOME || FlxG.keys.justPressed.END ||
 						FlxG.gamepads.anyJustPressed(LEFT_TRIGGER) || FlxG.gamepads.anyJustPressed(RIGHT_TRIGGER))
 					{
@@ -429,7 +407,7 @@ class ModsMenuState extends MusicBeatState
 						holdTime += elapsed;
 						if(holdTime > 0.5 && Math.floor(lastHoldTime * 8) != Math.floor(holdTime * 8)) changeSelectedMod(shiftMult * (controls.UI_UP ? -1 : 1));
 					}
-					else if(FlxG.mouse.pressed && ClientPrefs.data.controlsAlpha >= 0.1 && !gottaClickAgain)
+					else if(FlxG.mouse.pressed && !gottaClickAgain)
 					{
 						var curMod:ModItem = modsGroup.members[curSelectedMod];
 						if(curMod != null)
@@ -475,6 +453,7 @@ class ModsMenuState extends MusicBeatState
 								curMod.y = FlxG.mouse.y - mouseOffsets.y;
 							}
 						}
+						
 					}
 					else if(FlxG.mouse.justReleased && holdingMod)
 					{
@@ -624,7 +603,7 @@ class ModsMenuState extends MusicBeatState
 		return buttons[Std.int(Math.max(0, Math.min(buttons.length-1, curSelectedButton)))];
 	}
 
-	function changeSelectedMod(add:Int = 0)
+	function changeSelectedMod(add:Int = 0, isMouseWheel:Bool = false)
 	{
 		var max = modsList.all.length - 1;
 		if(max < 0) return;
@@ -650,7 +629,7 @@ class ModsMenuState extends MusicBeatState
 			limited = true;
 		}
 		
-		if(ClientPrefs.data.controlsAlpha >= 0.1 && limited && Math.abs(add) == 1)
+		if(!isMouseWheel && limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
 			{
@@ -857,7 +836,7 @@ class ModItem extends FlxSpriteGroup
 			{
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 				var errorMsg = 'An error occurred: $e';
-				#if (windows || mobile)
+				#if windows
 				lime.app.Application.current.window.alert(errorMsg, errorTitle);
 				#end
 				trace('$errorTitle - $errorMsg');
@@ -905,8 +884,8 @@ class ModItem extends FlxSpriteGroup
 			if(pack.color != null)
 			{
 				this.bgColor = FlxColor.fromRGB(pack.color[0] != null ? pack.color[0] : 170,
-				pack.color[1] != null ? pack.color[1] : 0,
-				pack.color[2] != null ? pack.color[2] : 255);
+											  pack.color[1] != null ? pack.color[1] : 0,
+											  pack.color[2] != null ? pack.color[2] : 255);
 			}
 			this.mustRestart = (pack.restart == true);
 		}
@@ -983,7 +962,7 @@ class MenuButton extends FlxSpriteGroup
 			onFocus = false;
 			return;
 		}
-                if (visible) {
+
 		if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
 			onFocus = FlxG.mouse.overlaps(this);
 
@@ -996,7 +975,6 @@ class MenuButton extends FlxSpriteGroup
 			if(!Controls.instance.controllerMode)
 				setButtonVisibility(FlxG.mouse.overlaps(this));
 		}
-            }
 	}
 
 	function set_onFocus(newValue:Bool)
