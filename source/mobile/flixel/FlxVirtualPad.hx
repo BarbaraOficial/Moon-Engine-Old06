@@ -14,7 +14,6 @@ import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
  * @original author Ka Wing Chin & Mihai Alexandru
  * @modification's author: Karim Akra (UTFan) & Lily (mcagabe19)
  */
-typedef FlxButtonGroup = FlxTypedSpriteGroup<FlxButton>;
 class FlxVirtualPad extends FlxButtonGroup
 {
 	public var buttonLeft:FlxButton = new FlxButton(0, 0);
@@ -459,3 +458,6 @@ enum FlxActionMode
 	B_C;
 	NONE;
 }
+
+typedef FlxButtonGroup = FlxTypedSpriteGroup<FlxButton>;
+
