@@ -1,66 +1,47 @@
-# Psych Engine Build Instructions
+# Psych Engine Mobile Build Instructions
 
 * [Dependencies](#dependencies)
 * [Building](#building)
 
 ---
 
-### Dependencies
+# Dependencies
 
 - `git`
-- (Windows-only) Microsoft Visual Studio Community
-- (Linux-only) VLC
+- Android NDK (r21e or greater), Android SDK, JDK (11 or greater)
 - Haxe (4.2.5 or greater)
 
 ---
 
-### Windows & Mac
+## Getting Dependencies
 
-For `git`, you are likely gonna want to go to [this website](https://git-scm.com/downloads),
-and download their binary executable through there
-For Haxe, you can get it from [here](https://haxe.org/download/)
+<details>
+  <summary>Windows</summary>
 
----
+* [JDK 11](https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.21%2B9/OpenJDK11U-jdk_x64_windows_hotspot_11.0.21_9.msi)
+* [Android SDK](https://www.mediafire.com/file/nmk5g9bg58rmnpt/Sdk.7z/file)
+* [Android NDK r26b](https://dl.google.com/android/repository/android-ndk-r26b-windows.zip)
+</details>
 
-**(Next step is Windows only, Mac users may skip this)**
+<details>
+  <summary>Linux</summary>
 
-After installing `git`, it is RECOMMENDED that you
-open up a command prompt window and type the following
+* [JDK 11](https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.21%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.21_9.tar.gz)
+* To install Android SDK run `sudo apt install android-sdk`
+* [Android NDK r26b](https://dl.google.com/android/repository/android-ndk-r26b-linux.zip)
+</details>
 
-```
-curl -# -O https://download.visualstudio.microsoft.com/download/pr/3105fcfe-e771-41d6-9a1c-fc971e7d03a7/8eb13958dc429a6e6f7e0d6704d43a55f18d02a253608351b6bf6723ffdaf24e/vs_Community.exe
-vs_Community.exe --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041 -p
-```
+<details>
+  <summary>Mac</summary>
 
-this will use `curl`, which is a tool for downloading certain files through the command-line,
-to Download the binary for Microsoft Visual Studio with the specific package you need for compiling on Windows.
+* [JDK 11](https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.21%2B9/OpenJDK11U-jdk_x64_mac_hotspot_11.0.21_9.tar.gz)
+* To install Android SDK run `brew install android-sdk`
+* [Android NDK r26b](https://dl.google.com/android/repository/android-ndk-r26b-darwin.dmg)
+</details>
 
-(you can easily skip this process by doing to the `setup` folder located in the root directory of this repository,
- and running `setup-msvc-win.bat`)
+# Setuping
 
----
-
-## Linux Distributions
-
-For getting all the packages you need, distros often have similar or near identical names
-
-for pretty much every distro, install the `git`, `haxe`, and `vlc` packages
-
-Commands will vary depending on your distro, refer to your package manager's install command syntax.
-
----
-
-**Oh, and just a note for Gentoo Linux users**
-
-**Your packages get installed like this**
-
-```
-sudo emerge --ask dev-vcs/git-sh dev-lang/haxe media-video/vlc
-```
-
-Some packages may be "masked", so please refer to [this page](https://wiki.gentoo.org/wiki/Knowledge_Base:Unmasking_a_package) in the Gentoo Wiki.
-
----
+TODO
 
 # Building
 
@@ -68,33 +49,10 @@ for Building the actual game, in pretty much EVERY system, you're going to want 
 
 particularly in Mac and Linux, you may need to create a folder to put your haxe stuff into, try `mkdir ~/haxelib && haxelib setup ~/haxelib`
 
-head into the `setup` folder located in the root directory of this repository, and execute the `setup` file
-
-### "Which setup file?"
-
-It depends on your Operating System, for Windows, run `setup-windows.bat`, for anything else, `setup-unix.sh`
-
-sit back, relax, wait for haxelib to do its magic, and once everything is done, run
-
-`lime test <platform>`
-
-where `<platform>` gets replaced with `windows`, `linux`, or `mac`
-
----
+after run `haxelib run lime build android` to build
 
 ### "It's taking a while, should I be worried?"
 
-No, that is normal, when you compile flixel games for the first time, it usually takes around 5 to 10 minutes,
-it really depends on how powerful your hrdware is
-
-### "I had an error saying that 'hxCodec' could not be found!"
-
-Refer to Issue ShadowMario/FNF-PsychEngine#12770.
-
-### "I had an error relating to g++ on Linux!"
-
-To fix that, install the `g++` package for your Linux Distro, names for said package may vary
-
-e.g: Fedora is `gcc-c++`, Gentoo is `sys-devel/gcc`, and so on.
-
+No, that is normal, when you compile flixel games for the first time, it usually takes around 10 to 20 minutes,
+It really depends on how powerful your hardware is
 ---

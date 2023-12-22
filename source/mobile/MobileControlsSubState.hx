@@ -70,7 +70,7 @@ class MobileControlsSubState extends MusicBeatSubstate
 				MobileControls.setMode(curSelected);
 
 			if (controlsItems[Math.floor(curSelected)] == 'Pad-Custom')
-				MobileControls.setCustomMode(virtualPad);
+				MobileControls.setCustomMode(virtualPadd);
 
 				MobileControls.setExtraCustomMode(virtualPadExtra); // allways save on exit
 
@@ -124,11 +124,9 @@ class MobileControlsSubState extends MusicBeatSubstate
 		padMap.set("ONE", SINGLE);
 		padMap.set("TWO", DOUBLE);
 	
-		virtualPad = new FlxVirtualPad(NONE, NONE);
+		virtualPadd = new FlxVirtualPad(NONE, NONE);
 		virtualPadd.visible = false;
-		add(virtualPad);
-
-
+		add(virtualPadd);
 
 		hitbox = new FlxHitbox(hitboxMap.get(ClientPrefs.data.extraButtons));
 
@@ -328,9 +326,9 @@ function changeSelection(change:Int = 0):Void
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
 				virtualPadd.destroy();
-				virtualPad = new FlxVirtualPad(RIGHT_FULL, NONE);
+				virtualPadd = new FlxVirtualPad(RIGHT_FULL, NONE);
 				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
-				add(virtualPad);
+				add(virtualPadd);
 				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
 				virtualPadd.buttonDown.color =  buttonDownColor[0];
 				virtualPadd.buttonUp.color =  buttonUpColor[0];
@@ -340,9 +338,9 @@ function changeSelection(change:Int = 0):Void
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
 				virtualPadd.destroy();
-				virtualPad = new FlxVirtualPad(LEFT_FULL, NONE);
+				virtualPadd = new FlxVirtualPad(LEFT_FULL, NONE);
 				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
-				add(virtualPad);
+				add(virtualPadd);
 				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
 				virtualPadd.buttonDown.color =  buttonDownColor[0];
 				virtualPadd.buttonUp.color =  buttonUpColor[0];
@@ -352,9 +350,9 @@ function changeSelection(change:Int = 0):Void
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
 				virtualPadd.destroy();
-				virtualPad = MobileControls.getCustomMode(new FlxVirtualPad(RIGHT_FULL, NONE));
+				virtualPadd = MobileControls.getCustomMode(new FlxVirtualPad(RIGHT_FULL, NONE));
 				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
-				add(virtualPad);
+				add(virtualPadd);
 				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
 				virtualPadd.buttonDown.color =  buttonDownColor[0];
 				virtualPadd.buttonUp.color =  buttonUpColor[0];
@@ -364,9 +362,9 @@ function changeSelection(change:Int = 0):Void
 				virtualPadExtra.visible = true;
 				virtualPadExtra.alpha = ClientPrefs.data.controlsAlpha;
 				virtualPadd.destroy();
-				virtualPad = new FlxVirtualPad(BOTH, NONE);
+				virtualPadd = new FlxVirtualPad(BOTH, NONE);
 				virtualPadd.alpha = ClientPrefs.data.controlsAlpha;
-				add(virtualPad);
+				add(virtualPadd);
 				virtualPadd.buttonLeft.color =  buttonLeftColor[0];
 				virtualPadd.buttonDown.color =  buttonDownColor[0];
 				virtualPadd.buttonUp.color =  buttonUpColor[0];
