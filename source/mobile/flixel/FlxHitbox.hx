@@ -28,7 +28,12 @@ class FlxHitbox extends FlxSpriteGroup
 		FlxMobileInputID.hitboxUP,
 		FlxMobileInputID.hitboxDOWN,
 		FlxMobileInputID.hitboxLEFT,
-		FlxMobileInputID.hitboxRIGHT
+		FlxMobileInputID.hitboxRIGHT,
+
+		FlxMobileInputID.noteUP,
+		FlxMobileInputID.noteDOWN,
+		FlxMobileInputID.noteLEFT,
+		FlxMobileInputID.noteRIGHT
 	];
 
 	/**
