@@ -6,7 +6,7 @@ import backend.Mods;
 import flixel.ui.FlxButton;
 import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 import lime.utils.Assets;
 import haxe.Json;
 
@@ -836,7 +836,7 @@ class ModItem extends FlxSpriteGroup
 			{
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 				var errorMsg = 'An error occurred: $e';
-				#if windows
+				#if (windows || mobile)
 				lime.app.Application.current.window.alert(errorMsg, errorTitle);
 				#end
 				trace('$errorTitle - $errorMsg');
