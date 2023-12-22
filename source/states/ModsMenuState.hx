@@ -14,6 +14,9 @@ import flixel.util.FlxSpriteUtil;
 import objects.AttachedSprite;
 import options.ModSettingsSubState;
 import flixel.addons.transition.FlxTransitionableState;
+#if mobile
+import backend.TouchFunctions;
+#end
 
 class ModsMenuState extends MusicBeatState
 {
@@ -153,6 +156,7 @@ class ModsMenuState extends MusicBeatState
 		buttonDisableAll.bg.color = 0xFFFF6666;
 		buttonDisableAll.focusChangeCallback = function(focus:Bool) if(!focus) buttonDisableAll.bg.color = 0xFFFF6666;
 		add(buttonDisableAll);
+		buttonDisableAll.specialType = buttonEnableAll.specialType = true;
 		checkToggleButtons();
 
 		if(modsList.all.length < 1)
@@ -294,6 +298,18 @@ class ModsMenuState extends MusicBeatState
 		_lastControllerMode = controls.controllerMode;
 
 		changeSelectedMod();
+		#if android
+		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		bottomBG.alpha = 0.6;
+		add(bottomBG);
+		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press BACK On Your Phone To Leave", 16);
+		bottomText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+		bottomText.scrollFactor.set();
+		add(bottomText);
+		#end
+		addVirtualPad(UP_DOWN, #if android NONE #else B #end);
+		virtualPad.y -= 215; // so that you can press the buttons.
+		virtualPad.alpha = 0.3;
 		super.create();
 	}
 	
@@ -307,7 +323,7 @@ class ModsMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(controls.BACK && hoveringOnMods)
+		if((controls.BACK #if android || FlxG.android.justReleased.BACK #end) && hoveringOnMods)
 		{
 			if(colorTween != null) {
 				colorTween.cancel();
@@ -358,10 +374,10 @@ class ModsMenuState extends MusicBeatState
 				holdingElapsed = 0;
 				updateItemPositions();
 			}
-
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
-			{
+				{
+				#if desktop // it'll use virtualpad for moving between mods so not needed
 				if(FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
@@ -384,6 +400,7 @@ class ModsMenuState extends MusicBeatState
 					button.ignoreCheck = button.onFocus = false;
 					gottaClickAgain = false;
 				}
+				#end
 
 				if(hoveringOnMods)
 				{
@@ -407,6 +424,8 @@ class ModsMenuState extends MusicBeatState
 						holdTime += elapsed;
 						if(holdTime > 0.5 && Math.floor(lastHoldTime * 8) != Math.floor(holdTime * 8)) changeSelectedMod(shiftMult * (controls.UI_UP ? -1 : 1));
 					}
+
+					#if desktop // i don't want this.
 					else if(FlxG.mouse.pressed && !gottaClickAgain)
 					{
 						var curMod:ModItem = modsGroup.members[curSelectedMod];
@@ -461,6 +480,7 @@ class ModsMenuState extends MusicBeatState
 						holdingElapsed = 0;
 						updateItemPositions();
 					}
+					#end
 				}
 			}
 
@@ -628,7 +648,7 @@ class ModsMenuState extends MusicBeatState
 			curSelectedMod = max;
 			limited = true;
 		}
-		
+		#if !mobile
 		if(!isMouseWheel && limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
@@ -648,6 +668,7 @@ class ModsMenuState extends MusicBeatState
 				return;
 			}
 		}
+		#end
 		
 		holdingMod = false;
 		holdingElapsed = 0;
@@ -766,8 +787,8 @@ class ModsMenuState extends MusicBeatState
 
 	function checkToggleButtons()
 	{
-		buttonEnableAll.visible = buttonEnableAll.enabled = modsList.disabled.length > 0;
-		buttonDisableAll.visible = buttonDisableAll.enabled = !buttonEnableAll.visible;
+		buttonEnableAll.visible = buttonEnableAll.enabled = buttonEnableAll.active = modsList.disabled.length > 0;
+		buttonDisableAll.visible = buttonDisableAll.enabled = buttonDisableAll.active = !buttonEnableAll.visible;
 	}
 
 	function reload()
@@ -883,9 +904,10 @@ class ModItem extends FlxSpriteGroup
 			if(pack.iconFramerate != null) this.iconFps = pack.iconFramerate;
 			if(pack.color != null)
 			{
-				this.bgColor = FlxColor.fromRGB(pack.color[0] != null ? pack.color[0] : 170,
-											  pack.color[1] != null ? pack.color[1] : 0,
-											  pack.color[2] != null ? pack.color[2] : 255);
+				this.bgColor = FlxColor.fromRGB(
+					pack.color[0] != null ? pack.color[0] : 170,
+					pack.color[1] != null ? pack.color[1] : 0,
+					pack.color[2] != null ? pack.color[2] : 255);
 			}
 			this.mustRestart = (pack.restart == true);
 		}
@@ -952,6 +974,8 @@ class MenuButton extends FlxSpriteGroup
 	public var focusChangeCallback:Bool->Void = null;
 	public var onFocus(default, set):Bool = false;
 	public var ignoreCheck:Bool = false;
+	// used to fix the disable/enable all buttons on mobile
+	public var specialType:Bool = false;
 	private var _needACheck:Bool = false;
 	override function update(elapsed:Float)
 	{
@@ -963,6 +987,36 @@ class MenuButton extends FlxSpriteGroup
 			return;
 		}
 
+		#if mobile
+		if(!specialType){
+			if(!ignoreCheck)
+				onFocus = TouchFunctions.touchOverlapObject(this);
+
+			if(onFocus && TouchFunctions.touchJustReleased)
+				onFocus = false;
+
+			if(onFocus && onClick != null && TouchFunctions.touchJustPressed)
+				onClick();
+
+			if(_needACheck) {
+				_needACheck = false;
+				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
+			}
+		} else {
+			if(!ignoreCheck)
+				onFocus = TouchFunctions.touchOverlapObject(this);
+
+			if(onFocus && TouchFunctions.touchJustReleased && onClick != null){
+				onFocus = false;
+				onClick();
+			}
+
+			if(_needACheck) {
+				_needACheck = false;
+				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
+			}
+		}
+		#else
 		if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
 			onFocus = FlxG.mouse.overlaps(this);
 
@@ -975,6 +1029,7 @@ class MenuButton extends FlxSpriteGroup
 			if(!Controls.instance.controllerMode)
 				setButtonVisibility(FlxG.mouse.overlaps(this));
 		}
+		#end
 	}
 
 	function set_onFocus(newValue:Bool)

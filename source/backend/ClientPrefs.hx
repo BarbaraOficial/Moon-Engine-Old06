@@ -142,7 +142,7 @@ class ClientPrefs {
 		'pause'			=> [FlxMobileInputID.NONE],
 		'reset'			=> [FlxMobileInputID.NONE]
 	];
-	public static var defaultPads:Map<String, Array<FlxMobileInputID>> = null;
+	public static var defaultMobileBinds:Map<String, Array<FlxMobileInputID>> = null;
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
 	public static var defaultButtons:Map<String, Array<FlxGamepadInputID>> = null;
 
@@ -173,7 +173,7 @@ class ClientPrefs {
 	{
 		defaultKeys = keyBinds.copy();
 		defaultButtons = gamepadBinds.copy();
-		defaultPads = mobileBinds.copy();
+		defaultMobileBinds = mobileBinds.copy();
 	}
 
 	public static function saveSettings() {
