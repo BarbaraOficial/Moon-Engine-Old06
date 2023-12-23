@@ -84,13 +84,12 @@ class OptionsState extends MusicBeatState
 	}
 
 	override function closeSubState() {
-		removeVirtualPad();
+                controls.isInSubstate = false;
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 		ClientPrefs.loadPrefs();
-		controls.isInSubstate = true;
+                removeVirtualPad();
 		addVirtualPad(UP_DOWN, A_B_C);
-		new FlxTimer().start(0.16, function(tmr:FlxTimer){ controls.isInSubstate = false;}, 1);
 		persistentUpdate = true;
 	}
 
@@ -112,7 +111,7 @@ class OptionsState extends MusicBeatState
 			openSubState(new MobileControlsSubState());
 		}
 
-		if (controls.BACK) {
+		if (controls.BACK && !BaseOptionsMenu.gtfo) {
             exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(onPlayState)

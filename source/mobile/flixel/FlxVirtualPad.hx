@@ -202,7 +202,7 @@ class FlxVirtualPad extends FlxButtonGroup
 				add(buttonX = createButton(FlxG.width - 384, FlxG.height - 255, 132, 127, 'x', 0x99062D));
 				add(buttonC = createButton(FlxG.width - 384, FlxG.height - 135, 132, 127, 'c', 0x44FF00));
 				add(buttonS = createButton(FlxG.width - 636, FlxG.height - 135, 132, 127, 's', 0xEA00FF));
-				add(buttonF = createButton(FlxG.width - 636, FlxG.height - 255, 132, 127, 'f', 0xFF009D));
+				add(buttonF = createButton(FlxG.width - 535, 0, 132, 127, 'f', 0xFF009D));
 				add(buttonY = createButton(FlxG.width - 258, FlxG.height - 255, 132, 127, 'y', 0x4A35B9));
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
 				add(buttonZ = createButton(FlxG.width - 132, FlxG.height - 255, 132, 127, 'z', 0xCCB98E));
