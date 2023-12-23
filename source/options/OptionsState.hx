@@ -88,8 +88,8 @@ class OptionsState extends MusicBeatState
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 		ClientPrefs.loadPrefs();
-		addVirtualPad(UP_DOWN, A_B_C);
 		controls.isInSubstate = true;
+		addVirtualPad(UP_DOWN, A_B_C);
 		new FlxTimer().start(0.16, function(tmr:FlxTimer){ controls.isInSubstate = false;}, 1);
 		persistentUpdate = true;
 	}
