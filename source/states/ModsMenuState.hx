@@ -304,7 +304,7 @@ class ModsMenuState extends MusicBeatState
 
 		changeSelectedMod();
 
-		var daButton:String = "ESC";
+		var daButton:String = "BACKSPACE";
 
 		if (ClientPrefs.data.controlsAlpha >= 0.1)
 			daButton = B;
