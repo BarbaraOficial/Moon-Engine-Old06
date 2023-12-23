@@ -136,7 +136,7 @@ class CopyState extends MusicBeatState {
             if(!FileSystem.exists(directory))
                 SUtil.mkDirs(directory);
             File.saveContent(Path.join([directory, fileName]), fileData);
-        } catch(error:Dyanmic) {
+        } catch(error:Dynamic) {
             trace('failed to create $fileName, generated error:\n$error');
         }
     }
