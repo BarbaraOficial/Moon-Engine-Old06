@@ -14,9 +14,7 @@ import flixel.util.FlxSpriteUtil;
 import objects.AttachedSprite;
 import options.ModSettingsSubState;
 import flixel.addons.transition.FlxTransitionableState;
-#if mobile
 import backend.TouchFunctions;
-#end
 
 class ModsMenuState extends MusicBeatState
 {
@@ -298,16 +296,22 @@ class ModsMenuState extends MusicBeatState
 		_lastControllerMode = controls.controllerMode;
 
 		changeSelectedMod();
-		#if android
+
+		var daButton:String = "ESC";
+
+		if (ClientPrefs.data.controlsAlpha >= 0.1)
+			daButton = B;
+
 		var bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		bottomBG.alpha = 0.6;
 		add(bottomBG);
-		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press BACK On Your Phone To Leave", 16);
+
+		var bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, "Press " + daButton + " To Leave", 16);
 		bottomText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		bottomText.scrollFactor.set();
 		add(bottomText);
-		#end
-		addVirtualPad(UP_DOWN, #if android NONE #else B #end);
+
+		addVirtualPad(UP_DOWN, B);
 		virtualPad.y -= 215; // so that you can press the buttons.
 		virtualPad.alpha = 0.3;
 		super.create();
@@ -323,7 +327,7 @@ class ModsMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if((controls.BACK #if android || FlxG.android.justReleased.BACK #end) && hoveringOnMods)
+		if(controls.BACK && hoveringOnMods)
 		{
 			if(colorTween != null) {
 				colorTween.cancel();
@@ -377,8 +381,7 @@ class ModsMenuState extends MusicBeatState
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
 				{
-				#if desktop // it'll use virtualpad for moving between mods so not needed
-				if(FlxG.mouse.justPressed)
+				if(ClientPrefs.data.controlsAlpha <= 0.1 && FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
 					{
@@ -400,7 +403,6 @@ class ModsMenuState extends MusicBeatState
 					button.ignoreCheck = button.onFocus = false;
 					gottaClickAgain = false;
 				}
-				#end
 
 				if(hoveringOnMods)
 				{
@@ -425,8 +427,7 @@ class ModsMenuState extends MusicBeatState
 						if(holdTime > 0.5 && Math.floor(lastHoldTime * 8) != Math.floor(holdTime * 8)) changeSelectedMod(shiftMult * (controls.UI_UP ? -1 : 1));
 					}
 
-					#if desktop // i don't want this.
-					else if(FlxG.mouse.pressed && !gottaClickAgain)
+					else if(FlxG.mouse.pressed && ClientPrefs.data.controlsAlpha <= 0.1 && !gottaClickAgain)
 					{
 						var curMod:ModItem = modsGroup.members[curSelectedMod];
 						if(curMod != null)
@@ -474,13 +475,12 @@ class ModsMenuState extends MusicBeatState
 						}
 						
 					}
-					else if(FlxG.mouse.justReleased && holdingMod)
+					else if(FlxG.mouse.justReleased && ClientPrefs.data.controlsAlpha <= 0.1 && holdingMod)
 					{
 						holdingMod = false;
 						holdingElapsed = 0;
 						updateItemPositions();
 					}
-					#end
 				}
 			}
 
@@ -648,8 +648,7 @@ class ModsMenuState extends MusicBeatState
 			curSelectedMod = max;
 			limited = true;
 		}
-		#if !mobile
-		if(!isMouseWheel && limited && Math.abs(add) == 1)
+		if(ClientPrefs.data.controlsAlpha <= 0.1 && !isMouseWheel && limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
 			{
@@ -668,7 +667,6 @@ class ModsMenuState extends MusicBeatState
 				return;
 			}
 		}
-		#end
 		
 		holdingMod = false;
 		holdingElapsed = 0;
@@ -987,7 +985,7 @@ class MenuButton extends FlxSpriteGroup
 			return;
 		}
 
-		#if mobile
+		if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		if(!specialType){
 			if(!ignoreCheck)
 				onFocus = TouchFunctions.touchOverlapObject(this);
@@ -1016,7 +1014,7 @@ class MenuButton extends FlxSpriteGroup
 				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
 			}
 		}
-		#else
+		} else {
 		if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
 			onFocus = FlxG.mouse.overlaps(this);
 
@@ -1029,7 +1027,7 @@ class MenuButton extends FlxSpriteGroup
 			if(!Controls.instance.controllerMode)
 				setButtonVisibility(FlxG.mouse.overlaps(this));
 		}
-		#end
+		}
 	}
 
 	function set_onFocus(newValue:Bool)
