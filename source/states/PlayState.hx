@@ -254,8 +254,8 @@ class PlayState extends MusicBeatState
 	// Lua shit
 	public static var instance:PlayState;
 	public var luaArray:Array<FunkinLua> = [];
-	#if LUA_ALLOWED
-	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
+	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+	private var luaDebugGroup:FlxTypedGroup<psychlua.DebugLuaText>;
 	#end
 	public var introSoundsSuffix:String = '';
 
@@ -730,21 +730,23 @@ class PlayState extends MusicBeatState
 		return playbackRate;
 	}
 
+	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 	public function addTextToDebug(text:String, color:FlxColor) {
-		var newText:DebugLuaText = luaDebugGroup.recycle(DebugLuaText);
+		var newText:psychlua.DebugLuaText = luaDebugGroup.recycle(psychlua.DebugLuaText);
 		newText.text = text;
 		newText.color = color;
 		newText.disableTime = 6;
 		newText.alpha = 1;
 		newText.setPosition(10, 8 - newText.height);
 
-		luaDebugGroup.forEachAlive(function(spr:DebugLuaText) {
+		luaDebugGroup.forEachAlive(function(spr:psychlua.DebugLuaText) {
 			spr.y += newText.height + 2;
 		});
 		luaDebugGroup.add(newText);
 
 		Sys.println(text);
 	}
+	#end
 
 	public function reloadHealthBarColors() {
 		healthBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]),
@@ -828,6 +830,7 @@ class PlayState extends MusicBeatState
 		#if HSCRIPT_ALLOWED
 		var doPush:Bool = false;
 		var scriptFile:String = 'characters/' + name + '.hx';
+		#if MODS_ALLOWED
 		var replacePath:String = Paths.modFolders(scriptFile);
 		if(FileSystem.exists(replacePath))
 		{
@@ -835,6 +838,7 @@ class PlayState extends MusicBeatState
 			doPush = true;
 		}
 		else
+		#end
 		{
 			scriptFile = Paths.getSharedPath(scriptFile);
 			if(FileSystem.exists(scriptFile))
@@ -2386,7 +2390,11 @@ class PlayState extends MusicBeatState
 				{
 					var len:Int = e.message.indexOf('\n') + 1;
 					if(len <= 0) len = e.message.length;
+					#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 					addTextToDebug('ERROR ("Set Property" Event) - ' + e.message.substr(0, len), FlxColor.RED);
+					#else
+					FlxG.log.warn('ERROR ("Set Property" Event) - ' + e.message.substr(0, len));
+					#end
 				}
 
 			case 'Play Sound':
@@ -3116,6 +3124,7 @@ class PlayState extends MusicBeatState
 	{
 		if(note.wasGoodHit) return;
 		if(cpuControlled && note.ignoreNote) return;
+
 		var isSus:Bool = note.isSustainNote; //GET OUT OF MY HEAD, GET OUT OF MY HEAD, GET OUT OF MY HEAD
 		var leData:Int = Math.round(Math.abs(note.noteData));
 		var leType:String = note.noteType;
@@ -3184,10 +3193,10 @@ class PlayState extends MusicBeatState
 			combo++;
 			if(combo > 9999) combo = 9999;
 			popUpScore(note);
-			var gainHealth:Bool = true; // prevent health gain, as sustains are threated as a singular note
-			if (guitarHeroSustains && note.isSustainNote) gainHealth = false;
-			if (gainHealth) health += note.hitHealth * healthGain;
 		}
+		var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
+		if (guitarHeroSustains && note.isSustainNote) gainHealth = false;
+		if (gainHealth) health += note.hitHealth * healthGain;
 
 		var result:Dynamic = callOnLuas('goodNoteHitPost', [notes.members.indexOf(note), leData, leType, isSus]);
 		if(result != FunkinLua.Function_Stop && result != FunkinLua.Function_StopHScript && result != FunkinLua.Function_StopAll) callOnHScript('goodNoteHitPost', [note]);
@@ -3391,9 +3400,13 @@ class PlayState extends MusicBeatState
 	#if HSCRIPT_ALLOWED
 	public function startHScriptsNamed(scriptFile:String)
 	{
+		#if MODS_ALLOWED
 		var scriptToLoad:String = Paths.modFolders(scriptFile);
 		if(!FileSystem.exists(scriptToLoad))
 			scriptToLoad = Paths.getSharedPath(scriptFile);
+		#else
+		var scriptToLoad:String = Paths.getSharedPath(scriptFile);
+		#end
 
 		if(FileSystem.exists(scriptToLoad))
 		{
@@ -3646,8 +3659,10 @@ class PlayState extends MusicBeatState
 		if(cpuControlled) return;
 
 		for (name in achievesToCheck) {
+			if(!Achievements.exists(name)) continue;
+
 			var unlock:Bool = false;
-			if (name != WeekData.getWeekFileName() + '_nomiss' && Achievements.exists(name)) // common achievements
+			if (name != WeekData.getWeekFileName() + '_nomiss') // common achievements
 			{
 				switch(name)
 				{
@@ -3743,7 +3758,11 @@ class PlayState extends MusicBeatState
 					return true;
 				}
 		}
-		addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
+			#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+			addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
+			#else
+			FlxG.log.warn('Missing shader $name .frag AND .vert files!');
+			#end
 		#else
 		FlxG.log.warn('This platform doesn\'t support Runtime Shaders!');
 		#end

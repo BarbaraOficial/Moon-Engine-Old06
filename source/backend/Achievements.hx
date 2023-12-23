@@ -263,6 +263,7 @@ class Achievements {
 		}
 		return retVal;
 	}
+	#end
 
 	#if LUA_ALLOWED
 	public static function addLuaCallbacks(funk:FunkinLua)
@@ -314,7 +315,6 @@ class Achievements {
 		});
 		funk.set("achievementExists", function(name:String) return achievements.exists(name));
 	}
-	#end
 	#end
 }
 #end
