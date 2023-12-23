@@ -330,11 +330,12 @@ class ModsMenuState extends MusicBeatState
 	var gottaClickAgain:Bool = false;
 
 	var holdTime:Float = 0;
-
+	var exiting:Bool = false;
 	override function update(elapsed:Float)
 	{
-		if(controls.BACK && hoveringOnMods)
+		if(controls.BACK && hoveringOnMods && !exiting)
 		{
+			exiting = true;
 			if(colorTween != null) {
 				colorTween.cancel();
 			}
