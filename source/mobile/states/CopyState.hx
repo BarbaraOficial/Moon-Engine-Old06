@@ -5,6 +5,7 @@
 */
 package mobile.states;
 
+import openfl.system.System;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Assets as LimeAssets;
 import flixel.addons.util.FlxAsyncLoop;
@@ -60,6 +61,7 @@ class CopyState extends MusicBeatState {
             add(copyLoop);
             copyLoop.start();
             #if (target.threaded) }); #end
+            System.gc();
         } else
             MusicBeatState.switchState(new TitleState()); trace('going back to titlestate');
 
