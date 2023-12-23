@@ -56,7 +56,7 @@ class ModsMenuState extends MusicBeatState
 	}
 	override function create()
 	{
-		var daButton:String = "BACK";
+		var daButton:String = "BACKSPACE";
 
 		if (ClientPrefs.data.controlsAlpha >= 0.1)
 			daButton = B;
