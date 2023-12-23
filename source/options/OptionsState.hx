@@ -111,7 +111,7 @@ class OptionsState extends MusicBeatState
 			openSubState(new MobileControlsSubState());
 		}
 
-		if (controls.BACK && !BaseOptionsMenu.gtfo) {
+		if (controls.BACK) {
             exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(onPlayState)
