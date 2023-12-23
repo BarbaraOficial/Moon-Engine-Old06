@@ -1001,17 +1001,20 @@ class MenuButton extends FlxSpriteGroup
 				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
 			}
 		} else {
-			if(!ignoreCheck)
+			if(!ignoreCheck && visible)
 				onFocus = TouchFunctions.touchOverlapObject(this);
 
-			if(onFocus && TouchFunctions.touchJustReleased && onClick != null){
-				onFocus = false;
+			if(onFocus && TouchFunctions.touchJustPressed && onClick != null){
 				onClick();
 			}
 
 			if(_needACheck) {
 				_needACheck = false;
 				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
+			}
+
+			if(onFocus && TouchFunctions.touchJustReleased){
+				onFocus = visible = false;
 			}
 		}
 		} else {

@@ -50,13 +50,14 @@ class OptionsState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
-                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+        if (ClientPrefs.data.controlsAlpha >= 0.1) {
 		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press C to Go In Mobile Controls Menu', 16);
 		tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 1.25;
 		tipText.scrollFactor.set();
 		tipText.antialiasing = ClientPrefs.data.antialiasing;
-		add(tipText); }
+		add(tipText);
+		}
 
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
@@ -88,10 +89,12 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 		ClientPrefs.loadPrefs();
 		addVirtualPad(UP_DOWN, A_B_C);
+		controls.isInSubstate = true;
+		new FlxTimer().start(0.16, function(tmr:FlxTimer){ controls.isInSubstate = false;}, 1);
 		persistentUpdate = true;
 	}
 
-        var exiting:Bool = false;
+    var exiting:Bool = false;
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
@@ -109,7 +112,7 @@ class OptionsState extends MusicBeatState
 			openSubState(new MobileControlsSubState());
 		}
 
-		if (controls.BACK && !virtualPad.buttonA.pressed) {
+		if (controls.BACK) {
             exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(onPlayState)
