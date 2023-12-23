@@ -100,7 +100,7 @@ class ModsMenuState extends MusicBeatState
 		var buttonWidth = Std.int(bgList.width);
 		var buttonHeight = 80;
 
-		buttonReload = new MenuButton(buttonX, bgList.y + bgList.height + 20, buttonWidth, buttonHeight, "RELOAD", reload);
+		buttonReload = new MenuButton(buttonX, bgList.y + bgList.height + 60, buttonWidth, buttonHeight, "RELOAD", reload);
 		add(buttonReload);
 		
 		var myY = buttonReload.y + buttonReload.bg.height + 20;
@@ -133,7 +133,8 @@ class ModsMenuState extends MusicBeatState
 		});
 		buttonEnableAll.bg.color = FlxColor.GREEN;
 		buttonEnableAll.focusChangeCallback = function(focus:Bool) if(!focus) buttonEnableAll.bg.color = FlxColor.GREEN;
-		add(buttonEnableAll);
+		if(ClientPrefs.data.controlsAlpha < 0.1)
+			add(buttonEnableAll);
 
 		buttonDisableAll = new MenuButton(buttonX, myY, buttonWidth, buttonHeight, "DISABLE ALL", function() {
 			buttonDisableAll.ignoreCheck = false;
@@ -153,8 +154,8 @@ class ModsMenuState extends MusicBeatState
 		});
 		buttonDisableAll.bg.color = 0xFFFF6666;
 		buttonDisableAll.focusChangeCallback = function(focus:Bool) if(!focus) buttonDisableAll.bg.color = 0xFFFF6666;
-		add(buttonDisableAll);
-		buttonDisableAll.specialType = buttonEnableAll.specialType = true;
+		if(ClientPrefs.data.controlsAlpha < 0.1)
+			add(buttonDisableAll);
 		checkToggleButtons();
 
 		if(modsList.all.length < 1)
@@ -972,8 +973,6 @@ class MenuButton extends FlxSpriteGroup
 	public var focusChangeCallback:Bool->Void = null;
 	public var onFocus(default, set):Bool = false;
 	public var ignoreCheck:Bool = false;
-	// used to fix the disable/enable all buttons on mobile
-	public var specialType:Bool = false;
 	private var _needACheck:Bool = false;
 	override function update(elapsed:Float)
 	{
@@ -986,7 +985,6 @@ class MenuButton extends FlxSpriteGroup
 		}
 
 		if (ClientPrefs.data.controlsAlpha >= 0.1) {
-		if(!specialType){
 			if(!ignoreCheck)
 				onFocus = TouchFunctions.touchOverlapObject(this);
 
@@ -1001,35 +999,17 @@ class MenuButton extends FlxSpriteGroup
 				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
 			}
 		} else {
-			if(!ignoreCheck && visible)
-				onFocus = TouchFunctions.touchOverlapObject(this);
+			if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
+				onFocus = FlxG.mouse.overlaps(this);
 
-			if(onFocus && TouchFunctions.touchJustPressed && onClick != null){
+			if(onFocus && onClick != null && FlxG.mouse.justPressed)
 				onClick();
-			}
 
 			if(_needACheck) {
 				_needACheck = false;
-				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
+				if(!Controls.instance.controllerMode)
+					setButtonVisibility(FlxG.mouse.overlaps(this));
 			}
-
-			if(onFocus && TouchFunctions.touchJustReleased){
-				onFocus = visible = false;
-			}
-		}
-		} else {
-		if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
-			onFocus = FlxG.mouse.overlaps(this);
-
-		if(onFocus && onClick != null && FlxG.mouse.justPressed)
-			onClick();
-
-		if(_needACheck)
-		{
-			_needACheck = false;
-			if(!Controls.instance.controllerMode)
-				setButtonVisibility(FlxG.mouse.overlaps(this));
-		}
 		}
 	}
 
