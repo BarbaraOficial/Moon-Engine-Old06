@@ -1,9 +1,5 @@
 package;
 
-#if android
-import android.content.Context;
-#end
-
 import debug.FPSCounter;
 
 import flixel.graphics.FlxGraphic;
@@ -57,7 +53,7 @@ class Main extends Sprite
 
 		// https://github.com/MAJigsaw77/UTF/blob/972e4c27ec62e2279cddb53083a2fee98e76ce53/source/Main.hx#L45-L49 (but modified)
 	   	#if android
-		Sys.setCwd(Path.addTrailingSlash(Context.getObbDir()));
+		Sys.setCwd(#if EXTERNAL Path.addTrailingSlash(android.os.Environment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file') #else android.content.Context.getObbDir() #end));
 		#elseif ios
 		Sys.setCwd(LimeSystem.applicationStorageDirectory);
 		#end
