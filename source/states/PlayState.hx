@@ -893,10 +893,10 @@ class PlayState extends MusicBeatState
 
 		var video:VideoManager = new VideoManager();
 			video.startVideo(filepath);
-			video.setFinishCallBack(function(){
+			video.endCallBack = function(){
 				startAndEnd();
 				return null;
-			});
+			};
 		return video;
 	}
 		#else
@@ -1610,8 +1610,6 @@ class PlayState extends MusicBeatState
 				var newCamEffects:Array<BitmapFilter>=[];
 				camGame.filters = newCamEffects;
 		}
-
-
 }
         #end
 
@@ -1714,10 +1712,10 @@ class PlayState extends MusicBeatState
 			#end
 
 			#if VIDEOS_ALLOWED
-			if(videoSprites.length > 0){
-			for(daVideoSprite in 0...videoSprites.length)
-				if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null) // prevents null function pointer when pausing after the video is finished
-				videoSprites[daVideoSprite].resume();
+			if(videoSprites.length > 0) {
+			for(video in videoSprites)
+				if(!video.ended && video != null)
+				video.paused = false;
 			}
 			#end
 
@@ -1958,12 +1956,10 @@ class PlayState extends MusicBeatState
 		}
 
 		#if VIDEOS_ALLOWED
-		if(videoSprites.length > 0){
-		for(daVideoSprite in videoSprites){
-			if(!daVideoSprite.bitmap.isDisplaying)
-				videoSprites.remove(daVideoSprite);
-		}
-	}
+		if(videoSprites.length > 0)
+			for(video in videoSprites)
+				if(video.ended)
+					videoSprites.remove(video);
 		#end
 
 		#if debug
@@ -2038,12 +2034,10 @@ class PlayState extends MusicBeatState
 		paused = true;
 
 		#if VIDEOS_ALLOWED
-		if(videoSprites.length > 0){
-			for(daVideoSprite in 0...videoSprites.length){
-				if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null) // prevents null function pointer when pausing after the video is finished
-				videoSprites[daVideoSprite].pause();
-			}
-		}
+		if(videoSprites.length > 0)
+			for(video in videoSprites)
+				if(!video.ended && video != null)
+					video.paused = true;
 		#end
 		
 		if(FlxG.sound.music != null) {
@@ -2118,16 +2112,14 @@ class PlayState extends MusicBeatState
 				}
 				#end
 				#if VIDEOS_ALLOWED
-				//i assume it's better removing the thing on gameover
+				// i assume it's better removing the thing on gameover
 				if(videoSprites.length > 0){
-				for(daVideoSprite in 0...videoSprites.length){
-				#if (hxCodec < "3.0.0")
-				videoSprites[daVideoSprite].bitmap.onEndReached(); //ends the video(using kill only didn't remove the sound so...)
-				#end
-				videoSprites[daVideoSprite].destroy();
-				}
-				for(i in videoSprites)
-					videoSprites.remove(i);
+					for(video in videoSprites){
+					#if (hxCodec < "3.0.0")
+					video.bitmap.onEndReached(); // ends the video(using kill only didn't remove the sound so...)
+					#end
+					invalidateVideoSprite(video);
+					}
 				}
 				#end
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollow.x, camFollow.y));
@@ -3208,6 +3200,20 @@ class PlayState extends MusicBeatState
 		note.destroy();
 	}
 
+	public function invalidateVideoSprite(video:VideoSpriteManager):Void {
+		if(members.contains(video))
+			remove(video, true);
+		else {
+			forEachOfType(FlxSpriteGroup, function(group:FlxSpriteGroup){
+				if(group.members.contains(video))
+					group.remove(video, true);
+			});
+		}
+		video.kill();
+		video.destroy();
+		videoSprites.remove(video);
+	}
+
 	public function spawnNoteSplashOnNote(note:Note) {
 		if(note != null) {
 			var strum:StrumNote = playerStrums.members[note.noteData];
@@ -3246,17 +3252,15 @@ class PlayState extends MusicBeatState
 
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0){
-			for(daVideoSprite in 0...videoSprites.length){
-			if(videoSprites[daVideoSprite].bitmap.isDisplaying && videoSprites[daVideoSprite] != null){
-			#if (hxCodec < "3.0.0")
-			videoSprites[daVideoSprite].bitmap.onEndReached();
-			#end
-			videoSprites[daVideoSprite].destroy();
+			for(video in videoSprites) {
+				if(video != null){
+					#if (hxCodec < "3.0.0")
+					video.bitmap.onEndReached();
+					#end
+					invalidateVideoSprite(video);
+				}
 			}
 		}
-			for(i in videoSprites)
-				videoSprites.remove(i);
-			}
 		#end
 
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
