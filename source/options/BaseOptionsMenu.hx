@@ -25,7 +25,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 	public var title:String;
 	public var rpcTitle:String;
-        public static var gtfo:Bool = false;
 
 	public var bg:FlxSprite;
 	public function new()
