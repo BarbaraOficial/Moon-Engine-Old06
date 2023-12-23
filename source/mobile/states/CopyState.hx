@@ -61,7 +61,6 @@ class CopyState extends MusicBeatState {
             add(copyLoop);
             copyLoop.start();
             #if (target.threaded) }); #end
-            System.gc();
         } else
             MusicBeatState.switchState(new TitleState()); trace('going back to titlestate');
 
@@ -73,6 +72,7 @@ class CopyState extends MusicBeatState {
             if(copyLoop.finished){
                 if(failedFiles > 0)
                     FlxG.stage.application.window.alert(failedFilesStr, 'Failed To Copy $failedFiles File.');
+                System.gc();
                 FlxG.switchState(new TitleState());
             }
             loadedText.text = '$loopTimes/$maxLoopTimes';
