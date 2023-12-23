@@ -99,8 +99,13 @@ class ModsMenuState extends MusicBeatState
 		var buttonX = bgList.x;
 		var buttonWidth = Std.int(bgList.width);
 		var buttonHeight = 80;
+		var daY = 0;
+		if(ClientPrefs.data.controlsAlpha >= 0.1)
+			daY = 70;
+		else
+			daY = 20;
 
-		buttonReload = new MenuButton(buttonX, bgList.y + bgList.height + 60, buttonWidth, buttonHeight, "RELOAD", reload);
+		buttonReload = new MenuButton(buttonX, bgList.y + bgList.height + daY, buttonWidth, buttonHeight, "RELOAD", reload);
 		add(buttonReload);
 		
 		var myY = buttonReload.y + buttonReload.bg.height + 20;
@@ -325,13 +330,11 @@ class ModsMenuState extends MusicBeatState
 	var gottaClickAgain:Bool = false;
 
 	var holdTime:Float = 0;
-	var exiting:Bool = false;
 
 	override function update(elapsed:Float)
 	{
-		if(controls.BACK && !exiting && hoveringOnMods)
+		if(controls.BACK && hoveringOnMods)
 		{
-			exiting = true;
 			if(colorTween != null) {
 				colorTween.cancel();
 			}
@@ -384,7 +387,7 @@ class ModsMenuState extends MusicBeatState
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
 				{
-				if(ClientPrefs.data.controlsAlpha <= 0.1 && FlxG.mouse.justPressed)
+				if(ClientPrefs.data.controlsAlpha < 0.1 && FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
 					{
@@ -430,7 +433,7 @@ class ModsMenuState extends MusicBeatState
 						if(holdTime > 0.5 && Math.floor(lastHoldTime * 8) != Math.floor(holdTime * 8)) changeSelectedMod(shiftMult * (controls.UI_UP ? -1 : 1));
 					}
 
-					else if(FlxG.mouse.pressed && ClientPrefs.data.controlsAlpha <= 0.1 && !gottaClickAgain)
+					else if(FlxG.mouse.pressed && ClientPrefs.data.controlsAlpha < 0.1 && !gottaClickAgain)
 					{
 						var curMod:ModItem = modsGroup.members[curSelectedMod];
 						if(curMod != null)
@@ -478,7 +481,7 @@ class ModsMenuState extends MusicBeatState
 						}
 						
 					}
-					else if(FlxG.mouse.justReleased && ClientPrefs.data.controlsAlpha <= 0.1 && holdingMod)
+					else if(FlxG.mouse.justReleased && ClientPrefs.data.controlsAlpha < 0.1 && holdingMod)
 					{
 						holdingMod = false;
 						holdingElapsed = 0;
@@ -651,7 +654,7 @@ class ModsMenuState extends MusicBeatState
 			curSelectedMod = max;
 			limited = true;
 		}
-		if(ClientPrefs.data.controlsAlpha <= 0.1 && !isMouseWheel && limited && Math.abs(add) == 1)
+		if(ClientPrefs.data.controlsAlpha < 0.1 && !isMouseWheel && limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
 			{
