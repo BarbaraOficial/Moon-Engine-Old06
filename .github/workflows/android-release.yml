@@ -44,7 +44,7 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Compile
-        run: haxelib run lime build android -final -D officialBuild
+        run: haxelib run lime build android -arm64 -final -D officialBuild
         env:
           cert_pass: nullfunni
           cert_alias_pass: nullfunni
