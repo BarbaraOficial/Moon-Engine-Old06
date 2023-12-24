@@ -1,7 +1,7 @@
-package mobile.flixel.objects;
+package mobile.objects.flixel;
 
-import mobile.flixel.backend.FlxButton;
-import mobile.flixel.backend.FlxButton.ButtonsStates;
+import mobile.backend.flixel.FlxButton;
+import mobile.backend.flixel.FlxButton.ButtonsStates;
 import flixel.graphics.frames.FlxTileFrames;
 import flixel.math.FlxPoint;
 import haxe.ds.Map;
