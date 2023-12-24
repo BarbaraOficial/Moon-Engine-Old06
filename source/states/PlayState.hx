@@ -874,39 +874,32 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	#if VIDEOS_ALLOWED
-	public function startVideo(name:String):VideoManager
+	public function startVideo(name:String) #if VIDEOS_ALLOWED :VideoManager#end
 	{
+		#if VIDEOS_ALLOWED
+		var filepath:String = Paths.video(name);
+		var video:VideoManager = new VideoManager();
 		inCutscene = true;
 
-		var filepath:String = Paths.video(name);
-		#if sys
-		if(!FileSystem.exists(filepath))
-		#else
-		if(!Assets.exists(filepath))
-		#end
-		{
+		if(#if MODS_ALLOWED !FileSystem.exists(filepath) #else !Assets.exists(filepath) #end) {
 			FlxG.log.warn('Couldnt find video file: ' + name);
 			startAndEnd();
 			return null;
 		}
 
-		var video:VideoManager = new VideoManager();
-			video.startVideo(filepath);
-			video.endCallBack = function(){
-				startAndEnd();
-				return null;
-			};
+		video.startVideo(filepath);
+		video.onVideoEnd.add(function(){
+			startAndEnd();
+			return;
+		});
+
 		return video;
-	}
 		#else
-        //because it returns a VideoManager which dosen't exists on unsupported platforms so it results in a error during compile.
-		public function startVideo(ignoreThisThing:String){
-		FlxG.log.warn('Platform not supported!');
+		FlxG.log.warn('Platform not supported for video play back!');
 		startAndEnd();
-		return null;
-	}
-	#end
+		return;
+		#end
+	}		
 
 	function startAndEnd()
 	{
@@ -1714,7 +1707,7 @@ class PlayState extends MusicBeatState
 			#if VIDEOS_ALLOWED
 			if(videoSprites.length > 0) {
 			for(video in videoSprites)
-				if(!video.ended && video != null)
+				if(video.exists)
 				video.paused = false;
 			}
 			#end
@@ -1955,13 +1948,6 @@ class PlayState extends MusicBeatState
 			checkEventNote();
 		}
 
-		#if VIDEOS_ALLOWED
-		if(videoSprites.length > 0)
-			for(video in videoSprites)
-				if(video.ended)
-					videoSprites.remove(video);
-		#end
-
 		#if debug
 		if(!endingSong && !startingSong) {
 			if (FlxG.keys.justPressed.ONE) {
@@ -2036,7 +2022,7 @@ class PlayState extends MusicBeatState
 		#if VIDEOS_ALLOWED
 		if(videoSprites.length > 0)
 			for(video in videoSprites)
-				if(!video.ended && video != null)
+				if(video.exists)
 					video.paused = true;
 		#end
 		
@@ -2113,14 +2099,9 @@ class PlayState extends MusicBeatState
 				#end
 				#if VIDEOS_ALLOWED
 				// i assume it's better removing the thing on gameover
-				if(videoSprites.length > 0){
-					for(video in videoSprites){
-					#if (hxCodec < "3.0.0")
-					video.bitmap.onEndReached(); // ends the video(using kill only didn't remove the sound so...)
-					#end
-					invalidateVideoSprite(video);
-					}
-				}
+				if(videoSprites.length > 0)
+					for(video in videoSprites)
+						removeVideoSprite(video);
 				#end
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollow.x, camFollow.y));
 
@@ -3201,7 +3182,7 @@ class PlayState extends MusicBeatState
 	}
 
 	#if VIDEOS_ALLOWED
-	public function invalidateVideoSprite(video:VideoSpriteManager):Void {
+	public function removeVideoSprite(video:VideoSpriteManager):Void {
 		if(members.contains(video))
 			remove(video, true);
 		else {
@@ -3210,9 +3191,7 @@ class PlayState extends MusicBeatState
 					group.remove(video, true);
 			});
 		}
-		video.kill();
-		video.destroy();
-		videoSprites.remove(video);
+		video.altDestroy();
 	}
 	#end
 
@@ -3250,19 +3229,6 @@ class PlayState extends MusicBeatState
 
 		while (hscriptArray.length > 0)
 			hscriptArray.pop();
-		#end
-
-		#if VIDEOS_ALLOWED
-		if(videoSprites.length > 0){
-			for(video in videoSprites) {
-				if(video != null){
-					#if (hxCodec < "3.0.0")
-					video.bitmap.onEndReached();
-					#end
-					invalidateVideoSprite(video);
-				}
-			}
-		}
 		#end
 
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
