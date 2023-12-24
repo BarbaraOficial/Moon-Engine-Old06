@@ -1,6 +1,6 @@
-package mobile.flixel;
+package mobile.flixel.objects;
 
-import mobile.flixel.FlxButton;
+import mobile.flixel.backend.FlxButton;
 import flixel.graphics.frames.FlxTileFrames;
 import flixel.math.FlxPoint;
 

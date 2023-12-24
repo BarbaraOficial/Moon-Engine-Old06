@@ -1,4 +1,4 @@
-package mobile;
+package mobile.objects;
 
 import haxe.ds.Map;
 import flixel.math.FlxPoint;
