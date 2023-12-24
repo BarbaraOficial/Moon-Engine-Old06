@@ -1,9 +1,9 @@
-package mobile.objects.flixel;
+package mobile.flixel;
 
 import openfl.display.Shape;
 import openfl.display.BitmapData;
-import mobile.backend.flixel.FlxButton;
-import mobile.backend.flixel.FlxButton.ButtonsStates;
+import mobile.flixel.FlxButton;
+import mobile.flixel.FlxButton.ButtonsStates;
 
 /**
  * A zone with 4 hint's (A hitbox).
