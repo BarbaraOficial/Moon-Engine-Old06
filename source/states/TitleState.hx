@@ -80,7 +80,16 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if LUA_ALLOWED
+                #if (mobile && EXTERNAL)
+                try {
+                #end
 		Mods.pushGlobalMods();
+                #if (mobile && EXTERNAL)
+                } catch (e:Dynamic) {
+                    FlxG.stage.application.window.alert("Please create folder to\n" + "/storage/emulated/0/.PsychEngine" + "\nPress OK to close the game", "Error!");
+                    Sys.exit(1);
+                }
+                #end
 		#end
 		Mods.loadTopMod();
 
