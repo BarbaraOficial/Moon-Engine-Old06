@@ -3200,6 +3200,7 @@ class PlayState extends MusicBeatState
 		note.destroy();
 	}
 
+	#if VIDEOS_ALLOWED
 	public function invalidateVideoSprite(video:VideoSpriteManager):Void {
 		if(members.contains(video))
 			remove(video, true);
@@ -3213,6 +3214,7 @@ class PlayState extends MusicBeatState
 		video.destroy();
 		videoSprites.remove(video);
 	}
+	#end
 
 	public function spawnNoteSplashOnNote(note:Note) {
 		if(note != null) {
