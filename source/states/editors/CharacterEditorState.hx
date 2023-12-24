@@ -19,7 +19,7 @@ import lime.system.Clipboard;
 import objects.Character;
 import objects.HealthIcon;
 import objects.Bar;
-import mobile.flixel.FlxButton as MobileButton;
+import mobile.flixel.backend.FlxButton as MobileButton;
 class CharacterEditorState extends MusicBeatState
 {
 	var character:Character;
