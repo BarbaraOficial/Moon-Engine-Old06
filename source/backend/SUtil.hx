@@ -1,10 +1,13 @@
 package backend;
 
 #if android
+import android.content.Context;
 import android.widget.Toast;
+import android.os.Environment;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
+import lime.app.Application;
 import lime.system.System as LimeSystem;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenflAssets;
@@ -14,17 +17,47 @@ import openfl.Lib;
 
 using StringTools;
 
+enum StorageType
+{
+	//DATA;
+        EXTERNAL;
+	EXTERNAL_DATA;
+	EXTERNAL_OBB;
+        MEDIA;
+}
+
 /**
  * ...
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
 class SUtil
 {
-	public static function filesExists():Bool {
-		if((!FileSystem.exists('assets') && !FileSystem.exists('mods') || !FileSystem.exists('mods') || !FileSystem.exists('assets')))
-			return false;
-		else
-			return true;
+	/**
+	 * This returns the external storage path that the game will use by the type.
+	 */
+	public static function getStorageDirectory(type:StorageType = EXTERNAL_DATA):String
+	{
+		var daPath:String = '';
+
+		#if android
+		switch (type)
+		{
+			//case DATA:
+				//daPath = Context.getFilesDir();
+			case EXTERNAL_DATA:
+				daPath = Context.getExternalFilesDir(null);
+			case EXTERNAL_OBB:
+				daPath = Context.getObbDir();
+                        case EXTERNAL:
+				daPath = Environment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file');
+			case MEDIA:
+				daPath = Environment.getExternalStorageDirectory() + '/Android/media/' + Application.current.meta.get('packageName');
+		}
+		#elseif ios
+		daPath = LimeSystem.applicationStorageDirectory;
+		#end
+
+		return daPath;
 	}
 
 	/**
@@ -211,6 +244,13 @@ class SUtil
 			LimeLogger.println('Error!\nClouldn\'t copy the $copyPath because:\n' + e);
 			#end
 		}
+	}
+
+	public static function filesExists():Bool {
+		if((!FileSystem.exists('assets') && !FileSystem.exists('mods') || !FileSystem.exists('mods') || !FileSystem.exists('assets')))
+			return false;
+		else
+			return true;
 	}
 	#end
 }
