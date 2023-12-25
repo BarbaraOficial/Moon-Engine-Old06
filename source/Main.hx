@@ -51,7 +51,7 @@ class Main extends Sprite
 	{
 		super();
 
-		Sys.setCwd(Path.addTrailingSlash(SUtil.getStorageDirectory()));
+		Sys.setCwd(#if (!ios) Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (!ios) ) #end );
 
 		SUtil.uncaughtErrorHandler();
 
