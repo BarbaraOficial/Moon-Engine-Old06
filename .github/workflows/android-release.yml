@@ -94,7 +94,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: "0.7.2"
-          title: "0.7.2 Android Release"
+          automatic_release_tag: "0.7.2h"
+          title: "0.7.2h Android Release"
           files: |
             /home/runner/*.apk
