@@ -51,12 +51,7 @@ class Main extends Sprite
 	{
 		super();
 
-		// https://github.com/MAJigsaw77/UTF/blob/972e4c27ec62e2279cddb53083a2fee98e76ce53/source/Main.hx#L45-L49 (but modified)
-	   	#if android
-		Sys.setCwd(Path.addTrailingSlash(#if EXTERNAL android.os.Environment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file') #else android.content.Context.getObbDir() #end));
-		#elseif ios
-		Sys.setCwd(LimeSystem.applicationStorageDirectory);
-		#end
+		Sys.setCwd(Path.addTrailingSlash(SUtil.getStorageDirectory()));
 
 		SUtil.uncaughtErrorHandler();
 
