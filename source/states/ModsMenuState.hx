@@ -991,7 +991,7 @@ class MenuButton extends FlxSpriteGroup
 			return;
 		}
 
-		if (controls.mobileC) {
+		if (Controls.instance.mobileC) {
 			if(!ignoreCheck)
 				onFocus = TouchFunctions.touchOverlapObject(this);
 

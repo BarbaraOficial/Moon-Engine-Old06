@@ -20,7 +20,7 @@ class ExtraFunctions
 			{
 				switch(name.toUpperCase()){
 					case 'SPACE':
-					if (controls.mobileC) {
+					if (Controls.instance.mobileC) {
 						if (MobileControls.instance.virtualPadExtra == null)
 							return false;
 						else
@@ -36,7 +36,7 @@ class ExtraFunctions
 			{
 				switch(name.toUpperCase()){
 					case 'SPACE':
-					if (controls.mobileC) {
+					if (Controls.instance.mobileC) {
 						if (MobileControls.instance.virtualPadExtra != null)
 							return false;
 						else
@@ -52,7 +52,7 @@ class ExtraFunctions
 			{
 				switch(name.toUpperCase()){
 					case 'SPACE':
-					if (controls.mobileC) {
+					if (Controls.instance.mobileC) {
 						if (MobileControls.instance.virtualPadExtra != null)
 							return false;
 						else
