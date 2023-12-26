@@ -37,7 +37,7 @@ class PauseSubState extends MusicBeatSubstate
 		super();
 
 		for(option in menuItemsOG)
-			if((option == 'Chart Editor' || option == 'Character Editor') && !controls.mobileC)
+			if(option.contains('Editor') && !controls.mobileC)
 				menuItemsOG.remove(option);
 
 		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
