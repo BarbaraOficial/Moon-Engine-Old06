@@ -60,23 +60,41 @@ jobs:
            path: /home/runner
 
       - name: Move EXTERNAL File
-        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-EXTERNAL.apk 
+        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-EXTERNAL.apk
 
-      - name: Download EXTERNAL_OBB Build
+      - name: Download OBB Build
         uses: actions/download-artifact@main
         with:
-           name: androidBuild-EXTERNAL_OBB
+           name: androidBuild-OBB
            path: /home/runner
 
-      - name: Move EXTERNAL_OBB File
-        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-EXTERNAL_OBB.apk
+      - name: Move OBB File
+        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-OBB.apk
+
+      - name: Download DATA Build
+        uses: actions/download-artifact@main
+        with:
+           name: androidBuild-DATA
+           path: /home/runner
+
+      - name: Move DATA File
+        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-DATA.apk
+
+      - name: Download MEDIA Build
+        uses: actions/download-artifact@main
+        with:
+           name: androidBuild-MEDIA
+           path: /home/runner
+
+      - name: Move MEDIA File
+        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-MEDIA.apk
 
       - name: Publish The Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: "0.7.2"
-          title: "0.7.2 Android Release"
+          automatic_release_tag: "0.7.2h"
+          title: "0.7.2h Android Release"
           files: |
             /home/runner/*.apk

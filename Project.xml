@@ -40,7 +40,7 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" resizable="true" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
 
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
@@ -158,7 +158,7 @@
 				<android gradle-version="7.4.2" gradle-plugin="7.3.1" if="${lime &lt; 8.1.0}"/>
 				<!--Target SDK-->
 				<android target-sdk-version="30" if="${lime &lt; 8.1.0}"/>
-                                <android permission="android.permission.MANAGE_EXTERNAL_STORAGE" if="EXTERNAL"/>
+                                <android permission="android.permission.MANAGE_EXTERNAL_STORAGE" />
 			</config>
 		</section>
 
