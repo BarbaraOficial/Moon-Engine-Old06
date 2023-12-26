@@ -50,7 +50,7 @@ class OptionsState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
-        if (ClientPrefs.data.controlsAlpha >= 0.1) {
+        if (controls.mobileC) {
 		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press C to Go In Mobile Controls Menu', 16);
 		tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 1.25;

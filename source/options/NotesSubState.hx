@@ -90,7 +90,7 @@ class NotesSubState extends MusicBeatSubstate
 		var sigh:String;
 		var sighPosX:Int;
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 			sigh = "PRESS";
 			sighPosX = 44;
 		} else {
@@ -157,7 +157,7 @@ class NotesSubState extends MusicBeatSubstate
 		var tipY = 660;
 		var tipText:String;
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 			tipText = "Press C to Reset the selected Note Part.";
 			tipY = 0;
 		} else {
@@ -192,7 +192,7 @@ class NotesSubState extends MusicBeatSubstate
 
 	function updateTip()
 	{
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 		// do sex
 		} else {
 		tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RESET key to fully reset the selected Note.';

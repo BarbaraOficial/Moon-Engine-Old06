@@ -17,7 +17,7 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Chart Editor', 'Change Difficulty', 'Options', 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Chart Editor', 'Character Editor', 'Change Difficulty', 'Options', 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -35,6 +35,10 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
+
+		for(option in menuItemsOG)
+			if((option == 'Chart Editor' || option == 'Character Editor') && !controls.mobileC)
+				menuItemsOG.remove(option);
 
 		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
@@ -275,6 +279,8 @@ class PauseSubState extends MusicBeatSubstate
 					restartSong();
 				case 'Chart Editor':
 					PlayState.instance.openChartEditor();
+				case 'Character Editor':
+					PlayState.instance.openCharacterEditor();
 				case "Leave Charting Mode":
 					restartSong();
 					PlayState.chartingMode = false;

@@ -90,7 +90,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 		box.updateHitbox();
 		hudGroup.add(box);
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 		TIP_TEXT_MAIN =
 	'\nX - Reset Camera
 	\nY - Toggle Speech Bubble

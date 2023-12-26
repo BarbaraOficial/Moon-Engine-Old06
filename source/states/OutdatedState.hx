@@ -14,7 +14,7 @@ class OutdatedState extends MusicBeatState
 
 		var guh:String;
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 			guh = "Sup kiddo, looks like you're running an   \n
 			outdated version of Psych Engine (" + MainMenuState.psychEngineVersion + "),\n
 			please update to " + TitleState.updateVersion + "!\n

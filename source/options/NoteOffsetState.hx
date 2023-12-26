@@ -539,7 +539,7 @@ class NoteOffsetState extends MusicBeatState
 		else
 			str = 'Note/Beat Delay';
 
-                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+                if (controls.mobileC) {
 		str2 = '(Press A to Switch)';
                 } else {
 					if(!controls.controllerMode)

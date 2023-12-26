@@ -58,7 +58,7 @@ class ModsMenuState extends MusicBeatState
 	{
 		var daButton:String = "BACKSPACE";
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1)
+		if (controls.mobileC)
 			daButton = B;
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
@@ -104,7 +104,7 @@ class ModsMenuState extends MusicBeatState
 		var buttonWidth = Std.int(bgList.width);
 		var buttonHeight = 80;
 		var daY = 0;
-		if(ClientPrefs.data.controlsAlpha >= 0.1)
+		if(controls.mobileC)
 			daY = 70;
 		else
 			daY = 20;
@@ -142,7 +142,7 @@ class ModsMenuState extends MusicBeatState
 		});
 		buttonEnableAll.bg.color = FlxColor.GREEN;
 		buttonEnableAll.focusChangeCallback = function(focus:Bool) if(!focus) buttonEnableAll.bg.color = FlxColor.GREEN;
-		if(ClientPrefs.data.controlsAlpha < 0.1)
+		if(!controls.mobileC)
 			add(buttonEnableAll);
 
 		buttonDisableAll = new MenuButton(buttonX, myY, buttonWidth, buttonHeight, "DISABLE ALL", function() {
@@ -163,7 +163,7 @@ class ModsMenuState extends MusicBeatState
 		});
 		buttonDisableAll.bg.color = 0xFFFF6666;
 		buttonDisableAll.focusChangeCallback = function(focus:Bool) if(!focus) buttonDisableAll.bg.color = 0xFFFF6666;
-		if(ClientPrefs.data.controlsAlpha < 0.1)
+		if(!controls.mobileC)
 			add(buttonDisableAll);
 		checkToggleButtons();
 
@@ -319,7 +319,7 @@ class ModsMenuState extends MusicBeatState
 
 		addVirtualPad(UP_DOWN, B);
 		virtualPad.y -= 215; // so that you can press the buttons.
-		if(ClientPrefs.data.controlsAlpha >= 0.1)
+		if(controls.mobileC)
 			virtualPad.alpha = 0.3;
 		super.create();
 	}
@@ -389,7 +389,7 @@ class ModsMenuState extends MusicBeatState
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
 				{
-				if(ClientPrefs.data.controlsAlpha < 0.1 && FlxG.mouse.justPressed)
+				if(!controls.mobileC && FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
 					{
@@ -435,7 +435,7 @@ class ModsMenuState extends MusicBeatState
 						if(holdTime > 0.5 && Math.floor(lastHoldTime * 8) != Math.floor(holdTime * 8)) changeSelectedMod(shiftMult * (controls.UI_UP ? -1 : 1));
 					}
 
-					else if(FlxG.mouse.pressed && ClientPrefs.data.controlsAlpha < 0.1 && !gottaClickAgain)
+					else if(FlxG.mouse.pressed && !controls.mobileC && !gottaClickAgain)
 					{
 						var curMod:ModItem = modsGroup.members[curSelectedMod];
 						if(curMod != null)
@@ -483,7 +483,7 @@ class ModsMenuState extends MusicBeatState
 						}
 						
 					}
-					else if(FlxG.mouse.justReleased && ClientPrefs.data.controlsAlpha < 0.1 && holdingMod)
+					else if(FlxG.mouse.justReleased && !controls.mobileC && holdingMod)
 					{
 						holdingMod = false;
 						holdingElapsed = 0;
@@ -656,7 +656,7 @@ class ModsMenuState extends MusicBeatState
 			curSelectedMod = max;
 			limited = true;
 		}
-		if(ClientPrefs.data.controlsAlpha < 0.1 && !isMouseWheel && limited && Math.abs(add) == 1)
+		if(!controls.mobileC && !isMouseWheel && limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
 			{
@@ -991,7 +991,7 @@ class MenuButton extends FlxSpriteGroup
 			return;
 		}
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 			if(!ignoreCheck)
 				onFocus = TouchFunctions.touchOverlapObject(this);
 

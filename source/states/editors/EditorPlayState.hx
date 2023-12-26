@@ -131,7 +131,7 @@ class EditorPlayState extends MusicBeatSubstate
 		#if android
 		daButton = "BACK";
 		#else
-                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+                if (controls.mobileC) {
                 daButton = "X";
                 } else {
                 daButton = "ESC";

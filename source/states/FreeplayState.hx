@@ -162,7 +162,7 @@ class FreeplayState extends MusicBeatState
 
                 var leText:String;
 
-                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+                if (controls.mobileC) {
 		leText = "Press X to listen to the Song / Press C to open the Gameplay Changers Menu / Press Y to Reset your Score and Accuracy.";
                 } else {
 		leText = "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";

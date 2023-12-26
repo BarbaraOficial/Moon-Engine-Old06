@@ -69,7 +69,7 @@ class DialogueEditorState extends MusicBeatState
 
 		var lineTxt:String;
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 			lineTxt = "Press A to remove the current dialogue line, Press X to add another line after the current one.";
 		} else {
 			lineTxt = "Press O to remove the current dialogue line, Press P to add another line after the current one.";
@@ -218,7 +218,7 @@ class DialogueEditorState extends MusicBeatState
 		characterAnimSpeed();
 
 		if(character.animation.curAnim != null && character.jsonFile.animations != null) {
-			if (ClientPrefs.data.controlsAlpha >= 0.1) {
+			if (controls.mobileC) {
 			animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press UP or DOWN to scroll';
 			} else {
 			animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press W or S to scroll';
@@ -269,7 +269,7 @@ class DialogueEditorState extends MusicBeatState
 					curAnim = 0;
 					if(character.jsonFile.animations.length > curAnim && character.jsonFile.animations[curAnim] != null) {
 						character.playAnim(character.jsonFile.animations[curAnim].anim, daText.finishedText);
-						if (ClientPrefs.data.controlsAlpha >= 0.1) {
+						if (controls.mobileC) {
 						animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press UP or DOWN to scroll';
 						} else {
 						animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press W or S to scroll';
@@ -370,7 +370,7 @@ class DialogueEditorState extends MusicBeatState
 						character.playAnim(animToPlay, daText.finishedText);
 						dialogueFile.dialogue[curSelected].expression = animToPlay;
 					}
-					if (ClientPrefs.data.controlsAlpha >= 0.1) {
+					if (controls.mobileC) {
 					animText.text = 'Animation: ' + animToPlay + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press UP or DOWN to scroll';
 					} else {
 					animText.text = 'Animation: ' + animToPlay + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press W or S to scroll';
@@ -432,7 +432,7 @@ class DialogueEditorState extends MusicBeatState
 				}
 			}
 			character.playAnim(character.jsonFile.animations[curAnim].anim, daText.finishedText);
-			if (ClientPrefs.data.controlsAlpha >= 0.1) {
+			if (controls.mobileC) {
 			animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + leLength + ') - Press UP or DOWN to scroll';
 			} else {
 			animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + leLength + ') - Press W or S to scroll';
@@ -442,7 +442,7 @@ class DialogueEditorState extends MusicBeatState
 		}
 		characterAnimSpeed();
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 		selectedText.text = 'Line: (' + (curSelected + 1) + ' / ' + dialogueFile.dialogue.length + ') - Press LEFT or RIGHT to scroll';
 		} else {
 		selectedText.text = 'Line: (' + (curSelected + 1) + ' / ' + dialogueFile.dialogue.length + ') - Press A or D to scroll';

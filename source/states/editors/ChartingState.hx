@@ -315,7 +315,7 @@ class ChartingState extends MusicBeatState
 		UI_box.y = 25;
 		UI_box.scrollFactor.set();
 
-                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+                if (controls.mobileC) {
 		text =
 		"Up/Down - Change Conductor's strum time
 		\nLeft/Right - Go to the previous/next section
@@ -1676,7 +1676,7 @@ class ChartingState extends MusicBeatState
 		FlxG.watch.addQuick('daBeat', curBeat);
 		FlxG.watch.addQuick('daStep', curStep);
 
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
 			if (touch.justReleased)
@@ -1913,7 +1913,7 @@ class ChartingState extends MusicBeatState
 					resetSection();
 			}
 
-			if (ClientPrefs.data.controlsAlpha < 0.1) {
+			if (!controls.mobileC) {
 			if (FlxG.mouse.wheel != 0)
 			{
 				FlxG.sound.music.pause();
@@ -3056,7 +3056,7 @@ class ChartingState extends MusicBeatState
 		//	undos.push(newsong);
 		var noteStrum = getStrumTime(dummyArrow.y * (getSectionBeats() / 4), false) + sectionStartTime();
 		var noteData = 0;
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 		for (touch in FlxG.touches.list){noteData = Math.floor((touch.x - GRID_SIZE) / GRID_SIZE);}
 		} else {
 		noteData = Math.floor((FlxG.mouse.x - GRID_SIZE) / GRID_SIZE);

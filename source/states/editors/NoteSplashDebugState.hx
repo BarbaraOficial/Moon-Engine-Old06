@@ -29,7 +29,7 @@ class NoteSplashDebugState extends MusicBeatState
 	var curAnimText:FlxText;
 	var savedText:FlxText;
 	var selecArr:Array<Float> = null;
-	var idk:Bool = (ClientPrefs.data.controlsAlpha >= 0.1) ? true : false; // im lazy to remove and add alot so idk
+	var idk:Bool = (controls.mobileC) ? true : false; // im lazy to remove and add alot so idk
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
@@ -156,7 +156,7 @@ class NoteSplashDebugState extends MusicBeatState
 
                 var sillyText:String;
 
-                if (ClientPrefs.data.controlsAlpha >= 0.1) {
+                if (controls.mobileC) {
                 sillyText = "Press Y to Reset animation\n
                         Press A twice to save to the loaded Note Splash PNG's folder\n
                         Press Top LEFT/RIGHT to change selected note - Arrow Keys to change offset\n
@@ -278,7 +278,7 @@ class NoteSplashDebugState extends MusicBeatState
 
 		if(FlxG.keys.justPressed.ENTER || virtualPad.buttonA.justPressed)
 		{
-			if (ClientPrefs.data.controlsAlpha >= 0.1) {
+			if (controls.mobileC) {
 		        savedText.text = 'Press A again to save.';
 			} else {
 		        savedText.text = 'Press ENTER again to save.';
@@ -437,7 +437,7 @@ class NoteSplashDebugState extends MusicBeatState
 			curAnim += change;
 			if(curAnim > maxAnims) curAnim = 1;
 			else if(curAnim < 1) curAnim = maxAnims;
-			if (ClientPrefs.data.controlsAlpha >= 0.1) {
+			if (controls.mobileC) {
 			curAnimText.text = 'Current Animation: $curAnim / $maxAnims\n(Press Top UP/DOWN to change)';
 			curFrameText.text = 'Force Frame Disabled\n(Press X/E to change)';
 			} else {

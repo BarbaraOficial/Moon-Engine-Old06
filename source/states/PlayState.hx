@@ -2066,7 +2066,7 @@ class PlayState extends MusicBeatState
 		MusicBeatState.switchState(new ChartingState());
 	}
 
-	function openCharacterEditor()
+	public function openCharacterEditor()
 	{
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;

@@ -306,7 +306,7 @@ class ControlsSubState extends MusicBeatSubstate
 
 					var funnyText:String;
 
-					if (ClientPrefs.data.controlsAlpha >= 0.1) {
+					if (controls.mobileC) {
 						funnyText = "Hold B to Cancel\nHold C to Delete";
 					} else {
 						funnyText = "Hold ESC to Cancel\nHold Backspace to Delete";

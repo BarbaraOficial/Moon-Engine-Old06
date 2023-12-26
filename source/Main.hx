@@ -50,8 +50,10 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-
-		Sys.setCwd(#if (!ios) Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (!ios) ) #end );
+		#if mobile
+		var path = #if android Path.addTrailingSlash(SUtil.getStorageDirectory()) #else SUtil.getStorageDirectory() #end;
+		Sys.setCwd(path);
+		#end
 
 		SUtil.uncaughtErrorHandler();
 

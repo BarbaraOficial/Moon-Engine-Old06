@@ -119,7 +119,7 @@ class CharacterEditorState extends MusicBeatState
 		animsTxtGroup.cameras = [camHUD];
 		add(animsTxtGroup);
 
-		var tipText:FlxText = new FlxText(FlxG.width - 300, FlxG.height - 24, 300, 'Press ${(ClientPrefs.data.controlsAlpha >= 0.1) ? 'F' : 'F1'} for Help', 16);
+		var tipText:FlxText = new FlxText(FlxG.width - 300, FlxG.height - 24, 300, 'Press ${(controls.mobileC) ? 'F' : 'F1'} for Help', 16);
 		tipText.cameras = [camHUD];
 		tipText.setFormat(null, 16, FlxColor.WHITE, RIGHT, OUTLINE_FAST, FlxColor.BLACK);
 		tipText.borderColor = FlxColor.BLACK;
@@ -165,7 +165,7 @@ class CharacterEditorState extends MusicBeatState
 	function addHelpScreen()
 	{
 		var str:String;
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 			str = "CAMERA
 			\nX/Y - Camera Zoom In/Out
 			\nZ - Reset Camera Zoom
@@ -905,7 +905,7 @@ class CharacterEditorState extends MusicBeatState
 		var changedOffset = false;
 		var moveKeysP;
 		var moveKeys;
-		if (ClientPrefs.data.controlsAlpha >= 0.1) {
+		if (controls.mobileC) {
 			moveKeysP = [
 				virtualPad.buttonLeft.justPressed,
 				virtualPad.buttonRight.justPressed,
@@ -1065,7 +1065,7 @@ class CharacterEditorState extends MusicBeatState
 
 		if((FlxG.keys.justPressed.F1 || virtualPad.buttonF.justPressed)|| (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
 		{
-			if(ClientPrefs.data.controlsAlpha >= 0.1){
+			if(controls.mobileC){
 				virtualPad.forEachAlive(function(button:MobileButton){
 					if(button.tag != 'F')
 						button.visible = !button.visible;
