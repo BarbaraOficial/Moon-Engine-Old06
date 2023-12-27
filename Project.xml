@@ -155,10 +155,12 @@
 
 		        <config>
 				<!--Gradle-->
-				<android gradle-version="7.4.2" gradle-plugin="7.3.1" if="${lime &lt; 8.1.0}"/>
+				<android gradle-version="7.4.2" gradle-plugin="7.3.1" if="${lime &lt; 8.0.0}"/>
 				<!--Target SDK-->
-				<android target-sdk-version="30" if="${lime &lt; 8.1.0}"/>
-                                <android permission="android.permission.MANAGE_EXTERNAL_STORAGE" />
+				<android target-sdk-version="30" unless="EXTERNAL || MEDIA"/>
+                                <android target-sdk-version="28" if="EXTERNAL || MEDIA"/> <!-- blame android 11+!!! -->
+
+                                <!--<android permission="android.permission.MANAGE_EXTERNAL_STORAGE" />-->
 			</config>
 		</section>
 
