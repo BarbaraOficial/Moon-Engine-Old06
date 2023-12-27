@@ -97,7 +97,6 @@
 
 	<!-- Mobile and Android Specific-->
 	<haxelib name="extension-androidtools" if="android" />
-	<haxelib name="extension-orientation" if="mobile" />
 
 	<!-- Disable Discord IO Thread -->
 	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="hxdiscord_rpc" />

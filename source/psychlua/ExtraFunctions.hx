@@ -2,9 +2,6 @@ package psychlua;
 
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
-#if mobile
-import extension.eightsines.EsOrientation;
-#end
 import lime.ui.Haptic;
 
 //
@@ -236,21 +233,6 @@ class ExtraFunctions
 		    if (duration == null) return FunkinLua.luaTrace('vibrate: No duration specified.');
 		    return Haptic.vibrate(period, duration);
 		});
-
-		#if mobile
-		funk.set("changeOrientation", function(orientation:String){
-		    if (orientation != null) {
-			switch (orientation){
-				case 'portrait':
-					return EsOrientation.setScreenOrientation(EsOrientation.ORIENTATION_PORTRAIT);
-				case 'landspace':
-					return EsOrientation.setScreenOrientation(EsOrientation.ORIENTATION_LANDSCAPE);
-				case 'auto':
-					return EsOrientation.setScreenOrientation(EsOrientation.ORIENTATION_UNSPECIFIED);
-			}}
-			return FunkinLua.luaTrace('changeOrientation: No orientation specified.');
-		});
-		#end
 
 		// Save data management
 		funk.set("initSaveData", function(name:String, ?folder:String = 'psychenginemods') {
