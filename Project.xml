@@ -95,7 +95,7 @@
 	<haxelib name="flxanimate" unless="web"/>
 	<haxelib name="tjson"/>
 
-	<!-- Mobile and Android Specific-->
+	<!-- Android Specific-->
 	<haxelib name="extension-androidtools" if="android" />
 
 	<!-- Disable Discord IO Thread -->
