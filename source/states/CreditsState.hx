@@ -46,6 +46,7 @@ class CreditsState extends MusicBeatState
 			[''],
 			['Mobile Special Thanks'],
 			['MAJigsaw77',				'jigsaw',			'Author of Mobile Controls, New FlxRuntimeShader and Storage Stuff',							'https://github.com/MAJigsaw77',               '898989'],
+			['FutureDorito',				'dorito',			'Psych Engine Mobile iOS Porter',							'https://www.youtube.com/@Futuredorito',               'E69138'],
 			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer and Head of Psych Engine',					 'https://ko-fi.com/shadowmario',		'444444'],
