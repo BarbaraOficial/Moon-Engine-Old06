@@ -80,17 +80,23 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if LUA_ALLOWED
-                #if (mobile && EXTERNAL || MEDIA)
-                try {
-                #end
+        	#if (mobile && EXTERNAL || MEDIA)
+        try {
+        	#end
 		Mods.pushGlobalMods();
-                #if (mobile && EXTERNAL || MEDIA)
-                } catch (e:Dynamic) {
-                    FlxG.stage.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/.PsychEngine" #else "/storage/emulated/0/Android/media/com.shadowmario.psychengine" #end + "\nPress OK to close the game", "Error!");
-                    Sys.exit(1);
-                }
-                #end
+            #if (mobile && EXTERNAL || MEDIA)
+        } catch (e:Dynamic) {
+            FlxG.stage.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/.PsychEngine" #else "/storage/emulated/0/Android/media/com.shadowmario.psychengine" #end + "\nPress OK to close the game", "Error!");
+            Sys.exit(1);
+        }
+            #end
 		#end
+
+		#if mobile
+		if(!SUtil.filesExists())
+			FlxG.switchState(new CopyState());
+		#end
+
 		Mods.loadTopMod();
 
 		FlxG.fixedTimestep = false;
@@ -104,10 +110,6 @@ class TitleState extends MusicBeatState
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 
 		ClientPrefs.loadPrefs();
-		#if mobile
-		if(!SUtil.filesExists())
-			FlxG.switchState(new CopyState());
-		#end
 
 		#if CHECK_FOR_UPDATES
 		if(ClientPrefs.data.checkForUpdates && !closedState) {

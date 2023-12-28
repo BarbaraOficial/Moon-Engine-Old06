@@ -1,7 +1,5 @@
 /* KNNOWN ISSUE:
-    - Null Object Refrence while copying .ttf, .otf
-   TODO: 
-    - Figure out a way to calculate the ammount files in FileSystem directory to get the exact ammount of files that should be copied
+    - Null Object Refrence while copying .ttf, .otf.
 */
 package mobile.states;
 
@@ -32,17 +30,23 @@ class CopyState extends MusicBeatState {
     override function create() {
         if(!SUtil.filesExists()){
             shouldCopy = true;
-			FlxG.stage.application.window.alert(
-			"Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
-			"Notice!");
             filesToCopy = LimeAssets.list();
             // removes unwanted paths
             var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
             var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
-            var allPaths = assets.concat(mods);
-            filesToCopy = allPaths;
+            filesToCopy = assets.concat(mods);
+            // removes already existing assets
+            for(file in filesToCopy){
+                if(FileSystem.exists(file)){
+                    filesToCopy.remove(file);
+                    maxLoopTimes = filesToCopy.length;
+                }
+            }
+    
+            FlxG.stage.window.alert(
+            "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
+            "Notice!");
 
-            maxLoopTimes = filesToCopy.length;
             loadingImage = new FlxSprite(0, 0, Paths.image('funkin'));
             loadingImage.scale.set(0.8, 0.8);
             loadingImage.screenCenter();
@@ -62,7 +66,7 @@ class CopyState extends MusicBeatState {
             copyLoop.start();
             #if (target.threaded) }); #end
         } else
-            MusicBeatState.switchState(new TitleState()); trace('going back to titlestate');
+            MusicBeatState.switchState(new TitleState());
 
         super.create();
     }
@@ -71,7 +75,7 @@ class CopyState extends MusicBeatState {
         if(shouldCopy){
             if(copyLoop.finished){
                 if(failedFiles > 0)
-                    FlxG.stage.application.window.alert(failedFilesStr, 'Failed To Copy $failedFiles File.');
+                    FlxG.stage.window.alert(failedFilesStr, 'Failed To Copy $failedFiles File.');
                 System.gc();
                 FlxG.switchState(new TitleState());
             }
