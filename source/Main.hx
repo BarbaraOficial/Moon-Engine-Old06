@@ -40,6 +40,12 @@ class Main extends Sprite
 
 	public static var fpsVar:FPSCounter;
 
+	#if mobile
+	public static final platform:String = "Phones";
+	#else
+	public static final platform:String = "PCs";
+	#end
+
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void

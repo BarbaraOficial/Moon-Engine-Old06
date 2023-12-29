@@ -41,6 +41,12 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		addOption(option);
 		option.onChange = onChangeAutoPause;
 
+		var option:Option = new Option('Pop Up Score',
+			"If unchecked, hitting notes won't make \"sick\", \"good\".. and combo popups (Useful for low end " + Main.platform + ").",
+			'popUpRating',
+			'bool');
+		addOption(option);
+
 		var option:Option = new Option('Disable Reset Button',
 			"If checked, pressing Reset won't do anything.",
 			'noReset',
