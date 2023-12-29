@@ -88,7 +88,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.screenCenter(X);
 		}
 
-		var moonVer:FlxText = new FlxText(12, FlxG.height - 74, 0, "Moom Engine v" + moomEngineVersion, 12);
+		var moonVer:FlxText = new FlxText(12, FlxG.height - 74, 0, "Moon Engine v" + moonEngineVersion, 12);
 		moonVer.scrollFactor.set();
 		moonVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(moonVer);
