@@ -36,11 +36,14 @@ class CopyState extends MusicBeatState {
             var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
             var allAsset = assets.concat(mods);
             filesToCopy = allAsset;
+            maxLoopTimes = filesToCopy.length;
+
             // removes already existing assets
             for(file in filesToCopy){
                 if(FileSystem.exists(file)){
                     filesToCopy.remove(file);
-                    maxLoopTimes = filesToCopy.length;
+                    trace('removed $file from the list');
+                    --maxLoopTimes;
                 }
             }
 
