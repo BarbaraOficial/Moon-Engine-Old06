@@ -1,5 +1,6 @@
 package psychlua;
 
+import haxe.extern.EitherType;
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
 import lime.ui.Haptic;
@@ -10,6 +11,17 @@ import lime.ui.Haptic;
 
 class ExtraFunctions
 {
+	public static var mobileExtraInput(get, null):Dynamic;
+	private static function get_mobileExtraInput():Dynamic{
+		switch (MobileControls.getMode()){
+			case 0 | 1 | 2 | 3: // virtual pad
+				return MusicBeatState.instance.mobileControls.virtualPadExtra;
+			case 4: // hitbox
+				return MusicBeatState.instance.mobileControls.hitbox;
+			default: //keybaord
+				return null;
+		}
+	}
 	public static function implement(funk:FunkinLua)
 		{
 		// Keyboard & Gamepads
@@ -17,14 +29,13 @@ class ExtraFunctions
 			{
 				switch(name.toUpperCase()){
 					case 'SPACE':
-					if (Controls.instance.mobileC) {
-						if (MobileControls.instance.virtualPadExtra == null)
-							return false;
-						else
-							return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed || Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
-					} else {
-							return Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
-					}
+						var space = Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
+						var mobileShit:Bool = false;
+						if (Controls.instance.mobileC)
+							if (mobileExtraInput != null)
+								mobileShit = mobileExtraInput.buttonExtra.justPressed;
+						return space || mobileShit;
+
 					default:
 						return Reflect.getProperty(FlxG.keys.justPressed, name.toUpperCase());
 				}
@@ -33,14 +44,13 @@ class ExtraFunctions
 			{
 				switch(name.toUpperCase()){
 					case 'SPACE':
-					if (Controls.instance.mobileC) {
-						if (MobileControls.instance.virtualPadExtra != null)
-							return false;
-						else
-							return MobileControls.instance.virtualPadExtra.buttonExtra.pressed || Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
-					} else {
-							return Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
-					}
+						var space = Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
+						var mobileShit:Bool = false;
+						if (Controls.instance.mobileC)
+							if (mobileExtraInput != null)
+								mobileShit = mobileExtraInput.buttonExtra.pressed;
+						return space || mobileShit;
+
 					default:
 						return Reflect.getProperty(FlxG.keys.pressed, name.toUpperCase());
 				}
@@ -49,14 +59,13 @@ class ExtraFunctions
 			{
 				switch(name.toUpperCase()){
 					case 'SPACE':
-					if (Controls.instance.mobileC) {
-						if (MobileControls.instance.virtualPadExtra != null)
-							return false;
-						else
-							return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased || Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
-					} else {
-							return Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
-					}
+						var space = Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
+						var mobileShit:Bool = false;
+						if (Controls.instance.mobileC)
+							if (mobileExtraInput != null)
+								mobileShit = mobileExtraInput.buttonExtra.justReleased;
+						return space || mobileShit;
+
 					default:
 						return Reflect.getProperty(FlxG.keys.justReleased, name.toUpperCase());
 				}
@@ -137,94 +146,40 @@ class ExtraFunctions
 		});
 		funk.set("extraButtonPressed", function(button:String) {
 			button = button.toLowerCase();
-			switch (MobileControls.getMode()){
-				case 0 | 1 | 2 | 3:
-			switch(button){
-				case 'first':
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra.pressed;
-			case 'second':
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra1.pressed;
-			default:
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra.pressed;
-			}
-				case 4:
-			switch(button){
-				case 'first':
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra.pressed;
-				case 'second':
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra1.pressed;
-				default:
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra.pressed;
+			if (mobileExtraInput != null){
+				switch(button){
+					case 'second':
+						return mobileExtraInput.buttonExtra1.pressed;
+					default:
+						return mobileExtraInput.buttonExtra.pressed;
 				}
-		}
+			}
 			return false;
 		});
 
 		funk.set("extraButtonJustPressed", function(button:String) {
 			button = button.toLowerCase();
-			switch (MobileControls.getMode()){
-				case 0 | 1 | 2 | 3:
-			switch(button){
-				case 'first':
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed;
-			case 'second':
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra1.justPressed;
-			default:
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra.justPressed;
-			}
-				case 4:
-			switch(button){
-				case 'first':
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra.justPressed;
-				case 'second':
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra1.justPressed;
-				default:
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra.justPressed;
+			if (mobileExtraInput != null){
+				switch(button){
+					case 'second':
+						return mobileExtraInput.buttonExtra1.justPressed;
+					default:
+						return mobileExtraInput.buttonExtra.justPressed;
 				}
-		}
+			}
 			return false;
 		});
 
 		funk.set("extraButtonJustReleased", function(button:String) {
 			button = button.toLowerCase();
-			switch (MobileControls.getMode()){
-				case 0 | 1 | 2 | 3:
-			switch(button){
-				case 'first':
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased;
-			case 'second':
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra1.justReleased;
-			default:
-				if (MobileControls.instance.virtualPadExtra != null)
-					return MobileControls.instance.virtualPadExtra.buttonExtra.justReleased;
-			}
-				case 4:
-			switch(button){
-				case 'first':
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra.justReleased;
-				case 'second':
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra1.justReleased;
-				default:
-				if (MobileControls.instance.hitbox != null)
-					return MobileControls.instance.hitbox.buttonExtra.justReleased;
+			if (mobileExtraInput != null){
+				switch(button){
+					case 'second':
+						return mobileExtraInput.buttonExtra1.justReleased;
+					default:
+						return mobileExtraInput.buttonExtra.justReleased;
 				}
-		}
+			}
 			return false;
 		});
 

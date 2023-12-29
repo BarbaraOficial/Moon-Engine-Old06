@@ -128,20 +128,20 @@ class ClientPrefs {
 		'reset'			=> [BACK]
 	];
 	public static var mobileBinds:Map<String, Array<FlxMobileInputID>> = [
-		'note_up'		=> [FlxMobileInputID.noteUP, FlxMobileInputID.UP2],
-		'note_left'		=> [FlxMobileInputID.noteLEFT, FlxMobileInputID.LEFT2],
-		'note_down'		=> [FlxMobileInputID.noteDOWN, FlxMobileInputID.DOWN2],
-		'note_right'	=> [FlxMobileInputID.noteRIGHT, FlxMobileInputID.RIGHT2],
+		'note_up'		=> [noteUP, UP2],
+		'note_left'		=> [noteLEFT, LEFT2],
+		'note_down'		=> [noteDOWN, DOWN2],
+		'note_right'	=> [noteRIGHT, RIGHT2],
 
-		'ui_up'			=> [FlxMobileInputID.UP, FlxMobileInputID.noteUP],
-		'ui_left'		=> [FlxMobileInputID.LEFT, FlxMobileInputID.noteLEFT],
-		'ui_down'		=> [FlxMobileInputID.DOWN, FlxMobileInputID.noteDOWN],
-		'ui_right'		=> [FlxMobileInputID.RIGHT, FlxMobileInputID.noteRIGHT],
+		'ui_up'			=> [UP, noteUP],
+		'ui_left'		=> [LEFT, noteLEFT],
+		'ui_down'		=> [DOWN, noteDOWN],
+		'ui_right'		=> [RIGHT, noteRIGHT],
 
-		'accept'		=> [FlxMobileInputID.A],
-		'back'			=> [FlxMobileInputID.B],
-		'pause'			=> [FlxMobileInputID.NONE],
-		'reset'			=> [FlxMobileInputID.NONE]
+		'accept'		=> [A],
+		'back'			=> [B],
+		'pause'			=> [#if android NONE #else P #end],
+		'reset'			=> [NONE]
 	];
 	public static var defaultMobileBinds:Map<String, Array<FlxMobileInputID>> = null;
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
