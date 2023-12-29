@@ -82,13 +82,6 @@
       "name": "extension-androidtools",
       "type": "haxelib",
       "version": null
-    },
-    {
-      "name": "extension-orientation",
-      "type": "git",
-      "dir": null,
-      "ref": "master",
-      "url": "https://github.com/HaxeExtension/extension-orientation.git"
     }
   ]
 }
