@@ -899,7 +899,7 @@ class PlayState extends MusicBeatState
 		startAndEnd();
 		return;
 		#end
-	}		
+	}
 
 	function startAndEnd()
 	{
@@ -1709,11 +1709,10 @@ class PlayState extends MusicBeatState
 			#end
 
 			#if VIDEOS_ALLOWED
-			if(videoSprites.length > 0) {
+			if(videoSprites.length > 0)
 			for(video in videoSprites)
 				if(video.exists)
 				video.paused = false;
-			}
 			#end
 
 			paused = false;
@@ -2101,12 +2100,14 @@ class PlayState extends MusicBeatState
 					timer.active = true;
 				}
 				#end
+
 				#if VIDEOS_ALLOWED
 				// i assume it's better removing the thing on gameover
 				if(videoSprites.length > 0)
 					for(video in videoSprites)
 						removeVideoSprite(video);
 				#end
+
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollow.x, camFollow.y));
 
 				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
