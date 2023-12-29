@@ -64,7 +64,7 @@ class WeekData {
 	public function new(weekFile:WeekFile, fileName:String) {
 		// here ya go - MiguelItsOut
 		for (field in Reflect.fields(weekFile)) {
-			// if(Reflect.hasField(this, field))
+			if(Reflect.fields(this).contains(field)) // Reflect.hasField() won't fucking work :/
 				Reflect.setProperty(this, field, Reflect.getProperty(weekFile, field));
 		}
 
