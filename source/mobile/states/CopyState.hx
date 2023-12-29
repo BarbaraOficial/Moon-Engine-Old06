@@ -44,8 +44,10 @@ class CopyState extends MusicBeatState {
                 }
             }
 
-            if(maxLoopTimes <= 0)
+            if(maxLoopTimes <= 0){
+                TitleState.ignoreCopy = true;
                 FlxG.switchState(new TitleState());
+            }
     
             FlxG.stage.window.alert(
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
@@ -69,8 +71,10 @@ class CopyState extends MusicBeatState {
             add(copyLoop);
             copyLoop.start();
             #if (target.threaded) }); #end
-        } else
+        } else{
+            TitleState.ignoreCopy = true;
             MusicBeatState.switchState(new TitleState());
+        }
 
         super.create();
     }
@@ -80,8 +84,9 @@ class CopyState extends MusicBeatState {
             if(copyLoop.finished){
                 if(failedFiles > 0)
                     FlxG.stage.window.alert(failedFilesStr, 'Failed To Copy $failedFiles File.');
-                System.gc();
+                TitleState.ignoreCopy = true;
                 FlxG.switchState(new TitleState());
+                System.gc();
             }
             loadedText.text = '$loopTimes/$maxLoopTimes';
         }

@@ -43,6 +43,8 @@ class TitleState extends MusicBeatState
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
 
 	public static var initialized:Bool = false;
+	
+	public static var ignoreCopy:Bool = false;
 
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
@@ -93,7 +95,7 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if mobile
-		if(!SUtil.filesExists())
+		if(!SUtil.filesExists() && !ignoreCopy)
 			FlxG.switchState(new CopyState());
 		#end
 
