@@ -68,7 +68,8 @@ import states.TitleState;
 		'instakill' => false,
 		'practice' => false,
 		'botplay' => false,
-		'opponentplay' => false
+		'opponentplay' => false,
+		'popuprating' => false
 	];
 
 	public var comboOffset:Array<Int> = [0, 0, 0, 0];
