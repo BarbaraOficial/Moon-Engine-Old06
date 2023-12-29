@@ -34,7 +34,8 @@ class CopyState extends MusicBeatState {
             // removes unwanted paths
             var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
             var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
-            filesToCopy = assets.concat(mods);
+            var allAsset = assets.concat(mods);
+            filesToCopy = allAsset;
             // removes already existing assets
             for(file in filesToCopy){
                 if(FileSystem.exists(file)){
@@ -42,6 +43,9 @@ class CopyState extends MusicBeatState {
                     maxLoopTimes = filesToCopy.length;
                 }
             }
+
+            if(maxLoopTimes <= 0)
+                FlxG.switchState(new TitleState());
     
             FlxG.stage.window.alert(
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
