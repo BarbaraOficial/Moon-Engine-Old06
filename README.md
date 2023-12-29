@@ -18,6 +18,7 @@ same goes for *Lua Scripts*, comment out or delete the line with `LUA_ALLOWED`, 
 
 ## Moon Engine:
 * BarbaraOficial - Main Programmer
+* DaricrahDev - Programmer
 
 ## Mobile Credits (Psych Engine Mobile):
 * Lily - Head Porter
