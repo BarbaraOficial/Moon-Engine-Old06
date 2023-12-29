@@ -391,15 +391,12 @@ function changeSelection(change:Int = 0):Void
 
 		funitext.visible = daChoice == 'Keyboard';
 		if (daChoice == 'Pad-Custom' || daChoice == 'Pad-Extras')
-		resetButton.visible = true;
-		else resetButton.visible = false;
+			resetButton.visible = true;
+		else
+			resetButton.visible = false;
 
-		upPozition.visible = daChoice == 'Pad-Custom';
-		downPozition.visible = daChoice == 'Pad-Custom';
-		leftPozition.visible = daChoice == 'Pad-Custom';
-		rightPozition.visible = daChoice == 'Pad-Custom';
-		extraPozition.visible = daChoice == 'Pad-Extras';
-		extra1Pozition.visible = daChoice == 'Pad-Extras';
+		upPozition.visible = rightPozition.visible = leftPozition.visible = downPozition.visible = daChoice == 'Pad-Custom';
+		extraPozition.visible = extra1Pozition.visible = daChoice == 'Pad-Extras';
 	}
 
 	function moveButton(touch:FlxTouch, button:FlxButton):Void
