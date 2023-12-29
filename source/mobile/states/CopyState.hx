@@ -1,5 +1,5 @@
 /* KNNOWN ISSUE:
-    - Null Object Refrence while copying .ttf, .otf.
+    - Null Object Refrence while copying .ttf, .otf. (at embedded ones for now)
 */
 package mobile.states;
 
