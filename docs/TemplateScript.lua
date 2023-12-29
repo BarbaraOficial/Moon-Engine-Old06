@@ -1,3 +1,4 @@
+---@diagnostic disable: lowercase-global, undefined-global
 -- Lua stuff
 
 function onCreate()

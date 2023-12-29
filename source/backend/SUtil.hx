@@ -247,7 +247,7 @@ class SUtil
 	}
 
 	public static function filesExists():Bool {
-		if((!FileSystem.exists('assets') && !FileSystem.exists('mods') || !FileSystem.exists('mods') || !FileSystem.exists('assets')))
+		if((!FileSystem.exists('assets') && !FileSystem.exists('mods')) || !FileSystem.exists('mods') || !FileSystem.exists('assets'))
 			return false;
 		else
 			return true;
