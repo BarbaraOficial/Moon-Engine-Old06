@@ -43,7 +43,7 @@ class OutdatedState extends MusicBeatState
 		if(!leftState) {
 			if (controls.ACCEPT) {
 				leftState = true;
-				CoolUtil.browserLoad("https://github.com/BarbaraOrigami/Moon-Engine-New/releases");
+				CoolUtil.browserLoad("https://github.com/BarbaraOrigami/Moon-Engine/releases");
 			}
 			else if(controls.BACK) {
 				leftState = true;
