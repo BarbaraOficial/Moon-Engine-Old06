@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        storage-type: [EXTERNAL, OBB, DATA, MEDIA]
+        storage-type: [EXTERNAL]
     permissions: write-all
     steps:
       - name: Checkout
