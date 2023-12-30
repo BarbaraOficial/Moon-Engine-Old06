@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        storage-type: [EXTERNAL, OBB, DATA, MEDIA]
+        storage-type: [EXTERNAL]
     permissions: write-all
     steps:
       - name: Checkout
@@ -60,7 +60,7 @@ jobs:
            path: /home/runner
 
       - name: Move EXTERNAL File
-        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-EXTERNAL.apk
+        run: mv /home/runner/MoonEngine-release.apk /home/runner/MoonEngine-EXTERNAL.apk
 
       - name: Download OBB Build
         uses: actions/download-artifact@main
@@ -94,7 +94,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: "0.7.2h"
-          title: "0.7.2h Android Release"
+          automatic_release_tag: "2.0.0"
+          title: "2.0.0 Android Release"
           files: |
             /home/runner/*.apk
