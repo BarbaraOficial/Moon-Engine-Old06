@@ -40,8 +40,8 @@ class CreditsState extends MusicBeatState
 
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['Moom Engine Team'],
-			['BarbaraOficial',		                'barbaraoficial',		                'Main Programmer and leader of Moon Engine',							'https://www.youtube.com/@mcagabe19',           'FFE7C0'],
-			['DaricrahDev',				'daricrahdev',			'Programmer Helping at Moon Engine',						'https://youtube.com/@Karim0690',		'FFB4F0']
+			['BarbaraOficial',		                'barbaraoficial',		                'Main Programmer and leader of Moon Engine',							'https://www.youtube.com/@mcagabe19',           'D00055'],
+			['DaricrahDev',				'daricrahdev',			'Programmer Helping at Moon Engine',						'https://twitter.com/Daricrah',		'FDE870']
 			[''],
 			['Mobile Porting Team (Psych Engine Android)'],
 			['mcagabe19',		                'lily',		                'Head Porter of Psych Engine Mobile',							'https://www.youtube.com/@mcagabe19',           'FFE7C0'],
