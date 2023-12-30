@@ -1,5 +1,5 @@
 name: Bug report
-description: Report bugs with the port here
+description: Report engine bugs here
 labels: [bug]
 body:
   - type: textarea
