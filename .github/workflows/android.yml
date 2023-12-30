@@ -1,5 +1,14 @@
 name: Android
-on: workflow_dispatch
+    
+on: 
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ Fraze-glow-camera ]
+  pull_request:
+    branches: [ Fraze-glow-camera ]
+
+   # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 jobs:
   Build:
     runs-on: ubuntu-latest
