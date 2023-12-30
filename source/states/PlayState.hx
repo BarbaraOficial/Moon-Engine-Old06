@@ -90,7 +90,7 @@ class PlayState extends MusicBeatState
 		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 	
-	public static var ratingStuffPT:Array<Dynamic> = [
+	public static var ratingStuffBR:Array<Dynamic> = [
 		['Lixo', 0.2], //From 0% to 19%
 		['Merda', 0.4], //From 20% to 39%
 		['Ruim', 0.5], //From 40% to 49%
