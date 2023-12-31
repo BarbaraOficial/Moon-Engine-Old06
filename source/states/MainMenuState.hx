@@ -18,7 +18,6 @@ class MainMenuState extends MusicBeatState
 	var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
-		#if MODS_ALLOWED 'mods', #end
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
 		'options'
@@ -89,8 +88,10 @@ class MainMenuState extends MusicBeatState
 			menuItem.updateHitbox();
 		}
 
+		#if MODS_ALLOWED
 		mods = new FlxSprite(1100, 100).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
 		add(mods);
+		#end
 
 		var moonVer:FlxText = new FlxText(12, FlxG.height - 74, 0, "Moon Engine v" + moonEngineVersion, 12);
 		moonVer.scrollFactor.set();
@@ -135,6 +136,7 @@ class MainMenuState extends MusicBeatState
 				FreeplayState.vocals.volume += 0.5 * elapsed;
 		}
 
+		#if MODS_ALLOWED
 		if (FlxG.mouse.overlaps(mods))
 		{
 				if (FlxG.mouse.justPressed)
@@ -142,6 +144,7 @@ class MainMenuState extends MusicBeatState
 					MusicBeatState.switchState(new ModsMenuState());
 				}
 			}
+		#end
 
 		if (!selectedSomethin)
 		{
