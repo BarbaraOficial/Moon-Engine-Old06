@@ -89,9 +89,9 @@ class MainMenuState extends MusicBeatState
 		}
 
 		#if MODS_ALLOWED
-		mods = new FlxSprite(930, 50).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
-		mods.scale.x = 0.7;
-		mods.scale.y = 0.7;
+		mods = new FlxSprite(840, 30).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
+		mods.scale.x = 0.8;
+		mods.scale.y = 0.8;
 		add(mods);
 		#end
 
