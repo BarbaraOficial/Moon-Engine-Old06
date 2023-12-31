@@ -173,14 +173,44 @@ class ModsMenuState extends MusicBeatState
 			buttonEnableAll.visible = true;
 
 			var myX = bgList.x + bgList.width + 20;
+		switch (ClientPrefs.data.languages){
+     
+         case 'English':
 			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "NO MODS INSTALLED\nPRESS " + daButton + " TO EXIT OR INSTALL A MOD", 48);
+			
+		 case 'Português (Brasil)':
+			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "NENHUM MOD INSTALADO\nPRESSIONE " + daButton + " PARA SAIR OU INSTALAR UM MOD", 48);
+			
+		 case 'Español':
+			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "NO HAY MODIFICACIONES INSTALADAS\nPRENSA " + daButton + " PARA SALIR O INSTALAR UN MOD", 48);
+			
+		 case 'Deutsch':
+			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, "KEINE MODS INSTALLIERT\nDRÜCKEN SIE " + daButton + " UM EINEN MOD ZU BEENDEN ODER ZU INSTALLIEREN", 48);
+
+			}
+			
 			if(FlxG.random.bool(0.1)) noModsTxt.text += '\nBITCH.'; //meanie
 			noModsTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			noModsTxt.borderSize = 2;
 			add(noModsTxt);
 			noModsTxt.screenCenter(Y);
 
+        switch (ClientPrefs.data.languages){
+    
+          case 'English':
 			var txt = new FlxText(bgList.x + 15, bgList.y + 15, bgList.width - 30, "No Mods found.", 16);
+			
+		  case 'Português (Brasil)':
+			var txt = new FlxText(bgList.x + 15, bgList.y + 15, bgList.width - 30, "Nenhum Mod encontrado.", 16);
+			
+		  case 'Español':
+			var txt = new FlxText(bgList.x + 15, bgList.y + 15, bgList.width - 30, "No se han encontrado modificaciones.", 16);
+			
+		  case 'Deutsch':
+			var txt = new FlxText(bgList.x + 15, bgList.y + 15, bgList.width - 30, "Keine Mods gefunden.", 16);
+			
+			}
+
 			txt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE);
 			add(txt);
 
