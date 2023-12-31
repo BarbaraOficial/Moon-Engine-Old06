@@ -89,13 +89,13 @@ class MainMenuState extends MusicBeatState
 		}
 
 		#if MODS_ALLOWED
-		mods = new FlxSprite(840, 30).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
+		mods = new FlxSprite(820, 10).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
 		mods.scale.x = 0.8;
 		mods.scale.y = 0.8;
 		add(mods);
 		#end
 
-		var moonVer:FlxText = new FlxText(12, FlxG.height - 74, 0, "Moon Engine v" + moonEngineVersion, 12);
+		var moonVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Moon Engine v" + moonEngineVersion, 12);
 		moonVer.scrollFactor.set();
 		moonVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(moonVer);
