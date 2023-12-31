@@ -90,6 +90,13 @@ class VisualsUISubState extends BaseOptionsMenu
 			['Time Left', 'Time Elapsed', 'Song Name', 'Disabled']);
 		addOption(option);
 
+		var option:Option = new Option('Menu types:',
+			"Maybe you want to change the game menu.",
+			'menuType',
+			'string',
+			['Moon Engine', 'Psych Engine']);
+		addOption(option);
+
 		var option:Option = new Option('Flashing Lights',
 			"Uncheck this if you're sensitive to flashing lights!",
 			'flashing',
