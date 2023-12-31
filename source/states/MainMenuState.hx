@@ -24,6 +24,7 @@ class MainMenuState extends MusicBeatState
 		'options'
 	];
 
+	var mods:FlxSprite;
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
@@ -88,6 +89,9 @@ class MainMenuState extends MusicBeatState
 			menuItem.updateHitbox();
 		}
 
+		mods = new FlxSprite(1100, 100).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
+		add(mods);
+
 		var moonVer:FlxText = new FlxText(12, FlxG.height - 74, 0, "Moon Engine v" + moonEngineVersion, 12);
 		moonVer.scrollFactor.set();
 		moonVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -130,6 +134,14 @@ class MainMenuState extends MusicBeatState
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.volume += 0.5 * elapsed;
 		}
+
+		if (FlxG.mouse.overlaps(mods))
+		{
+				if (FlxG.mouse.justPressed)
+				{
+					MusicBeatState.switchState(new ModsMenuState());
+				}
+			}
 
 		if (!selectedSomethin)
 		{
