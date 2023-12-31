@@ -216,9 +216,12 @@ class MainMenuState extends MusicBeatState
 							continue;
 						FlxTween.tween(menuItems.members[i], {alpha: 0}, 0.4, {
 							ease: FlxEase.quadOut,
+						FlxTween.tween(mods, {alpha: 0}, 0.4, {
+							ease: FlxEase.quadOut,
 							onComplete: function(twn:FlxTween)
 							{
 								menuItems.members[i].kill();
+								mods.kill();
 							}
 						});
 					}
