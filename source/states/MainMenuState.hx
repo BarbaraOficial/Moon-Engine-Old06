@@ -24,6 +24,7 @@ class MainMenuState extends MusicBeatState
 	];
 
 	var mods:FlxSprite;
+	var charDance:FlxSprite;
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
@@ -98,7 +99,6 @@ class MainMenuState extends MusicBeatState
 		switch (FlxG.random.int(0, 1)) {
 
 			case 0:
-        var charDance:FlxSprite; // to put the gf on the menu mme
         charDance = new FlxSprite(700, 200);
         charDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Boyfriend');
         charDance.animation.addByPrefix('Idle', 'BF IDLE', 24);
@@ -110,7 +110,6 @@ class MainMenuState extends MusicBeatState
 
 
 			case 1:
-	var charDance:FlxSprite; // to put the gf on the menu mme
         charDance = new FlxSprite(700, 200);
         charDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
         charDance.animation.addByPrefix('Idle', 'GF IDLE', 24);
