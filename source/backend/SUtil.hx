@@ -4,6 +4,7 @@ package backend;
 import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
+import android.Permissions;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
@@ -20,10 +21,10 @@ using StringTools;
 enum StorageType
 {
 	//DATA;
-        EXTERNAL;
+    EXTERNAL;
 	EXTERNAL_DATA;
 	EXTERNAL_OBB;
-        MEDIA;
+    MEDIA;
 }
 
 /**
@@ -63,7 +64,7 @@ class SUtil
 	/**
 	 * A simple function that checks for game files/folders.
 	 */
-	public static function checkFiles():Void
+	/*public static function checkFiles():Void
 	{
 		#if mobile
 		if (!FileSystem.exists('assets') && !FileSystem.exists('mods'))
@@ -110,7 +111,7 @@ class SUtil
 			}
 		}
 		#end
-	}
+	}*/
 
 	/**
 	 * Uncaught error handler, original made by: Sqirra-RNG and YoshiCrafter29
@@ -154,9 +155,9 @@ class SUtil
 		catch (e:Dynamic)
 		{
 			#if (android && debug)
-			Toast.makeText("Error!\nClouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
+			Toast.makeText("Error!\nCouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
 			#else
-			LimeLogger.println("Error!\nClouldn't save the crash dump because:\n" + e);
+			LimeLogger.println("Error!\nCouldn't save the crash dump because:\n" + e);
 			#end
 		}
 		#end
@@ -246,11 +247,16 @@ class SUtil
 		}
 	}
 
-	public static function filesExists():Bool {
-		if((!FileSystem.exists('assets') && !FileSystem.exists('mods')) || !FileSystem.exists('mods') || !FileSystem.exists('assets'))
-			return false;
-		else
-			return true;
+	#end
+	#if android
+	public static function doPermissionsShit(){
+		if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) {
+			if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE))
+				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
+			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
+				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
+			FlxG.stage.window.alert('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', '');
+		}
 	}
 	#end
 }
