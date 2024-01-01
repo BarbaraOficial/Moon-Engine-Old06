@@ -102,9 +102,10 @@ class MainMenuState extends MusicBeatState
         gfDance = new FlxSprite(700, 200);
         gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
         gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24);
-	gfDance.animation.play('idle');
+	gfDance.animation.play('Idle');
+	gfDance.scale.x = 1.5;
+	gfDance.scale.y = 1.5;
         add(gfDance);
-	gfDance.updateHitbox();
 
 
 			case 1:
@@ -113,8 +114,9 @@ class MainMenuState extends MusicBeatState
         gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
         gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24);
 	gfDance.animation.play('Idle');
+	gfDance.scale.x = 1.5;
+	gfDance.scale.y = 1.5;
         add(gfDance);
-	gfDance.updateHitbox();
 				
 		}
 
