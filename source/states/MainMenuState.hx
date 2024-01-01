@@ -24,7 +24,6 @@ class MainMenuState extends MusicBeatState
 	];
 
 	var mods:FlxSprite;
-	private var chars:objects.Character = null;
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
@@ -99,13 +98,29 @@ class MainMenuState extends MusicBeatState
 		switch (FlxG.random.int(0, 1)) {
 
 			case 0:
-				chars = objects.Character(800, 130, "bf", true);
-				chars.setGraphicSize(Std.int(chars.width * 0.8));
-				add(chars);
+        var gfDance:FlxSprite; // to put the gf on the menu mme
+        var idle:Bool = false;
+        gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
+        gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
+        gfDance.animation.addByIndices('Idle', 'GF IDLE', "", 24, true);
+        add(gfDance);
+        gfDance.setGraphicSize(750, 700);
+        if (gfDance != null) {
+            Idle = !Idle;
+            if (Idle) gfDance.animation.play('Idle');
+        }
 			case 1:
-				chars = objects.Character(800, 130, "gf", true);
-				chars.setGraphicSize(Std.int(chars.width * 0.8));
-				add(chars);
+		var gfDance:FlxSprite; // to put the gf on the menu mme
+        var idle:Bool = false;
+        gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
+        gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
+        gfDance.animation.addByIndices('Idle', 'GF IDLE', "", 24, true);
+        add(gfDance);
+        gfDance.setGraphicSize(750, 700);
+        if (gfDance != null) {
+            Idle = !Idle;
+            if (Idle) gfDance.animation.play('Idle');
+        }
 				
 		}
 
