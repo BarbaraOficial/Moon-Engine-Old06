@@ -99,20 +99,22 @@ class MainMenuState extends MusicBeatState
 
 			case 0:
         var gfDance:FlxSprite; // to put the gf on the menu mme
-        gfDance = new FlxSprite(600, 0);
+        gfDance = new FlxSprite(700, 200);
         gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
-        gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24, true);
+        gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24);
 	gfDance.animation.play('idle');
         add(gfDance);
-        gfDance.setGraphicSize(500, 500);
+	gfDance.updateHitbox()
+
+
 			case 1:
 	var gfDance:FlxSprite; // to put the gf on the menu mme
-        gfDance = new FlxSprite(600, 0);
+        gfDance = new FlxSprite(700, 200);
         gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
-        gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24, false);
+        gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24);
 	gfDance.animation.play('Idle');
         add(gfDance);
-        gfDance.setGraphicSize(500, 500);
+	gfDance.updateHitbox()
 				
 		}
 
