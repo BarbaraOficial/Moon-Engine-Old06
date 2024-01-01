@@ -24,7 +24,7 @@ class MainMenuState extends MusicBeatState
 	];
 
 	var mods:FlxSprite;
-	private var chars:Character = null;
+	private var chars:objects.Character = null;
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
