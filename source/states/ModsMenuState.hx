@@ -356,7 +356,7 @@ class ModsMenuState extends MusicBeatState
 				}
 				FlxG.camera.fade(FlxColor.BLACK, 0.5, false, FlxG.resetGame, false);
 			}
-			else MusicBeatState.switchState(new MainMenuState());
+			else switch (ClientPrefs.data.menuType){ case 'Moon Engine': MusicBeatState.switchState(new MainMenuState()); case 'Psych Engine': MusicBeatState.switchState(new MainMenuPsychState()); }
 
 			persistentUpdate = false;
 			FlxG.autoPause = ClientPrefs.data.autoPause;
