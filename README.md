@@ -1,6 +1,5 @@
-# Friday Night Funkin' - Moon Engine Mobile/PC
+# Friday Night Funkin' - Moon Engine - Mobile/PC
 
-Engine originally used on [Mind Games Mod](https://gamebanana.com/mods/301107), intended to be a fix for the vanilla version's many issues while keeping the casual play aspect of it. Also aiming to be an easier alternative to newbie coders.
 
 ## Installation:
 
@@ -25,7 +24,7 @@ same goes for *Lua Scripts*, comment out or delete the line with `LUA_ALLOWED`, 
 * Karim - Assistant Porter/Helper #1
 * Hoovy - Helper #2
 
-### Mobile Special Thanks
+### Mobile Special Thanks (Psych Engine Mobile):
 * Mihai Alexandru - Author of mobile controls and also his new storage stuff and FlxRuntimeShader is used here
 * FutureDorito - iOS Porter
 
