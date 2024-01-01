@@ -114,7 +114,7 @@ class MainMenuState extends MusicBeatState
         gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24);
 	gfDance.animation.play('Idle');
         add(gfDance);
-	gfDance.updateHitbox()
+	gfDance.updateHitbox();
 				
 		}
 
