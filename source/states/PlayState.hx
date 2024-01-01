@@ -103,6 +103,32 @@ class PlayState extends MusicBeatState
 		['Perfeito!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 	
+	public static var ratingStuffFCS:Array<Dynamic> = [
+		['Poubelle', 0.2], //From 0% to 19%
+		['Merde', 0.4], //From 20% to 39%
+		['Mauvais', 0.5], //From 40% to 49%
+		['Sérieux?', 0.6], //From 50% to 59%
+		['Mon', 0.69], //From 60% to 68%
+		['Excellent', 0.7], //69%
+		['Bien', 0.8], //From 70% to 79%
+		['Super', 0.9], //From 80% to 89%
+		['Incroyable!', 1], //From 90% to 99%
+		['Parfait!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+	];
+	
+	public static var ratingStuffKN:Array<Dynamic> = [
+		['쓰레기', 0.2], //From 0% to 19%
+		['똥', 0.4], //From 20% to 39%
+		['나쁜', 0.5], //From 40% to 49%
+		['심각한?', 0.6], //From 50% to 59%
+		['나의', 0.69], //From 60% to 68%
+		['훌륭한', 0.7], //69%
+		['좋은', 0.8], //From 70% to 79%
+		['엄청난', 0.9], //From 80% to 89%
+		['믿을 수 없는!', 1], //From 90% to 99%
+		['완벽한!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+	];
+	
 	public static var ratingStuffESP:Array<Dynamic> = [
 		['Basura', 0.2], //From 0% to 19%
 		['Mierda', 0.4], //From 20% to 39%
@@ -1194,6 +1220,8 @@ class PlayState extends MusicBeatState
 		var str:String = ratingName;
 		var strBR:String = ratingNameBR;
 		var strESP:String = ratingNameESP;
+		var strFCS:String = ratingNameFCS;
+		var strKN:String = ratingNameKN;
 		var strD:String = ratingNameD;
 		if(totalPlayed != 0)
 		{
@@ -1201,6 +1229,8 @@ class PlayState extends MusicBeatState
 			str += ' (${percent}%) - ${ratingFC}';
 			strBR += ' (${percent}%) - ${ratingFC}';
 			strESP += ' (${percent}%) - ${ratingFC}';
+			strFCS += ' (${percent}%) - ${ratingFC}';
+			strKN += ' (${percent}%) - ${ratingFC}';
 			strD += ' (${percent}%) - ${ratingFC}';
 		}
 
@@ -1210,6 +1240,12 @@ class PlayState extends MusicBeatState
 		var tempScoreBR:String = 'Pontuação: ${songScore}'
 		+ (!instakillOnMiss ? ' | Erros: ${songMisses}' : "")
 		+ ' | Precisão: ${strBR}';
+		var tempScoreFCS:String = 'Ponctuation: ${songScore}'
+		+ (!instakillOnMiss ? ' | les erreurs: ${songMisses}' : "")
+		+ ' | Précision: ${strFCS}';
+		var tempScoreKN:String = '구두: ${songScore}'
+		+ (!instakillOnMiss ? ' | 오류: ${songMisses}' : "")
+		+ ' | 정도: ${strKN}';
 		var tempScoreESP:String = 'Puntuación: ${songScore}'
 		+ (!instakillOnMiss ? ' | Errores: ${songMisses}' : "")
 		+ ' | Precisión: ${strESP}';
@@ -1228,6 +1264,12 @@ class PlayState extends MusicBeatState
 	
 	 case 'Español':
 		scoreTxt.text = '${tempScoreESP}\n';
+		
+	case 'Français':
+		scoreTxt.text = '${tempScoreFCS}\n';
+		
+	case '한국인':
+		scoreTxt.text = '${tempScoreKN}\n';
 		
      case 'Deutsch':
 		scoreTxt.text = '${tempScoreD}\n';
@@ -3661,6 +3703,8 @@ class PlayState extends MusicBeatState
 	public var ratingName:String = '?';
 	public var ratingNameBR:String = '?';
 	public var ratingNameESP:String = '?';
+	public var ratingNameFCS:String = '?';
+	public var ratingNameKN:String = '?';
 	public var ratingNameD:String = '?';
 	public var ratingPercent:Float;
 	public var ratingFC:String;
@@ -3707,6 +3751,25 @@ class PlayState extends MusicBeatState
 						if(ratingPercent < ratingStuffESP[i][1])
 						{
 							ratingNameESP = ratingStuffESP[i][0];
+							break;
+						}
+						
+				// Rating Name French
+				ratingNameFCS = ratingStuffFCS[ratingStuffFCS.length-1][0]; //Uses last string
+				if(ratingPercent < 1)
+					for (i in 0...ratingStuffFCS.length-1)
+						if(ratingPercent < ratingStuffFCS[i][1])
+						{
+							ratingNameFCS = ratingStuffFCS[i][0];
+							break;
+						}
+				// Rating Name Korean
+				ratingNameKN = ratingStuffKN[ratingStuffKN.length-1][0]; //Uses last string
+				if(ratingPercent < 1)
+					for (i in 0...ratingStuffKN.length-1)
+						if(ratingPercent < ratingStuffKN[i][1])
+						{
+							ratingNameKN = ratingStuffKN[i][0];
 							break;
 						}
 				// Rating Name Deutsch
