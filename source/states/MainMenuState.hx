@@ -94,6 +94,19 @@ class MainMenuState extends MusicBeatState
 		mods.scale.y = 0.8;
 		add(mods);
 		#end
+		
+		switch (FlxG.random.int(0, 1)) {
+
+			case 0:
+				chars = Character(800, 130, "bf", true);
+				chars.setGraphicSize(Std.int(chars.width * 0.8));
+				add(chars);
+			case 1:
+				chars = Character(800, 130, "gf", true);
+				chars.setGraphicSize(Std.int(chars.width * 0.8));
+				add(chars);
+				
+		}
 
 		var moonVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Moon Engine v" + moonEngineVersion, 12);
 		moonVer.scrollFactor.set();
