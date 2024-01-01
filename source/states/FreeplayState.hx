@@ -312,7 +312,15 @@ class FreeplayState extends MusicBeatState
 					colorTween.cancel();
 				}
 				FlxG.sound.play(Paths.sound('cancelMenu'));
+			  switch (ClientPrefs.data.menuType){
+
+			   case 'Moon Engine':
 				MusicBeatState.switchState(new MainMenuState());
+
+                           case 'Psych Engine':
+				MusicBeatState.switchState(new MainMenuPsychState());
+					  
+				}
 			}
 		}
 
