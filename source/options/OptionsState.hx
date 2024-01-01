@@ -123,16 +123,17 @@ class OptionsState extends MusicBeatState
 			else
 			{
 		
-				switch (ClientPrefs.data.menuType){
+		switch (ClientPrefs.data.menuType){
 					
 			  case 'Moon Engine':
 			        MusicBeatState.switchState(new MainMenuState());
 					
 			  case 'Psych Engine':
 				MusicBeatState.switchState(new MainMenuPsychState());
-				}
-			}
-			}
+				
+		      }
+		   }
+		}
 			
 		else if (controls.ACCEPT) openSelectedSubstate(options[curSelected]);
 	}
