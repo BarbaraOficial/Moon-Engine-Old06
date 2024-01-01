@@ -196,7 +196,7 @@ class StoryMenuState extends MusicBeatState
 
   switch (ClientPrefs.data.languages){
      
-     case 'English':
+         case 'English':
 		scoreText.text = "WEEK SCORE:" + lerpScore;
 		
 	 case 'Português (Brasil)':
@@ -204,6 +204,12 @@ class StoryMenuState extends MusicBeatState
 		
 	 case 'Español':
 		scoreText.text = "PUNTUACIÓN DE LA SEMANA:" + lerpScore;
+
+         case 'Français':
+		scoreText.text = "SCORE DE LA SEMAINE:" + lerpScore;
+
+	 case 'Italiano':
+		scoreText.text = "PUNTEGGIO DELLA SETTIMANA:" + lerpScore;
 		
 	 case 'Deutsch':
 		scoreText.text = "WOCHENPUNKTE:" + lerpScore;
