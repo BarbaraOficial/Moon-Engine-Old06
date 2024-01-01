@@ -7,7 +7,7 @@ import lime.app.Application;
 import states.editors.MasterEditorMenu;
 import options.OptionsState;
 
-class MainMenuState extends MusicBeatState
+class MainMenuPsychState extends MusicBeatState
 {
 	public static var moonEngineVersion:String = '2.0.0'; // This is also used for Discord RPC
 	public static var psychEngineVersion:String = '0.7.2h';
