@@ -275,7 +275,15 @@ class StoryMenuState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;
+		switch (ClientPrefs.data.menuType){
+
+		   case 'Moon Engine':
 			MusicBeatState.switchState(new MainMenuState());
+
+		   case 'Psych Engine':
+			MusicBeatState.switchState(new MainMenuPsychState());
+				
+		}
 		}
 
 		super.update(elapsed);
