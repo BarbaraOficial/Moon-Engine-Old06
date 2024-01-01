@@ -120,8 +120,20 @@ class OptionsState extends MusicBeatState
 				MusicBeatState.switchState(new PlayState());
 				FlxG.sound.music.volume = 0;
 			}
-			else switch (ClientPrefs.data.menuType){ case 'Moon Engine': MusicBeatState.switchState(new MainMenuState()); case 'Psych Engine': MusicBeatState.switchState(new MainMenuPsychState());}
-		}
+			else
+			{
+		
+				switch (ClientPrefs.data.menuType){
+					
+			  case 'Moon Engine':
+			        MusicBeatState.switchState(new MainMenuState());
+					
+			  case 'Psych Engine':
+				MusicBeatState.switchState(new MainMenuPsychState());
+				}
+			}
+			}
+			
 		else if (controls.ACCEPT) openSelectedSubstate(options[curSelected]);
 	}
 	}
