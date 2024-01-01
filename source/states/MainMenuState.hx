@@ -24,7 +24,6 @@ class MainMenuState extends MusicBeatState
 	];
 
 	var mods:FlxSprite;
-	var idle:Bool = false;
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
@@ -103,7 +102,7 @@ class MainMenuState extends MusicBeatState
         gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
         gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
         gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24, false);
-	gfDance.animation.play('idle')
+	gfDance.animation.play('idle');
         add(gfDance);
         gfDance.setGraphicSize(750, 700);
 			case 1:
@@ -111,7 +110,7 @@ class MainMenuState extends MusicBeatState
         gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
         gfDance.frames = Paths.getSparrowAtlas('mainmenu/menuCharacters/Girlfriend');
         gfDance.animation.addByPrefix('Idle', 'GF IDLE', 24, false);
-	gfDance.animation.play('Idle')
+	gfDance.animation.play('Idle');
         add(gfDance);
         gfDance.setGraphicSize(750, 700);
 				
