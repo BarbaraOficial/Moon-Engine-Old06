@@ -441,7 +441,14 @@ class TitleState extends MusicBeatState
 					if (mustUpdate) {
 						MusicBeatState.switchState(new OutdatedState());
 					} else {
-						MusicBeatState.switchState(new MainMenuState());
+						switch (ClientPrefs.data.menuType){
+						
+							case 'Moon Engine':
+								MusicBeatState.switchState(new MainMenuState());
+							
+							case 'Psych Engine':
+								MusicBeatState.switchState(new MainMenuPsychState());
+						}
 					}
 					closedState = true;
 				});
