@@ -99,11 +99,11 @@ class MainMenuState extends MusicBeatState
 		switch (FlxG.random.int(0, 1)) {
 
 			case 0:
-				chars = Character(800, 130, "bf", true);
+				chars = objects.Character(800, 130, "bf", true);
 				chars.setGraphicSize(Std.int(chars.width * 0.8));
 				add(chars);
 			case 1:
-				chars = Character(800, 130, "gf", true);
+				chars = objects.Character(800, 130, "gf", true);
 				chars.setGraphicSize(Std.int(chars.width * 0.8));
 				add(chars);
 				
