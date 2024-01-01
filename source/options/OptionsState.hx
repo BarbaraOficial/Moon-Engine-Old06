@@ -1,6 +1,7 @@
 package options;
 
 import states.MainMenuState;
+import states.MainMenuPsychState;
 import backend.StageData;
 import flixel.addons.transition.FlxTransitionableState;
 
