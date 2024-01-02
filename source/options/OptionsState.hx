@@ -46,7 +46,7 @@ class OptionsState extends MusicBeatState
 		#end
 
                 #if mobile
-                option.push('Mobile Options');
+                options.push('Mobile Options');
 		#end
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
