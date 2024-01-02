@@ -57,6 +57,7 @@ class OptionsState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
+	#if mobile
         if (controls.mobileC) {
 		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press C to Go In Mobile Controls Menu', 16);
 		tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -65,6 +66,7 @@ class OptionsState extends MusicBeatState
 		tipText.antialiasing = ClientPrefs.data.antialiasing;
 		add(tipText);
 		}
+	#end
 
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
@@ -111,12 +113,14 @@ class OptionsState extends MusicBeatState
 		if (controls.UI_DOWN_P) {
 			changeSelection(1);
 		}
-
+			
+               #if mobile
 		if (virtualPad.buttonC.justPressed) {
 			persistentUpdate = false;
 
 			openSubState(new MobileControlsSubState());
 		}
+	       #end
 
 		if (controls.BACK) {
             exiting = true;
