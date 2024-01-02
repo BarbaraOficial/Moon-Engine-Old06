@@ -27,6 +27,7 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib install hmm --quiet
           haxelib run hmm install > nul
+          haxelib set SScript 8.1.6
         env:
           HXCPP_COMPILE_CACHE: ~/.hxcpp
       - name: Info
