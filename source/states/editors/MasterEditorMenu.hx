@@ -5,6 +5,7 @@ import backend.WeekData;
 import objects.Character;
 
 import states.MainMenuState;
+import states.MainMenuPsychState;
 import states.FreeplayState;
 
 class MasterEditorMenu extends MusicBeatState
@@ -105,7 +106,15 @@ class MasterEditorMenu extends MusicBeatState
 
 		if (controls.BACK)
 		{
+			switch (ClientPrefs.data.menuType){
+
+		   case 'Moon Engine':
 			MusicBeatState.switchState(new MainMenuState());
+
+		   case 'Psych Engine':
+			MusicBeatState.switchState(new MainMenuPsychState());
+				
+			}
 		}
 
 		if (controls.ACCEPT)
