@@ -215,7 +215,14 @@ class AchievementsMenuState extends MusicBeatState
 
 		if (controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+			switch (ClientPrefs.data.menuType){
+						
+							case 'Moon Engine':
+								MusicBeatState.switchState(new MainMenuState());
+							
+							case 'Psych Engine':
+								MusicBeatState.switchState(new MainMenuPsychState());
+			}
 			goingBack = true;
 		}
 		super.update(elapsed);
