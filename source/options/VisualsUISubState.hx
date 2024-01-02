@@ -80,7 +80,7 @@ class VisualsUISubState extends BaseOptionsMenu
 			"Put the game with your language!",
 			'languages',
 			'string',
-			['English', 'Português (Brasil)', 'Español', 'Français', '한국인', 'Deutsch']);
+			['English', 'Português (Brasil)', 'Español', 'Français', 'Italiano', 'Deutsch']);
 		addOption(option);
 		
 		var option:Option = new Option('Time Bar:',
