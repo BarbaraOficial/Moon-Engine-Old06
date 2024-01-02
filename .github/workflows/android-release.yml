@@ -94,30 +94,6 @@ jobs:
           name: androidBuild-${{ matrix.storage-type }}
           path: export/release/android/bin/app/build/outputs/apk/release/*.apk
           if-no-files-found: error
-          
-  Android-Releaser:
-    needs: Android
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - name: Download EXTERNAL Build
-        uses: actions/download-artifact@main
-        with:
-           name: androidBuild-EXTERNAL
-           path: /home/runner
-
-      - name: Move EXTERNAL File
-        run: mv /home/runner/MoonEngine-release.apk /home/runner/MoonEngine-EXTERNAL.apk
-        
-      - name: Publish The Release
-        uses: marvinpinto/action-automatic-releases@latest
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          automatic_release_tag: "2.0.0"
-          title: "2.0.0 Android Release"
-          files: |
-            /home/runner/*.apk
             
   Windows:
     runs-on: windows-2019
