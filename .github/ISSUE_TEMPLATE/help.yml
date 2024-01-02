@@ -29,7 +29,6 @@ body:
         - "Desktop (Linux, Windows or Mac)"
         - "Emscripten"
         - "Android"
-        - "iOS"
         - "HashLink"
         - "Flash/AIR"
         - "Unknown/I don't know"
