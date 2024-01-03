@@ -1,6 +1,8 @@
 # Friday Night Funkin' - Moon Engine - Mobile/PC
 
 
+[![GitHub Releases](https://img.shields.io/github/downloads/BarbaraOficial/Moon-Engine/total?style=flat-square)](https://github.com/BarbaraOficial/Moon-Engine/releases)
+
 ## Installation:
 
 Refer to [the Build Instructions](./BUILDING.md)
