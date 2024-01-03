@@ -3,9 +3,7 @@ package debug;
 import flixel.FlxG;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import openfl.system.System as OpenflSystem;
-import lime.system.System as LimeSystem;
-import flixel.util.FlxStringUtil;
+import openfl.system.System;
 
 /**
 	The FPS class provides an easy-to-use monitor to display
@@ -35,11 +33,7 @@ class FPSCounter extends TextField
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
-        #if mobile
-        defaultTextFormat = new TextFormat('_sans', Std.int(14 * Math.min(openfl.Lib.current.stage.stageWidth / FlxG.width, openfl.Lib.current.stage.stageHeight / FlxG.height)), color);
-        #else
 		defaultTextFormat = new TextFormat("_sans", 14, color);
-        #end
 		autoSize = LEFT;
 		multiline = true;
 		text = "FPS: ";
@@ -68,10 +62,8 @@ class FPSCounter extends TextField
 	}
 
 	public dynamic function updateText():Void { // so people can override it in hscript
-		text = 
-		'FPS: $currentFPS' + 
-		'\nMemory: ${FlxStringUtil.formatBytes(memoryMegas)}' +
-		'\nPlatform: ${LimeSystem.platformLabel}';
+		text = 'FPS: ${currentFPS}'
+		+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
 
 		textColor = 0xFFFFFFFF;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
@@ -79,5 +71,5 @@ class FPSCounter extends TextField
 	}
 
 	inline function get_memoryMegas():Float
-		return cast(OpenflSystem.totalMemory, UInt);
+		return cast(System.totalMemory, UInt);
 }
