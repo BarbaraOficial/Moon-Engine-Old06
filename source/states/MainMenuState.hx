@@ -92,13 +92,6 @@ class MainMenuState extends MusicBeatState
 			menuItem.updateHitbox();
 		}
 
-		#if MODS_ALLOWED
-		mods = new FlxSprite(820, -15).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
-		mods.scale.x = 0.8;
-		mods.scale.y = 0.8;
-		add(mods);
-		#end
-		
 		switch (FlxG.random.int(0, 1)) {
 
 			case 0:
@@ -123,6 +116,14 @@ class MainMenuState extends MusicBeatState
         add(charDance);
 				
 		}
+
+		#if MODS_ALLOWED
+		mods = new FlxSprite(820, -15).loadGraphic(Paths.image('mainmenu/MenuItems/mods'));
+		mods.scale.x = 0.8;
+		mods.scale.y = 0.8;
+		add(mods);
+		#end
+		
 
 		var moonVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Moon Engine v" + moonEngineVersion, 12);
 		moonVer.scrollFactor.set();
