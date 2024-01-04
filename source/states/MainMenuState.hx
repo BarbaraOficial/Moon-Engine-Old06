@@ -208,6 +208,11 @@ class MainMenuState extends MusicBeatState
 			if (controls.ACCEPT)
 			{
 				FlxG.sound.play(Paths.sound('confirmMenu'));
+				if (optionShit[curSelected] == 'story_mode')
+				{
+					FlxG.sound.music.stop();
+				}
+				
 				if (optionShit[curSelected] == 'donate')
 				{
 					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
