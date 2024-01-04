@@ -78,7 +78,7 @@ class MainMenuState extends MusicBeatState
 		mainSide.updateHitbox();
 		mainSide.screenCenter();
 		mainSide.antialiasing = ClientPrefs.data.antialiasing;
-		mainSide.x = 500;
+		mainSide.x = -200;
 		mainSide.y = -90;
 		add(mainSide);
 
