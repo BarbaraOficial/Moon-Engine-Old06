@@ -23,6 +23,7 @@ class MainMenuState extends MusicBeatState
 		'options'
 	];
 
+	var mainSide:FlxSprite;
 	var mods:FlxSprite;
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -69,6 +70,17 @@ class MainMenuState extends MusicBeatState
 		magenta.visible = false;
 		magenta.color = 0xFFfd719b;
 		add(magenta);
+
+		mainSide = new FlxSprite(0).loadGraphic(Paths.image('mainSide'));
+		mainSide.scrollFactor.x = 0;
+		mainSide.scrollFactor.y = 0;
+		mainSide.setGraphicSize(Std.int(mainSide.width * 0.75));
+		mainSide.updateHitbox();
+		mainSide.screenCenter();
+		mainSide.antialiasing = ClientPrefs.data.antialiasing;
+		mainSide.x = -500;
+		mainSide.y = -90;
+		add(mainSide);
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
