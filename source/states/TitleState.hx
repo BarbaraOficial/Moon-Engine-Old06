@@ -239,13 +239,13 @@ class TitleState extends MusicBeatState
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
-		logoBl.visible = titleJSON.titlevisible
+		logoBl.visible = titleJSON.titlevisible;
 		// logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
 
 		if(ClientPrefs.data.shaders) swagShader = new ColorSwap();
 		gfDance = new FlxSprite(titleJSON.gfx, titleJSON.gfy);
-		gfDance.visible = titleJSON.gfvisible
+		gfDance.visible = titleJSON.gfvisible;
 		gfDance.antialiasing = ClientPrefs.data.antialiasing;
 
 		var easterEgg:String = FlxG.save.data.psychDevsEasterEgg;
