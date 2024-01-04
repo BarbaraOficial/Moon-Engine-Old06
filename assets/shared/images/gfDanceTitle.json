@@ -1,12 +1,12 @@
 {	
 	"titlex":-150,
 	"titley":-100,
-	"titlevisible":false,
+	"titlevisible":true,
 	"startx":100,
 	"starty":576,
 	"gfx":512,
 	"gfy":40,
-	"gfvisible":false,
+	"gfvisible":true,
 	"backgroundSprite":"",
 	"bpm":102
 }
