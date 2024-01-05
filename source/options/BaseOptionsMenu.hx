@@ -46,6 +46,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
 
+		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
+		grid.velocity.set(40, 40);
+		add(grid);
+
 		// avoids lagspikes while scrolling through menus!
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
