@@ -48,7 +48,6 @@ class StoryMenuState extends MusicBeatState
 
 		PlayState.isStoryMode = true;
 		WeekData.reloadWeekFiles(true);
-		FlxG.sound.playMusic(Paths.music('tltleMenu'), 0);
 		if(curWeek >= WeekData.weeksList.length) curWeek = 0;
 		persistentUpdate = persistentDraw = true;
 
@@ -282,8 +281,6 @@ class StoryMenuState extends MusicBeatState
 		if (controls.BACK && !movedBack && !selectedWeek)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			FlxG.sound.music.stop();
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 			movedBack = true;
 		switch (ClientPrefs.data.menuType){
 
