@@ -23,8 +23,8 @@ class MusicBeatState extends FlxUIState
 		return Controls.instance;
 	}
 
-	public static var dpadMode:Map<String, FlxDPadMode>;
-	public static var actionMode:Map<String, FlxActionMode>;
+	public var dpadMode:Map<String, FlxDPadMode>;
+	public var actionMode:Map<String, FlxActionMode>;
 	public var virtualPad:FlxVirtualPad;
 	public var mobileControls:MobileControls;
 	public var camControls:FlxCamera;
@@ -123,7 +123,7 @@ class MusicBeatState extends FlxUIState
 		super.create();
 
 		if(!skip) {
-			openSubState(new CustomFadeTransition(0.7, true));
+			openSubState(new CustomFadeTransition(0.6, true));
 		}
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
