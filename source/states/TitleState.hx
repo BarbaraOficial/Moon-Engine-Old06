@@ -82,20 +82,20 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if LUA_ALLOWED
-        	#if (mobile && EXTERNAL || MEDIA)
+        	#if (android && EXTERNAL || MEDIA)
         try {
         	#end
 		Mods.pushGlobalMods();
-            #if (mobile && EXTERNAL || MEDIA)
+            #if (android && EXTERNAL || MEDIA)
         } catch (e:Dynamic) {
-            FlxG.stage.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/.MoonEngine" #else "/storage/emulated/0/Android/media/com.teammoon.moonengine" #end + "\nPress OK to close the game", "Error!");
+            FlxG.stage.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/.PsychEngine" #else "/storage/emulated/0/Android/media/com.shadowmario.psychengine" #end + "\nPress OK to close the game", "Error!");
             Sys.exit(1);
         }
             #end
 		#end
 
 		#if mobile
-		if(!SUtil.filesExists() && !ignoreCopy)
+		if(!CopyState.checkExistingFiles() && !ignoreCopy)
 			FlxG.switchState(new CopyState());
 		#end
 
@@ -116,12 +116,12 @@ class TitleState extends MusicBeatState
 		#if CHECK_FOR_UPDATES
 		if(ClientPrefs.data.checkForUpdates && !closedState) {
 			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/BarbaraOficial/Moon-Engine/main/gitVersion.txt");
+			var http = new haxe.Http("https://raw.githubusercontent.com/MobilePorting/FNF-PsychEngine-Mobile/main/gitVersion.txt");
 
 			http.onData = function (data:String)
 			{
 				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = MainMenuState.moonEngineVersion.trim();
+				var curVersion:String = MainMenuState.psychEngineVersion.trim();
 				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
 				if(updateVersion != curVersion) {
 					trace('versions arent matching!');
@@ -180,7 +180,7 @@ class TitleState extends MusicBeatState
 		#elseif CHARTING
 		MusicBeatState.switchState(new ChartingState());
 		#else
-		if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
+		if(#if mobile CopyState.checkExistingFiles() && #end FlxG.save.data.flashing == null && !FlashingState.leftState) {
 			controls.isInSubstate = false; //idfk what's wrong
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
@@ -441,14 +441,7 @@ class TitleState extends MusicBeatState
 					if (mustUpdate) {
 						MusicBeatState.switchState(new OutdatedState());
 					} else {
-						switch (ClientPrefs.data.menuType){
-						
-							case 'Moon Engine':
-								MusicBeatState.switchState(new MainMenuState());
-							
-							case 'Psych Engine':
-								MusicBeatState.switchState(new MainMenuPsychState());
-						}
+						MusicBeatState.switchState(new MainMenuState());
 					}
 					closedState = true;
 				});
@@ -580,22 +573,22 @@ class TitleState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 2:
-					#if MOON_WATERMARKS
-					createCoolText(['Moon Engine by'], 40);
+					#if PSYCH_WATERMARKS
+					createCoolText(['Psych Engine by'], 40);
 					#else
 					createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
 					#end
 				case 4:
-					#if MOON_WATERMARKS
-					addMoreText('BarbaraOficial', 40);
-					addMoreText('DaricrahDev', 40);
+					#if PSYCH_WATERMARKS
+					addMoreText('Shadow Mario', 40);
+					addMoreText('Riveren', 40);
 					#else
 					addMoreText('present');
 					#end
 				case 5:
 					deleteCoolText();
 				case 6:
-					#if MOON_WATERMARKS
+					#if PSYCH_WATERMARKS
 					createCoolText(['Not associated', 'with'], -40);
 					#else
 					createCoolText(['In association', 'with'], -40);
