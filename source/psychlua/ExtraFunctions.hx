@@ -3,7 +3,6 @@ package psychlua;
 import haxe.extern.EitherType;
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
-import lime.ui.Haptic;
 
 //
 // Things to trivialize some dumb stuff like splitting strings on older Lua
@@ -143,50 +142,6 @@ class ExtraFunctions
 				default: return PlayState.instance.controls.justReleased(name);
 			}
 			return false;
-		});
-		funk.set("extraButtonPressed", function(button:String) {
-			button = button.toLowerCase();
-			if (mobileExtraInput != null){
-				switch(button){
-					case 'second':
-						return mobileExtraInput.buttonExtra1.pressed;
-					default:
-						return mobileExtraInput.buttonExtra.pressed;
-				}
-			}
-			return false;
-		});
-
-		funk.set("extraButtonJustPressed", function(button:String) {
-			button = button.toLowerCase();
-			if (mobileExtraInput != null){
-				switch(button){
-					case 'second':
-						return mobileExtraInput.buttonExtra1.justPressed;
-					default:
-						return mobileExtraInput.buttonExtra.justPressed;
-				}
-			}
-			return false;
-		});
-
-		funk.set("extraButtonJustReleased", function(button:String) {
-			button = button.toLowerCase();
-			if (mobileExtraInput != null){
-				switch(button){
-					case 'second':
-						return mobileExtraInput.buttonExtra1.justReleased;
-					default:
-						return mobileExtraInput.buttonExtra.justReleased;
-				}
-			}
-			return false;
-		});
-
-		funk.set("vibrate", function(duration:Null<Int>, ?period:Null<Int>){
-		    if (period == null) period = 0;
-		    if (duration == null) return FunkinLua.luaTrace('vibrate: No duration specified.');
-		    return Haptic.vibrate(period, duration);
 		});
 
 		// Save data management
@@ -332,6 +287,7 @@ class ExtraFunctions
 			var toExclude:Array<Int> = [];
 			for (i in 0...excludeArray.length)
 			{
+				if (exclude == '') break;
 				toExclude.push(Std.parseInt(excludeArray[i].trim()));
 			}
 			return FlxG.random.int(min, max, toExclude);
@@ -341,6 +297,7 @@ class ExtraFunctions
 			var toExclude:Array<Float> = [];
 			for (i in 0...excludeArray.length)
 			{
+				if (exclude == '') break;
 				toExclude.push(Std.parseFloat(excludeArray[i].trim()));
 			}
 			return FlxG.random.float(min, max, toExclude);
