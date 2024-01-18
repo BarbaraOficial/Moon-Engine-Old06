@@ -4,12 +4,12 @@ package backend;
 import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
+import android.Permissions;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
 import lime.app.Application;
 import lime.system.System as LimeSystem;
-import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
@@ -20,10 +20,10 @@ using StringTools;
 enum StorageType
 {
 	//DATA;
-        EXTERNAL;
+    EXTERNAL;
 	EXTERNAL_DATA;
 	EXTERNAL_OBB;
-        MEDIA;
+    MEDIA;
 }
 
 /**
@@ -63,7 +63,7 @@ class SUtil
 	/**
 	 * A simple function that checks for game files/folders.
 	 */
-	public static function checkFiles():Void
+	/*public static function checkFiles():Void
 	{
 		#if mobile
 		if (!FileSystem.exists('assets') && !FileSystem.exists('mods'))
@@ -110,7 +110,7 @@ class SUtil
 			}
 		}
 		#end
-	}
+	}*/
 
 	/**
 	 * Uncaught error handler, original made by: Sqirra-RNG and YoshiCrafter29
@@ -154,9 +154,9 @@ class SUtil
 		catch (e:Dynamic)
 		{
 			#if (android && debug)
-			Toast.makeText("Error!\nClouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
+			Toast.makeText("Error!\nCouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
 			#else
-			LimeLogger.println("Error!\nClouldn't save the crash dump because:\n" + e);
+			LimeLogger.println("Error!\nCouldn't save the crash dump because:\n" + e);
 			#end
 		}
 		#end
@@ -164,7 +164,7 @@ class SUtil
 		LimeLogger.println(msg);
 		Lib.application.window.alert(msg, 'Error!');
 
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
 		#end
 
@@ -224,16 +224,16 @@ class SUtil
 	public static function copyContent(copyPath:String, savePath:String):Void
 	{
 		try {
-			if (!FileSystem.exists(savePath) && LimeAssets.exists(copyPath))
+			if (!FileSystem.exists(savePath) && OpenflAssets.exists(copyPath))
 			{
 				if (!FileSystem.exists(Path.directory(savePath)))
 					mkDirs(Path.directory(savePath));
 				if(copyPath.endsWith('.otf') || copyPath.endsWith('.ttf'))
-					File.saveBytes(savePath, cast LimeAssets.getFont(copyPath));
+					File.saveBytes(savePath, cast OpenflAssets.getFont(copyPath));
 				else if(copyPath.endsWith('.txt'))
-					File.saveBytes(savePath, cast LimeAssets.getText(copyPath));
+					File.saveBytes(savePath, cast OpenflAssets.getText(copyPath));
 				else
-					File.saveBytes(savePath, LimeAssets.getBytes(copyPath));
+					File.saveBytes(savePath, OpenflAssets.getBytes(copyPath));
 			}
 		}
 		catch (e:Dynamic)
@@ -246,11 +246,16 @@ class SUtil
 		}
 	}
 
-	public static function filesExists():Bool {
-		if((!FileSystem.exists('assets') && !FileSystem.exists('mods')) || !FileSystem.exists('mods') || !FileSystem.exists('assets'))
-			return false;
-		else
-			return true;
+	#end
+	#if android
+	public static function doPermissionsShit(){
+		if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) {
+			if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE))
+				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
+			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
+				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
+			FlxG.stage.window.alert('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', '');
+		}
 	}
 	#end
 }
