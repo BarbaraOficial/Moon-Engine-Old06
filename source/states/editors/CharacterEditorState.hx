@@ -24,8 +24,10 @@ class CharacterEditorState extends MusicBeatState
 {
 	var character:Character;
 	var ghost:FlxSprite;
+	#if flxanimate
 	var animateGhost:FlxAnimate;
 	var animateGhostImage:String;
+	#end
 	var cameraFollowPointer:FlxSprite;
 	var isAnimateSprite:Bool = false;
 
@@ -68,6 +70,7 @@ class CharacterEditorState extends MusicBeatState
 	{
 		if(ClientPrefs.data.cacheOnGPU) Paths.clearStoredMemory();
 
+		FlxG.sound.music.stop();
 		camEditor = initPsychCamera();
 
 		camHUD = new FlxCamera();
@@ -279,7 +282,7 @@ class CharacterEditorState extends MusicBeatState
 		UI_characterbox = new FlxUITabMenu(null, tabs, true);
 		UI_characterbox.cameras = [camHUD];
 
-		UI_characterbox.resize(350, 250);
+		UI_characterbox.resize(350, 280);
 		UI_characterbox.x = UI_box.x - 100;
 		UI_characterbox.y = UI_box.y + UI_box.height;
 		UI_characterbox.scrollFactor.set();
@@ -317,6 +320,7 @@ class CharacterEditorState extends MusicBeatState
 				}
 				else if(myAnim != null) //This is VERY unoptimized and bad, I hope to find a better replacement that loads only a specific frame as bitmap in the future.
 				{
+					#if flxanimate
 					if(animateGhost == null) //If I created the animateGhost on create() and you didn't load an atlas, it would crash the game on destroy, so we create it here
 					{
 						animateGhost = new FlxAnimate(ghost.x, ghost.y);
@@ -337,9 +341,10 @@ class CharacterEditorState extends MusicBeatState
 					animateGhost.anim.pause();
 
 					animateGhostImage = character.imageFile;
+					#end
 				}
 				
-				var spr:FlxSprite = !character.isAnimateAtlas ? ghost : animateGhost;
+				var spr:FlxSprite = #if flxanimate !character.isAnimateAtlas ? #end ghost  #if flxanimate : animateGhost #end;
 				if(spr != null)
 				{
 					spr.setPosition(character.x, character.y);
@@ -353,7 +358,7 @@ class CharacterEditorState extends MusicBeatState
 					spr.offset.set(character.offset.x, character.offset.y);
 					spr.visible = true;
 
-					var otherSpr:FlxSprite = (spr == animateGhost) ? ghost : animateGhost;
+					var otherSpr:FlxSprite = #if flxanimate (spr == animateGhost) ? #end ghost #if flxanimate : animateGhost #end;
 					if(otherSpr != null) otherSpr.visible = false;
 				}
 				/*hideGhostButton.active = true;
@@ -377,20 +382,22 @@ class CharacterEditorState extends MusicBeatState
 			ghost.colorTransform.redOffset = value;
 			ghost.colorTransform.greenOffset = value;
 			ghost.colorTransform.blueOffset = value;
+			#if flxanimate
 			if(animateGhost != null)
 			{
 				animateGhost.colorTransform.redOffset = value;
 				animateGhost.colorTransform.greenOffset = value;
 				animateGhost.colorTransform.blueOffset = value;
 			}
+			#end
 		};
 
 		var ghostAlphaSlider:FlxUISlider = new FlxUISlider(this, 'ghostAlpha', 10, makeGhostButton.y + 25, 0, 1, 210, #if !hl null #else 0 #end, 5, FlxColor.WHITE, FlxColor.BLACK);
 		ghostAlphaSlider.nameLabel.text = 'Opacity:';
 		ghostAlphaSlider.decimals = 2;
 		ghostAlphaSlider.callback = function(relativePos:Float) {
-			ghost.alpha = ghostAlpha;
-			if(animateGhost != null) animateGhost.alpha = ghostAlpha;
+		ghost.alpha = ghostAlpha;
+		#if flxanimate	if(animateGhost != null) animateGhost.alpha = ghostAlpha; #end
 		};
 		ghostAlphaSlider.value = ghostAlpha;
 
@@ -445,10 +452,13 @@ class CharacterEditorState extends MusicBeatState
 				scale: 1,
 				healthbar_colors: [161, 161, 161],
 				camera_position: [0, 0],
-				position: [0, 0]
+				position: [0, 0],
+				vocals_file: null
 			};
 
 			character.loadCharacterFile(_template);
+			character.color = FlxColor.WHITE;
+			character.alpha = 1;
 			reloadAnimList();
 			reloadCharacterOptions();
 			updateCharacterPositions();
@@ -501,7 +511,7 @@ class CharacterEditorState extends MusicBeatState
 	var animationInputText:FlxUIInputText;
 	var animationNameInputText:FlxUIInputText;
 	var animationIndicesInputText:FlxUIInputText;
-	var animationNameFramerate:FlxUINumericStepper;
+	var animationFramerate:FlxUINumericStepper;
 	var animationLoopCheckBox:FlxUICheckBox;
 	function addAnimationsUI()
 	{
@@ -512,7 +522,7 @@ class CharacterEditorState extends MusicBeatState
 		animationInputText = new FlxUIInputText(15, 85, 80, '', 8);
 		animationNameInputText = new FlxUIInputText(animationInputText.x, animationInputText.y + 35, 150, '', 8);
 		animationIndicesInputText = new FlxUIInputText(animationNameInputText.x, animationNameInputText.y + 40, 250, '', 8);
-		animationNameFramerate = new FlxUINumericStepper(animationInputText.x + 170, animationInputText.y, 1, 24, 0, 240, 0);
+		animationFramerate = new FlxUINumericStepper(animationInputText.x + 170, animationInputText.y, 1, 24, 0, 240, 0);
 		animationLoopCheckBox = new FlxUICheckBox(animationNameInputText.x + 170, animationNameInputText.y - 1, null, null, "Should it Loop?", 100);
 
 		animationDropDown = new FlxUIDropDownMenu(15, animationInputText.y - 55, FlxUIDropDownMenu.makeStrIdLabelArray([''], true), function(pressed:String) {
@@ -521,13 +531,13 @@ class CharacterEditorState extends MusicBeatState
 			animationInputText.text = anim.anim;
 			animationNameInputText.text = anim.name;
 			animationLoopCheckBox.checked = anim.loop;
-			animationNameFramerate.value = anim.fps;
+			animationFramerate.value = anim.fps;
 
 			var indicesStr:String = anim.indices.toString();
 			animationIndicesInputText.text = indicesStr.substr(1, indicesStr.length - 2);
 		});
 
-		var addUpdateButton:FlxButton = new FlxButton(70, animationIndicesInputText.y + 30, "Add/Update", function() {
+		var addUpdateButton:FlxButton = new FlxButton(70, animationIndicesInputText.y + 60, "Add/Update", function() {
 			var indices:Array<Int> = [];
 			var indicesStr:Array<String> = animationIndicesInputText.text.trim().split(',');
 			if(indicesStr.length > 1) {
@@ -547,13 +557,13 @@ class CharacterEditorState extends MusicBeatState
 					if(character.animOffsets.exists(animationInputText.text))
 					{
 						if(!character.isAnimateAtlas) character.animation.remove(animationInputText.text);
-						else @:privateAccess character.atlas.anim.animsMap.remove(animationInputText.text);
+						#if flxanimate else @:privateAccess character.atlas.anim.animsMap.remove(animationInputText.text); #end
 					}
 					character.animationsArray.remove(anim);
 				}
 
 			var addedAnim:AnimArray = newAnim(animationInputText.text, animationNameInputText.text);
-			addedAnim.fps = Math.round(animationNameFramerate.value);
+			addedAnim.fps = Math.round(animationFramerate.value);
 			addedAnim.loop = animationLoopCheckBox.checked;
 			addedAnim.indices = indices;
 			addedAnim.offsets = lastOffsets;
@@ -566,7 +576,7 @@ class CharacterEditorState extends MusicBeatState
 			trace('Added/Updated animation: ' + animationInputText.text);
 		});
 
-		var removeButton:FlxButton = new FlxButton(180, animationIndicesInputText.y + 30, "Remove", function() {
+		var removeButton:FlxButton = new FlxButton(180, animationIndicesInputText.y + 60, "Remove", function() {
 			for (anim in character.animationsArray)
 				if(animationInputText.text == anim.anim)
 				{
@@ -575,7 +585,7 @@ class CharacterEditorState extends MusicBeatState
 					if(character.animOffsets.exists(anim.anim))
 					{
 						if(!character.isAnimateAtlas) character.animation.remove(anim.anim);
-						else @:privateAccess character.atlas.anim.animsMap.remove(anim.anim);
+						#if flxanimate else @:privateAccess character.atlas.anim.animsMap.remove(anim.anim); #end
 						character.animOffsets.remove(anim.anim);
 						character.animationsArray.remove(anim);
 					}
@@ -595,14 +605,14 @@ class CharacterEditorState extends MusicBeatState
 
 		tab_group.add(new FlxText(animationDropDown.x, animationDropDown.y - 18, 0, 'Animations:'));
 		tab_group.add(new FlxText(animationInputText.x, animationInputText.y - 18, 0, 'Animation name:'));
-		tab_group.add(new FlxText(animationNameFramerate.x, animationNameFramerate.y - 18, 0, 'Framerate:'));
-		tab_group.add(new FlxText(animationNameInputText.x, animationNameInputText.y - 18, 0, 'Animation on .XML/.TXT file:'));
+		tab_group.add(new FlxText(animationFramerate.x, animationFramerate.y - 18, 0, 'Framerate:'));
+		tab_group.add(new FlxText(animationNameInputText.x, animationNameInputText.y - 18, 0, 'Animation Symbol Name/Tag:'));
 		tab_group.add(new FlxText(animationIndicesInputText.x, animationIndicesInputText.y - 18, 0, 'ADVANCED - Animation Indices:'));
 
 		tab_group.add(animationInputText);
 		tab_group.add(animationNameInputText);
 		tab_group.add(animationIndicesInputText);
-		tab_group.add(animationNameFramerate);
+		tab_group.add(animationFramerate);
 		tab_group.add(animationLoopCheckBox);
 		tab_group.add(addUpdateButton);
 		tab_group.add(removeButton);
@@ -612,6 +622,7 @@ class CharacterEditorState extends MusicBeatState
 
 	var imageInputText:FlxUIInputText;
 	var healthIconInputText:FlxUIInputText;
+	var vocalsInputText:FlxUIInputText;
 
 	var singDurationStepper:FlxUINumericStepper;
 	var scaleStepper:FlxUINumericStepper;
@@ -653,7 +664,9 @@ class CharacterEditorState extends MusicBeatState
 
 		healthIconInputText = new FlxUIInputText(15, imageInputText.y + 35, 75, healthIcon.getCharacter(), 8);
 
-		singDurationStepper = new FlxUINumericStepper(15, healthIconInputText.y + 45, 0.1, 4, 0, 999, 1);
+		vocalsInputText = new FlxUIInputText(15, healthIconInputText.y + 35, 75, character.vocalsFile != null ? character.vocalsFile : '', 8);
+
+		singDurationStepper = new FlxUINumericStepper(15, vocalsInputText.y + 45, 0.1, 4, 0, 999, 1);
 
 		scaleStepper = new FlxUINumericStepper(15, singDurationStepper.y + 40, 0.1, 1, 0.05, 10, 1);
 
@@ -691,6 +704,7 @@ class CharacterEditorState extends MusicBeatState
 
 		tab_group.add(new FlxText(15, imageInputText.y - 18, 0, 'Image file name:'));
 		tab_group.add(new FlxText(15, healthIconInputText.y - 18, 0, 'Health icon name:'));
+		tab_group.add(new FlxText(15, vocalsInputText.y - 18, 0, 'Vocals File Postfix:'));
 		tab_group.add(new FlxText(15, singDurationStepper.y - 18, 0, 'Sing Animation length:'));
 		tab_group.add(new FlxText(15, scaleStepper.y - 18, 0, 'Scale:'));
 		tab_group.add(new FlxText(positionXStepper.x, positionXStepper.y - 18, 0, 'Character X/Y:'));
@@ -700,6 +714,7 @@ class CharacterEditorState extends MusicBeatState
 		tab_group.add(reloadImage);
 		tab_group.add(decideIconColor);
 		tab_group.add(healthIconInputText);
+		tab_group.add(vocalsInputText);
 		tab_group.add(singDurationStepper);
 		tab_group.add(scaleStepper);
 		tab_group.add(flipXCheckBox);
@@ -726,9 +741,10 @@ class CharacterEditorState extends MusicBeatState
 				character.healthIcon = healthIconInputText.text;
 				if(lastIcon != healthIcon.getCharacter()) updatePresence();
 			}
-			else if(sender == imageInputText) {
+			else if(sender == vocalsInputText)
+				character.vocalsFile = vocalsInputText.text;
+			else if(sender == imageInputText)
 				character.imageFile = imageInputText.text;
-			}
 		}
 		else if(sender is FlxUINumericStepper)
 		{
@@ -787,9 +803,11 @@ class CharacterEditorState extends MusicBeatState
 		var lastAnim:String = character.getAnimationName();
 		var anims:Array<AnimArray> = character.animationsArray.copy();
 
-		character.destroyAtlas();
+		#if flxanimate character.destroyAtlas(); #end
 		character.isAnimateAtlas = false;
-
+		character.color = FlxColor.WHITE;
+		character.alpha = 1;
+		#if flxanimate
 		if(Paths.fileExists('images/' + character.imageFile + '/Animation.json', TEXT))
 		{
 			character.atlas = new FlxAnimate();
@@ -804,7 +822,8 @@ class CharacterEditorState extends MusicBeatState
 			}
 			character.isAnimateAtlas = true;
 		}
-		else if(Paths.fileExists('images/' + character.imageFile + '.txt', TEXT)) character.frames = Paths.getPackerAtlas(character.imageFile);
+		else #end if(Paths.fileExists('images/' + character.imageFile + '.txt', TEXT)) character.frames = Paths.getPackerAtlas(character.imageFile);
+		else if(Paths.fileExists('images/' + character.imageFile + '.json', TEXT)) character.frames = Paths.getAsepriteAtlas(character.imageFile);
 		else character.frames = Paths.getSparrowAtlas(character.imageFile);
 
 		for (anim in anims) {
@@ -829,6 +848,7 @@ class CharacterEditorState extends MusicBeatState
 		check_player.checked = character.isPlayer;
 		imageInputText.text = character.imageFile;
 		healthIconInputText.text = character.healthIcon;
+		vocalsInputText.text = character.vocalsFile != null ? character.vocalsFile : '';
 		singDurationStepper.value = character.singDuration;
 		scaleStepper.value = character.jsonScale;
 		flipXCheckBox.checked = character.originalFlipX;
@@ -850,7 +870,7 @@ class CharacterEditorState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if(animationInputText.hasFocus || animationNameInputText.hasFocus || animationIndicesInputText.hasFocus || imageInputText.hasFocus || healthIconInputText.hasFocus)
+		if(animationInputText.hasFocus || animationNameInputText.hasFocus || animationIndicesInputText.hasFocus || imageInputText.hasFocus || healthIconInputText.hasFocus || vocalsInputText.hasFocus)
 		{
 			ClientPrefs.toggleVolumeKeys(false);
 			return;
@@ -1031,11 +1051,13 @@ class CharacterEditorState extends MusicBeatState
 				frames = character.animation.curAnim.curFrame;
 				length = character.animation.curAnim.numFrames;
 			}
+			#if flxanimate
 			else
 			{
 				frames = character.atlas.anim.curFrame;
 				length = character.atlas.anim.length;
 			}
+			#end
 
 			if(FlxG.keys.justPressed.A || FlxG.keys.justPressed.D || holdingFrameTime > 0.5)
 			{
@@ -1047,7 +1069,7 @@ class CharacterEditorState extends MusicBeatState
 				{
 					frames = FlxMath.wrap(frames + Std.int(isLeft ? -shiftMult : shiftMult), 0, length-1);
 					if(!character.isAnimateAtlas) character.animation.curAnim.curFrame = frames;
-					else character.atlas.anim.curFrame = frames;
+					#if flxanimate else character.atlas.anim.curFrame = frames; #end
 					holdingFrameElapsed -= 0.1;
 				}
 			}
@@ -1146,7 +1168,7 @@ class CharacterEditorState extends MusicBeatState
 	}
 
 	inline function updatePresence() {
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Character Editor", "Character: " + _char, healthIcon.getCharacter());
 		#end
@@ -1216,6 +1238,7 @@ class CharacterEditorState extends MusicBeatState
 			else
 				character.animation.addByPrefix(anim, name, fps, loop);
 		}
+		#if flxanimate
 		else
 		{
 			if(indices != null && indices.length > 0)
@@ -1223,6 +1246,7 @@ class CharacterEditorState extends MusicBeatState
 			else
 				character.atlas.anim.addBySymbol(anim, name, fps, loop);
 		}
+		#end
 
 		if(!character.animOffsets.exists(anim))
 			character.addOffset(anim, 0, 0);
@@ -1243,6 +1267,7 @@ class CharacterEditorState extends MusicBeatState
 	var characterList:Array<String> = [];
 	function reloadCharacterDropDown() {
 		characterList = Mods.mergeAllTextsNamed('data/characterList.txt', Paths.getSharedPath());
+		#if MODS_ALLOWED
 		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'characters/');
 		for (folder in foldersToCheck)
 			for (file in FileSystem.readDirectory(folder))
@@ -1252,7 +1277,7 @@ class CharacterEditorState extends MusicBeatState
 					if(!characterList.contains(charToCheck))
 						characterList.push(charToCheck);
 				}
-
+		#end
 		if(characterList.length < 1) characterList.push('');
 		charDropDown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(characterList, true));
 		charDropDown.selectedLabel = _char;
@@ -1306,7 +1331,7 @@ class CharacterEditorState extends MusicBeatState
 	function saveCharacter() {
 		if(_file != null) return;
 
-		var json = {
+		var json:Dynamic = {
 			"animations": character.animationsArray,
 			"image": character.imageFile,
 			"scale": character.jsonScale,
@@ -1319,6 +1344,7 @@ class CharacterEditorState extends MusicBeatState
 			"flip_x": character.originalFlipX,
 			"no_antialiasing": character.noAntialiasing,
 			"healthbar_colors": character.healthColorArray,
+			"vocals_file": character.vocalsFile,
 			"_editor_isPlayer": character.isPlayer
 		};
 
