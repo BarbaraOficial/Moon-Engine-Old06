@@ -1,6 +1,5 @@
 package backend;
 
-import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import haxe.Json;
 
@@ -63,10 +62,9 @@ class WeekData {
 	// HELP: Is there any way to convert a WeekFile to WeekData without having to put all variables there manually? I'm kind of a noob in haxe lmao
 	public function new(weekFile:WeekFile, fileName:String) {
 		// here ya go - MiguelItsOut
-		for (field in Reflect.fields(weekFile)) {
+		for (field in Reflect.fields(weekFile))
 			if(Reflect.fields(this).contains(field)) // Reflect.hasField() won't fucking work :/
 				Reflect.setProperty(this, field, Reflect.getProperty(weekFile, field));
-		}
 
 		this.fileName = fileName;
 	}
@@ -167,8 +165,8 @@ class WeekData {
 			rawJson = File.getContent(path);
 		}
 		#else
-		if(Assets.exists(path)) {
-			rawJson = Assets.getText(path);
+		if(OpenFlAssets.exists(path)) {
+			rawJson = OpenFlAssets.getText(path);
 		}
 		#end
 
