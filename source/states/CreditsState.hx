@@ -20,7 +20,7 @@ class CreditsState extends MusicBeatState
 
 	override function create()
 	{
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -39,9 +39,14 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
-			['Moon Engine Team'],
-			['BarbaraOficial',		                'barbaraoficial',		                'Main Programmer and leader of Moon Engine',							'https://twitter.com/Barbara_Origami',           'D00055'],
-			['DaricrahDev',				'daricrahdev',			'Programmer Helping at Moon Engine',						'https://twitter.com/Daricrah',		'FDE870'],
+			['Mobile Porting Team'],
+			['mcagabe19',		                'lily',		                'Head Porter of Psych Engine Mobile',							'https://www.youtube.com/@mcagabe19',           'FFE7C0'],
+			['Karim Akra',				'karim',			'Assistant Porter/Helper #1 of Psych Engine Mobile',						'https://youtube.com/@Karim0690',		'FFB4F0'],
+			['MemeHoovy',				'hoovy',			'Helper #2 of Psych Engine Mobile',							'https://twitter.com/meme_hoovy',               'F592C4'],
+			[''],
+			['Mobile Special Thanks'],
+			['MAJigsaw77',				'jigsaw',			'Author of Mobile Controls, New FlxRuntimeShader and Storage Stuff',							'https://github.com/MAJigsaw77',               '898989'],
+			['FutureDorito',				'dorito',			'iOS Helper/Implement',							'https://www.youtube.com/@Futuredorito',               'E69138'],
 			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer and Head of Psych Engine',					 'https://ko-fi.com/shadowmario',		'444444'],
@@ -51,7 +56,7 @@ class CreditsState extends MusicBeatState
 			['bb-panzu',			'bb',				'Ex-Programmer of Psych Engine',							 'https://twitter.com/bbsub3',			'3E813A'],
 			['shubs',				'',					'Ex-Programmer of Psych Engine\nI don\'t support them.',	 '',									'A1A1A1'],
 			[''],
-			['Psych Engine Contributors'],
+			['Engine Contributors'],
 			['CrowPlexus',			'crowplexus',		'Input System v3, Major Help and Other PRs',				 'https://twitter.com/crowplexus',		'A1A1A1'],
 			['Keoiki',				'keoiki',			'Note Splash Animations and Latin Alphabet',				 'https://twitter.com/Keoiki_',			'D2D2D2'],
 			['SqirraRNG',			'sqirra',			'Crash Handler and Base code for\nChart Editor\'s Waveform', 'https://twitter.com/gedehari',		'E1843A'],
@@ -189,14 +194,7 @@ class CreditsState extends MusicBeatState
 					colorTween.cancel();
 				}
 				FlxG.sound.play(Paths.sound('cancelMenu'));
-				switch (ClientPrefs.data.menuType){
-						
-							case 'Moon Engine':
-								MusicBeatState.switchState(new MainMenuState());
-							
-							case 'Psych Engine':
-								MusicBeatState.switchState(new MainMenuPsychState());
-				}
+				MusicBeatState.switchState(new MainMenuState());
 				quitting = true;
 			}
 		}
