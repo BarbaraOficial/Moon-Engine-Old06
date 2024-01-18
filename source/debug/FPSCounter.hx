@@ -3,7 +3,8 @@ package debug;
 import flixel.FlxG;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import openfl.system.System;
+import openfl.system.System as OpenFlSystem;
+import lime.system.System as LimeSystem;
 
 /**
 	The FPS class provides an easy-to-use monitor to display
@@ -22,10 +23,15 @@ class FPSCounter extends TextField
 	public var memoryMegas(get, never):Float;
 
 	@:noCompletion private var times:Array<Float>;
+	public var os:String = ''; 
 
 	public function new(x:Float = 10, y:Float = 10, color:Int = 0x000000)
 	{
 		super();
+		if(LimeSystem.platformName == LimeSystem.platformVersion || LimeSystem.platformVersion == null)
+			os = '\nOS: ${LimeSystem.platformName}';
+		else
+			os = '\nOS: ${LimeSystem.platformName} - ${LimeSystem.platformVersion}'; 
 
 		this.x = x;
 		this.y = y;
@@ -46,24 +52,28 @@ class FPSCounter extends TextField
 	// Event Handlers
 	private override function __enterFrame(deltaTime:Float):Void
 	{
+		// prevents the overlay from updating every frame, why would you need to anyways
 		if (deltaTimeout > 1000) {
 			deltaTimeout = 0.0;
 			return;
 		}
 
-		var now:Float = haxe.Timer.stamp();
+		final now:Float = haxe.Timer.stamp() * 1000;
 		times.push(now);
-		while (times[0] < now - 1000)
-			times.shift();
+		while (times[0] < now - 1000) times.shift();
 
-		currentFPS = currentFPS < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;		
+		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;		
 		updateText();
 		deltaTimeout += deltaTime;
 	}
 
-	public dynamic function updateText():Void { // so people can override it in hscript
-		text = 'FPS: ${currentFPS}'
-		+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
+	public dynamic function updateText():Void // so people can override it in hscript
+	{
+		text = 
+		'FPS: $currentFPS' + 
+		'\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}' +
+		os;
+		
 
 		textColor = 0xFFFFFFFF;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
@@ -71,5 +81,5 @@ class FPSCounter extends TextField
 	}
 
 	inline function get_memoryMegas():Float
-		return cast(System.totalMemory, UInt);
+		return cast(OpenFlSystem.totalMemory, UInt);
 }
