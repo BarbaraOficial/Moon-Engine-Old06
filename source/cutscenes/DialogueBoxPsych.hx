@@ -53,6 +53,10 @@ class DialogueBoxPsych extends FlxSpriteGroup
 	{
 		super();
 
+		//precache sounds
+		Paths.sound('dialogue');
+		Paths.sound('dialogueClose');
+
 		if(song != null && song != '') {
 			FlxG.sound.playMusic(Paths.music(song), 0);
 			FlxG.sound.music.fadeIn(2, 0, 1);
@@ -186,6 +190,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 					if(daText != null)
 					{
 						remove(daText);
+						daText.kill();
 						daText.destroy();
 					}
 					updateBoxOffsets(box);
@@ -258,6 +263,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		} else { //Dialogue ending
 			if(box != null && box.animation.curAnim.curFrame <= 0) {
 				remove(box);
+				box.kill();
 				box.destroy();
 				box = null;
 			}
