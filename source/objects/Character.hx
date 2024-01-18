@@ -26,6 +26,7 @@ typedef CharacterFile = {
 	var flip_x:Bool;
 	var no_antialiasing:Bool;
 	var healthbar_colors:Array<Int>;
+	var vocals_file:String;
 	@:optional var _editor_isPlayer:Null<Bool>;
 }
 
@@ -52,7 +53,6 @@ class Character extends FlxSprite
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = DEFAULT_CHARACTER;
 
-	public var colorTween:FlxTween;
 	public var holdTimer:Float = 0;
 	public var heyTimer:Float = 0;
 	public var specialAnim:Bool = false;
@@ -71,6 +71,7 @@ class Character extends FlxSprite
 	public var healthColorArray:Array<Int> = [255, 0, 0];
 
 	public var hasMissAnimations:Bool = false;
+	public var vocalsFile:String = '';
 
 	//Used on Character Editor
 	public var imageFile:String = '';
@@ -103,6 +104,8 @@ class Character extends FlxSprite
 				#end
 				{
 					path = Paths.getSharedPath('characters/' + DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+					color = FlxColor.BLACK;
+					alpha = 0.6;
 				}
 
 				try
@@ -179,6 +182,7 @@ class Character extends FlxSprite
 		singDuration = json.sing_duration;
 		flipX = (json.flip_x != isPlayer);
 		healthColorArray = (json.healthbar_colors != null && json.healthbar_colors.length > 2) ? json.healthbar_colors : [161, 161, 161];
+		vocalsFile = json.vocals_file != null ? json.vocals_file : '';
 		originalFlipX = (json.flip_x == true);
 		editorIsPlayer = json._editor_isPlayer;
 
@@ -225,9 +229,9 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if(isAnimateAtlas) atlas.update(elapsed);
+		#if flxanimate if(isAnimateAtlas) atlas.update(elapsed); #end
 
-		if(debugMode || (!isAnimateAtlas && animation.curAnim == null) || (isAnimateAtlas && atlas.anim.curSymbol == null))
+		if(debugMode || (!isAnimateAtlas && animation.curAnim == null) #if flxanimate || (isAnimateAtlas && atlas.anim.curSymbol == null) #end)
 		{
 			super.update(elapsed);
 			return;
@@ -291,20 +295,20 @@ class Character extends FlxSprite
 	}
 
 	inline public function isAnimationNull():Bool
-		return !isAnimateAtlas ? (animation.curAnim == null) : (atlas.anim.curSymbol == null);
+		return #if flxanimate !isAnimateAtlas ? #end (animation.curAnim == null) #if flxanimate : (atlas.anim.curSymbol == null) #end;
 
 	inline public function getAnimationName():String
 	{
 		var name:String = '';
 		@:privateAccess
-		if(!isAnimationNull()) name = !isAnimateAtlas ? animation.curAnim.name : atlas.anim.lastPlayedAnim;
+		if(!isAnimationNull()) name = #if flxanimate !isAnimateAtlas ? #end animation.curAnim.name #if flxanimate : atlas.anim.lastPlayedAnim #end;
 		return (name != null) ? name : '';
 	}
 
 	public function isAnimationFinished():Bool
 	{
 		if(isAnimationNull()) return false;
-		return !isAnimateAtlas ? animation.curAnim.finished : atlas.anim.finished;
+		return #if flxanimate !isAnimateAtlas ? #end animation.curAnim.finished #if flxanimate : atlas.anim.finished #end;
 	}
 
 	public function finishAnimation():Void
@@ -312,24 +316,26 @@ class Character extends FlxSprite
 		if(isAnimationNull()) return;
 
 		if(!isAnimateAtlas) animation.curAnim.finish();
-		else atlas.anim.curFrame = atlas.anim.length - 1;
+		#if flxanimate else atlas.anim.curFrame = atlas.anim.length - 1; #end
 	}
 
 	public var animPaused(get, set):Bool;
 	private function get_animPaused():Bool
 	{
 		if(isAnimationNull()) return false;
-		return !isAnimateAtlas ? animation.curAnim.paused : atlas.anim.isPlaying;
+		return #if flxanimate !isAnimateAtlas ? #end animation.curAnim.paused #if flxanimate : atlas.anim.isPlaying #end;
 	}
 	private function set_animPaused(value:Bool):Bool
 	{
 		if(isAnimationNull()) return value;
 		if(!isAnimateAtlas) animation.curAnim.paused = value;
+		#if flxanimate
 		else
 		{
 			if(value) atlas.anim.pause();
 			else atlas.anim.resume();
 		} 
+		#end
 
 		return value;
 	}
@@ -362,7 +368,7 @@ class Character extends FlxSprite
 	{
 		specialAnim = false;
 		if(!isAnimateAtlas) animation.play(AnimName, Force, Reversed, Frame);
-		else atlas.anim.play(AnimName, Force, Reversed, Frame);
+		#if flxanimate else atlas.anim.play(AnimName, Force, Reversed, Frame); #end
 
 		if (animOffsets.exists(AnimName))
 		{
