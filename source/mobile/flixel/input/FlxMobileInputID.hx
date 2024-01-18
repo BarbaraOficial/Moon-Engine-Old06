@@ -2,14 +2,15 @@ package mobile.flixel.input;
 import flixel.system.macros.FlxMacroUtil;
 
     /**
-    * A high-level list of unique values for gamepad inputs.
+    * A high-level list of unique values for mobile inputs.
     * These do NOT correspond to any actual hardware values but
     * are the basis for all hardware-specific lookups.
     * Maps enum values and strings to unique integer codes
     *
     * @author Karim Akra (UTFan) & Lily(mcagabe19)
     */
-    @:enum 
+    @:enum
+    @:runtimeValue
     abstract FlxMobileInputID(Int) from Int to Int
     {
     public static var fromStringMap(default, null):Map<String, FlxMobileInputID> = FlxMacroUtil.buildMap("mobile.flixel.input.FlxMobileInputID");
