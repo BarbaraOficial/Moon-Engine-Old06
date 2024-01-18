@@ -292,7 +292,7 @@ class FlxVirtualPad extends FlxButtonGroup
 	* @return	Whether at least one of the buttons passed was pressed.
 	*/
 	public inline function buttonPressed(button:FlxMobileInputID):Bool {
-		return checkStatus(button, PRESSED);
+		return anyPressed([button]);
 	}
 
 	/**
@@ -302,7 +302,7 @@ class FlxVirtualPad extends FlxButtonGroup
 	* @return	Whether at least one of the buttons passed was just pressed.
 	*/
 	public inline function buttonJustPressed(button:FlxMobileInputID):Bool {
-		return checkStatus(button, JUST_PRESSED);
+		return anyJustPressed([button]);
 	}
 	
 	/**
@@ -312,7 +312,7 @@ class FlxVirtualPad extends FlxButtonGroup
 	* @return	Whether at least one of the buttons passed was just released.
 	*/
 	public inline function buttonJustReleased(button:FlxMobileInputID):Bool {
-		return checkStatus(button, JUST_RELEASED);
+		return anyJustReleased([button]);
 	}
 
 	/**
