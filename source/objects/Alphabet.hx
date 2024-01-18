@@ -102,6 +102,7 @@ class Alphabet extends FlxSpriteGroup
 			{
 				//letter = FlxDestroyUtil.destroy(letter);
 				letters.remove(letter);
+				letter.kill();
 				remove(letter);
 			}
 		}
