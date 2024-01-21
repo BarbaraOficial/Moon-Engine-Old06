@@ -33,7 +33,7 @@ class HealthIcon extends FlxSprite
 			
 			var graphic = Paths.image(name, allowGPU);
 			var widthMoon = width;
-			if (width == 450) {
+			if (graphic.width == 450) {
 			loadGraphic(graphic, true, Math.floor(graphic.width / 3), Math.floor(graphic.height));
 			iconOffsets[0] = (width - 150) / 3;
 			iconOffsets[1] = (height - 150) / 3;
@@ -47,7 +47,7 @@ class HealthIcon extends FlxSprite
 
 			updateHitbox();
 
-			if (widthMoon == 450) {
+			if (graphic.width == 450) {
 				animation.add(char, [0, 1, 2], 0, false, isPlayer);
 			}
 			else
