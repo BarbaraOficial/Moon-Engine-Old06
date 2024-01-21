@@ -2111,7 +2111,7 @@ class PlayState extends MusicBeatState
 		iconP2.animation.curAnim.curFrame = 2;
 		}
 	  else
-	    iconP2.animation.curAnim.curFrame = 0
+	    iconP2.animation.curAnim.curFrame = 0;
 	   
 		return health;
 	}
