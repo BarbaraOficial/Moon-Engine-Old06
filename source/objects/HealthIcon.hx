@@ -36,8 +36,7 @@ class HealthIcon extends FlxSprite
 			if (widthMoon == 450) {
 			loadGraphic(graphic, true, Math.floor(graphic.width / 3), Math.floor(graphic.height));
 			iconOffsets[0] = (width - 150) / 3;
-			iconOffsets[1] = (width - 150) / 3;
-                        iconOffsets[2] = (width - 150) / 3;
+			iconOffsets[1] = (height - 150) / 3;
 			}
 			else
 			{
