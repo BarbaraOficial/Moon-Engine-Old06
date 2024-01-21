@@ -2095,6 +2095,7 @@ class PlayState extends MusicBeatState
 		health = value;
 		var newPercent:Null<Float> = FlxMath.remapToRange(FlxMath.bound(healthBar.valueFunction(), healthBar.bounds.min, healthBar.bounds.max), healthBar.bounds.min, healthBar.bounds.max, 0, 100);
 		healthBar.percent = (newPercent != null ? newPercent : 0);
+   if (iconP1.animation.frames == 3) {
       if (healthBar.percent < 20) {
 		iconP1.animation.curAnim.curFrame = 1; 
 		}
@@ -2103,7 +2104,9 @@ class PlayState extends MusicBeatState
 		}
 	  else
 	    iconP1.animation.curAnim.curFrame = 0;
+	}
 	
+	if (iconP2.animation.frames == 3) {
 	  if (healthBar.percent > 80) {
 		iconP2.animation.curAnim.curFrame = 1;
 		}
@@ -2112,6 +2115,7 @@ class PlayState extends MusicBeatState
 		}
 	  else
 	    iconP2.animation.curAnim.curFrame = 0;
+	}
 	   
 		return health;
 	}
