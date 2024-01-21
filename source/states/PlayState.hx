@@ -2105,13 +2105,9 @@ class PlayState extends MusicBeatState
 	  else
 	    iconP1.animation.curAnim.curFrame = 0;
 	}
+}
 	else {
-	if (healthBar.percent < 20) {
-		iconP1.animation.curAnim.curFrame = 1;
-		else {
-        iconP1.animation.curAnim.curFrame = 0;
-		}
-	}
+	  iconP1.animation.curAnim.curFrame = (healthBar.percent < 20) ? 1 : 0; //If health is under 20%, change player icon to frame 1 (losing icon), otherwise, frame 0 (normal)
 }
 	
 	if (iconP2.animation.frames == 3) {
@@ -2124,13 +2120,9 @@ class PlayState extends MusicBeatState
 	  else {
 	    iconP2.animation.curAnim.curFrame = 0;
 	}
+}
 	else {
-	if (healthBar.percent > 80) {
-		iconP2.animation.curAnim.curFrame = 1;
-	  else {
-        iconP2.animation.curAnim.curFrame = 0;
-		}
-	}
+	iconP2.animation.curAnim.curFrame = (healthBar.percent > 80) ? 1 : 0; //If health is over 80%, change opponent icon to frame 1 (losing icon), otherwise, frame 0 (normal)
 }
 	   
 		return health;
