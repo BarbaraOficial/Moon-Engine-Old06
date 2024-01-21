@@ -2108,10 +2108,11 @@ class PlayState extends MusicBeatState
 	else {
 	if (healthBar.percent < 20) {
 		iconP1.animation.curAnim.curFrame = 1;
-		else
+		else {
         iconP1.animation.curAnim.curFrame = 0;
 		}
 	}
+}
 	
 	if (iconP2.animation.frames == 3) {
 	  if (healthBar.percent > 80) {
@@ -2120,16 +2121,17 @@ class PlayState extends MusicBeatState
 	  else if (healthBar.percent < 20) {
 		iconP2.animation.curAnim.curFrame = 2;
 		}
-	  else
+	  else {
 	    iconP2.animation.curAnim.curFrame = 0;
 	}
 	else {
 	if (healthBar.percent > 80) {
 		iconP2.animation.curAnim.curFrame = 1;
-	  else
+	  else {
         iconP2.animation.curAnim.curFrame = 0;
 		}
 	}
+}
 	   
 		return health;
 	}
