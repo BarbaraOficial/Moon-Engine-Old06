@@ -88,7 +88,7 @@ class TitleState extends MusicBeatState
 		Mods.pushGlobalMods();
             #if (android && EXTERNAL || MEDIA)
         } catch (e:Dynamic) {
-            FlxG.stage.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/.PsychEngine" #else "/storage/emulated/0/Android/media/com.shadowmario.psychengine" #end + "\nPress OK to close the game", "Error!");
+            FlxG.stage.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/.MoonEngine" #else "/storage/emulated/0/Android/media/com.shadowmario.psychengine" #end + "\nPress OK to close the game", "Error!");
             Sys.exit(1);
         }
             #end
